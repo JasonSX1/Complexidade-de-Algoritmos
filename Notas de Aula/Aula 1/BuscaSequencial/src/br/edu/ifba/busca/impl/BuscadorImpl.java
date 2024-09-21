@@ -3,7 +3,7 @@ package br.edu.ifba.busca.impl;
 import br.edu.ifba.busca.buscadores.Buscador;
 import br.edu.ifba.busca.buscadores.ResultadoBusca;
 
-public class BuscadorImpl implements Buscador{
+public class BuscadorImpl implements Buscador{ 
 
     @Override
     public ResultadoBusca buscar(int numero, int[] numeros) {
