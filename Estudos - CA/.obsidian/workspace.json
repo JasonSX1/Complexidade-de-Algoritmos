@@ -1,0 +1,161 @@
+{
+  "main": {
+    "id": "320c70065e949a19",
+    "type": "split",
+    "children": [
+      {
+        "id": "351a7a94f6d3c2e6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a8be002c0de8b9e2",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "Complexidade de Algoritmos.canvas",
+                "viewState": {
+                  "x": 2143.1016525974187,
+                  "y": -683.9685135473359,
+                  "zoom": -0.8567476360192814
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2551b1842d756240",
+    "type": "split",
+    "children": [
+      {
+        "id": "f9be5a0bf8e282dd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9b053c5effb37775",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "65ba59ce7d629e75",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "96650b76bf196939",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "b349addd583c3aeb",
+    "type": "split",
+    "children": [
+      {
+        "id": "9edb26f4d44a30b0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f6c6f970398e1568",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Complexidade de Algoritmos.canvas",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "45eeb28ce3e7219c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Complexidade de Algoritmos.canvas",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "c75a78f01944b444",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "476352d2addd1661",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Complexidade de Algoritmos.canvas"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false
+    }
+  },
+  "active": "a8be002c0de8b9e2",
+  "lastOpenFiles": [
+    "Imagens/Pasted image 20240921164536.png",
+    "Complexidade de Algoritmos.canvas",
+    "Imagens",
+    "Imagens/Pasted image 20240921163603.png",
+    "Imagens/Pasted image 20240921163313.png",
+    "Welcome.md"
+  ]
+}
