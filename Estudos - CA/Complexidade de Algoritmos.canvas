@@ -6,7 +6,7 @@
 		{"id":"9fda0f31bbf4fbbf","type":"text","text":"Complexidade Constante - São algoritmos cujas complexidades adquirem o valor *O(1)*, que independem do tamanho de n entradas e são sempre executadas num numero fixo de vezes","x":1215,"y":-560,"width":300,"height":206,"color":"2"},
 		{"id":"28694e8cd847672e","type":"text","text":"Impressão de elementos de uma lista","x":1890,"y":-1100,"width":250,"height":60},
 		{"id":"17bd6bec2dca6ba8","type":"text","text":"Somar todos os valores de um vetor de números","x":1890,"y":-981,"width":250,"height":74,"color":"3"},
-		{"id":"bc4deb8adfa17531","type":"file","file":"Imagens/Pasted image 20240921163603.png","x":2240,"y":-1180,"width":400,"height":324},
+		{"id":"bc4deb8adfa17531","type":"file","file":"Imagens/Pasted image 20240921163603.png","x":2240,"y":-1180,"width":399,"height":324},
 		{"id":"8d9d0ee4845da5f2","type":"text","text":"Complexidade Logarítmica - São algoritmos cujas complexidades correspondem a O(logN), ocorre comumente em algoritmos de \"Dividir para conquistar\".","x":1940,"y":-354,"width":250,"height":236,"color":"2"},
 		{"id":"66e9eaf2364300f3","type":"text","text":"Busca Binária","x":2240,"y":-487,"width":250,"height":60,"color":"3"},
 		{"id":"9693f30a067ae5e1","type":"text","text":"Árvore de Busca Binária","x":2240,"y":-414,"width":250,"height":60,"color":"3"},
