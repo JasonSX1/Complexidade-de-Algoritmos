@@ -17,4 +17,6 @@ public abstract class Arvore<Tipo> {
     public abstract Node<Tipo> buscar(Node<Tipo> raiz, Tipo chave);
 
     public abstract Node<Tipo> inserir (Node<Tipo> raiz, Tipo chave);
+
+    public abstract int getPassosDeBusca();
 }

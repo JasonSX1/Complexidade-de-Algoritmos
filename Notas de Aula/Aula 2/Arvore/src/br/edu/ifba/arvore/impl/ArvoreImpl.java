@@ -5,9 +5,16 @@ import br.edu.ifba.arvore.estrutura.Node;
 
 public class ArvoreImpl extends Arvore<Integer> {
 
+    private int passosDeBusca = 0;
+
+    @Override
+    public int getPassosDeBusca() {
+        return passosDeBusca;
+    }
+
     @Override
     public void imprimir() {
-        StringBuilder visualizador = new StringBuilder(); 
+        StringBuilder visualizador = new StringBuilder();
         imprimir(visualizador, "", "", raiz);
         System.out.println(visualizador.toString());
     }
@@ -33,13 +40,31 @@ public class ArvoreImpl extends Arvore<Integer> {
 
     @Override
     public Node<Integer> buscar(Node<Integer> raiz, Integer chave) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'buscar'");
+        passosDeBusca++;
+        if (raiz == null || raiz.getChave() == chave) {
+            return raiz;
+        }
+
+        if (chave < raiz.getChave()){
+            return buscar(raiz.getEsquerda(), chave);
+        }
+
+        return buscar(raiz.getDireita(), chave);
     }
 
     @Override
-    public Node<Integer> inserir(Node<Integer> raiz, Integer chave) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'inserir'");
+    public Node<Integer> inserir (Node<Integer> raiz, Integer chave) {
+        if (raiz == null) {
+            raiz = new Node<Integer>(chave);
+
+            return raiz;
+        }
+
+        if (chave < raiz.getChave()) {
+            raiz.setEsquerda(inserir(raiz.getEsquerda(), chave));
+        } else if (chave > raiz.getChave()) {
+            raiz.setDireita(inserir(raiz.getDireita(), chave));
+        }
+        return raiz;
     }
 }
