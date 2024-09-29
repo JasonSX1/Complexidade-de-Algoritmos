@@ -15,9 +15,9 @@
               "state": {
                 "file": "Complexidade de Algoritmos.canvas",
                 "viewState": {
-                  "x": 2143.1016525974187,
-                  "y": -683.9685135473359,
-                  "zoom": -0.8567476360192814
+                  "x": 1902.7874967867976,
+                  "y": -1553.317790794008,
+                  "zoom": -1.1102230246251565e-16
                 }
               }
             }
@@ -72,7 +72,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "b349addd583c3aeb",
@@ -149,8 +149,12 @@
       "command-palette:Abrir paleta de comandos": false
     }
   },
-  "active": "a8be002c0de8b9e2",
+  "active": "9b053c5effb37775",
   "lastOpenFiles": [
+    "Imagens/Pasted image 20240928165324.png",
+    "Imagens/Pasted image 20240928161823.png",
+    "Imagens/Pasted image 20240928155512.png",
+    "Imagens/Pasted image 20240928145608.png",
     "Imagens/Pasted image 20240921164536.png",
     "Complexidade de Algoritmos.canvas",
     "Imagens",
