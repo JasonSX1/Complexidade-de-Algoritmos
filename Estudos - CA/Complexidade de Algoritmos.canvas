@@ -35,13 +35,13 @@
 		{"id":"bc4deb8adfa17531","type":"file","file":"Imagens/Pasted image 20240921163603.png","x":407,"y":-1075,"width":399,"height":324},
 		{"id":"28694e8cd847672e","type":"text","text":"Impressão de elementos de uma lista","x":858,"y":-1240,"width":250,"height":60,"color":"3"},
 		{"id":"17bd6bec2dca6ba8","type":"text","text":"Somar todos os valores de um vetor de números","x":858,"y":-1149,"width":250,"height":74,"color":"3"},
-		{"id":"667bab29a0f1ba0e","type":"file","file":"Imagens/Pasted image 20240928165324.png","x":2500,"y":-1500,"width":400,"height":232},
+		{"id":"667bab29a0f1ba0e","type":"file","file":"Imagens/Pasted image 20240928165324.png","x":2500,"y":-1500,"width":399,"height":232},
 		{"id":"3d45dc49d0524e89","type":"text","text":"**Complexidade Exponencial** - São algoritmos cuja complexidade correspondem ao valor ***O(2^N),*** geralmente indicam casos extremos de aplicação de força bruta, dependendo do tamanho da entrada de dados podem se tornar impraticáveis, geralmente são **ineficientes e impraticáveis**","x":1600,"y":-1468,"width":380,"height":200,"color":"2"},
 		{"id":"5f27860f22495919","type":"text","text":"**Complexidade Fatorial** - São algoritmos cuja complexidade correspondem ao valor ***O(N!),*** a complexidade cresce de forma fatorial conforme o tamanho do input, são geralmente considerados impossíveis de resolução.","x":1790,"y":-940,"width":380,"height":200,"color":"2"},
 		{"id":"916c7e99b01a3c9f","type":"text","text":"Verificação de soma de subconjuntos","x":1420,"y":-1670,"width":250,"height":60,"color":"3"},
-		{"id":"586740ea2c193773","x":1760,"y":-1705,"width":315,"height":130,"color":"3","type":"text","text":"Dado um vetor de números e um valor total X, existem números no vetor que, se somados chegam ao valor de X?"},
-		{"id":"7ed42a7080c5f5e9","x":1835,"y":-1041,"width":290,"height":50,"color":"3","type":"text","text":"Problema do caixeiro-viajante"},
-		{"id":"074a4f4fcac0c4e0","x":1778,"y":-1880,"width":279,"height":125,"color":"3","type":"text","text":"Consiste em calcular todas as possibilidades de soma dentro de um vetor para se obter um número específico"}
+		{"id":"586740ea2c193773","type":"text","text":"Dado um vetor de números e um valor total X, existem números no vetor que, se somados chegam ao valor de X?","x":1760,"y":-1705,"width":315,"height":130,"color":"3"},
+		{"id":"7ed42a7080c5f5e9","type":"text","text":"Problema do caixeiro-viajante","x":1835,"y":-1041,"width":290,"height":50,"color":"3"},
+		{"id":"074a4f4fcac0c4e0","type":"text","text":"Consiste em calcular todas as possibilidades de soma dentro de um vetor para se obter um número específico","x":1778,"y":-1880,"width":279,"height":125,"color":"3"}
 	],
 	"edges":[
 		{"id":"885196dfa8b38a89","fromNode":"7bce111f54f37204","fromSide":"right","toNode":"d5dec6f87aee6703","toSide":"left"},
