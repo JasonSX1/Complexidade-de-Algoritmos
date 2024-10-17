@@ -15,14 +15,27 @@
               "state": {
                 "file": "Complexidade de Algoritmos.canvas",
                 "viewState": {
-                  "x": 2367.210987790825,
-                  "y": -739.5326372279196,
-                  "zoom": -1
+                  "x": 2000.1868664668614,
+                  "y": -453.8345333450496,
+                  "zoom": -1.6666666666666665
                 }
               }
             }
+          },
+          {
+            "id": "218c970fee9f8785",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Trabalho - CA.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -88,7 +101,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Complexidade de Algoritmos.canvas",
+                "file": "Trabalho - CA.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Complexidade de Algoritmos.canvas",
+                "file": "Trabalho - CA.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -128,7 +141,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Complexidade de Algoritmos.canvas"
+                "file": "Trabalho - CA.md"
               }
             }
           }
@@ -149,14 +162,16 @@
       "command-palette:Abrir paleta de comandos": false
     }
   },
-  "active": "9b053c5effb37775",
+  "active": "218c970fee9f8785",
   "lastOpenFiles": [
+    "Complexidade de Algoritmos.canvas",
+    "Trabalho - CA.md",
+    "Imagens/Pasted image 20241010113939.png",
     "Imagens/Pasted image 20240928165324.png",
     "Imagens/Pasted image 20240928161823.png",
     "Imagens/Pasted image 20240928155512.png",
     "Imagens/Pasted image 20240928145608.png",
     "Imagens/Pasted image 20240921164536.png",
-    "Complexidade de Algoritmos.canvas",
     "Imagens",
     "Imagens/Pasted image 20240921163603.png",
     "Imagens/Pasted image 20240921163313.png",
