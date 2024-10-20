@@ -31,7 +31,7 @@ public class App {
 
         // d.1 imprimindo os Jogadores
         System.out.println("Imprimindo os Jogadores...\n");
-        Jogador.gerarJogadores(QTD_JOGADORES);
+        //Jogador.gerarJogadores(QTD_JOGADORES);
 
         // d.2 imprimindo as apostas por jogador
     }
