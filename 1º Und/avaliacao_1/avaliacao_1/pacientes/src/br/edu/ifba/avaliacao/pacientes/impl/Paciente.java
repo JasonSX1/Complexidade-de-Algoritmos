@@ -21,7 +21,7 @@ public class Paciente implements Comparable<Paciente> {
     @Override
     public String toString() {
         return "id: " + identificacao + ", nome: " + nome;
-    }
+    } 
 
     @Override
     public int compareTo(Paciente o) {

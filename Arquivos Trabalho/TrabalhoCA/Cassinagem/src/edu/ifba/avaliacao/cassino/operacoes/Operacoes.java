@@ -1,5 +1,6 @@
 package edu.ifba.avaliacao.cassino.operacoes;
 
-public class Operacoes {
+public interface Operacoes {
     
+
 }
