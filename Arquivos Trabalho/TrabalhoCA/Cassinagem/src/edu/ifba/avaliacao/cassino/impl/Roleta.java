@@ -12,8 +12,20 @@ public class Roleta {
         this.tipoSorteado = tipoSorteado;
     }
 
-    public int getNumeroSorteado() { return numeroSorteado; }
-    public String getCorSorteada() { return corSorteada; }
-    public String getTipoSorteado() { return tipoSorteado; }
-    
+    public int getNumeroSorteado() {
+        return numeroSorteado;
+    }
+
+    public String getCorSorteada() {
+        return corSorteada;
+    }
+
+    public String getTipoSorteado() {
+        return tipoSorteado;
+    }
+
+    // Gira a roleta e gera o resultado (número, cor e tipo)
+    public void girar() { 
+        //todo
+     }
 }
