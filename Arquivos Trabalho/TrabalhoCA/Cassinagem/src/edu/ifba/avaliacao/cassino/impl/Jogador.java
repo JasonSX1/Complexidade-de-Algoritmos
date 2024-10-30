@@ -11,6 +11,7 @@ public class Jogador {
     private String nome;
     private String sobrenome;
     private double saldo;
+    private List<Aposta> historicoApostas;
 
     public int getId() {
         return id;
@@ -21,7 +22,7 @@ public class Jogador {
     }
 
     public String getNomeCompleto() {
-        return nome + "" + sobrenome;
+        return nome + " " + sobrenome;
     }
 
     public void setNome(String nome) {
@@ -44,7 +45,9 @@ public class Jogador {
         this.saldo = saldo;
     }
 
-    private List<Aposta> historicoApostas;
+    public List<Aposta> getHistoricoApostas() {
+        return historicoApostas;
+    }
 
     // Construtor do jogador
     public Jogador(int id, String nome, String sobrenome, double saldo) {
@@ -52,6 +55,7 @@ public class Jogador {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.saldo = saldo;
+        this.historicoApostas = new ArrayList<>(); // Inicializa a lista de apostas
     }
 
     // Geração de jogadores com nomes e saldo aleatório
@@ -86,6 +90,10 @@ public class Jogador {
         saldo = aposta.getSaldoResultante(saldo); // Atualiza saldo com o resultado da aposta
     }
 
+    public double getSaldoInicial() {
+        return saldo; // Retorna o saldo inicial (ou pode-se implementar uma lógica específica para isso)
+    }
+
     public void imprimirLeiturasPorRodada() {
         System.out.println("RODADA | ENTRADA | APOSTA | RESULTADO DA ROLETA   | RESULTADO | SALDO RESULTANTE");
         for (int i = 0; i < historicoApostas.size(); i++) {
@@ -93,30 +101,4 @@ public class Jogador {
             System.out.println((i + 1) + "\t| " + aposta);
         }
     }
-
-    // Método para gerar apostas para todos os jogadores
-    public static void gerarApostasParaJogadores(List<Jogador> jogadores, int rodadas) {
-        Random random = new Random();
-
-        for (Jogador jogador : jogadores) {
-            for (int i = 0; i < rodadas; i++) {
-                double entrada = 10 + random.nextInt(40); // Valor entre 10 e 50
-                int numeroApostado = random.nextInt(36); // Número entre 0 e 35
-                int numeroRoleta = random.nextInt(36); // Resultado da roleta entre 0 e 35
-                String corRoleta = (numeroRoleta % 2 == 0) ? "VERMELHO" : "PRETO";
-                String paridadeRoleta = (numeroRoleta % 2 == 0) ? "PAR" : "ÍMPAR";
-
-                // Calcula o resultado da aposta (simulação de ganho/perda)
-                double resultado = (numeroApostado == numeroRoleta) ? entrada * 3 : -entrada;
-
-                // Adiciona a aposta ao histórico do jogador
-                Aposta aposta = new Aposta(entrada, numeroApostado, numeroRoleta, corRoleta, paridadeRoleta, resultado);
-                jogador.adicionarAposta(aposta);
-            }
-        }
-    }
-
-    
-
-
 }

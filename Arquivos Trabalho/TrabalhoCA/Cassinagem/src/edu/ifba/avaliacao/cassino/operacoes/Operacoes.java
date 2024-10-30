@@ -9,7 +9,7 @@ public interface Operacoes<Jogador, Aposta> {
     // Implementação d.1 - imprime as apostas realizadas
     void imprimir(List<Aposta> monitorados);
 
-    // Implementação d.2 - imprime as apostas associadas a cada jogador
+    // Implementação d.2 - imprime a lista de resultados da roleta e as apostas associadas a cada jogador
     void imprimir(Map<Jogador, List<Aposta>> leituras);
 
     // Implementação d.3 - ordena apostas por lucro
