@@ -11,14 +11,10 @@ import edu.ifba.avaliacao.cassino.impl.Aposta;
 public class App {
     public static void main(String[] args) throws Exception {
         int quantidadeJogadores = 10; // Quantidade padrão de jogadores
-        int rodadas = 10;  // Define a quantidade de apostas para cada jogador
+        int rodadas = 10; // Define a quantidade de apostas para cada jogador
 
-        // Código ANSI para verde
-        final String VERDE = "\u001B[32m";
         // Código ANSI para vermelho
         final String VERMELHO = "\u001B[31m";
-        // Código ANSI para preto
-        final String PRETO = "\u001B[30m";
         // Código ANSI para resetar a cor
         final String RESET = "\u001B[0m";
 
@@ -38,10 +34,12 @@ public class App {
                 VERMELHO + "▀                                ▀       ▀ ▀                          ▀        ▀    ▀    ");
         System.out.println(RESET);
 
-        // d.1 imprimindo os Jogadores
+        // Implementação d.1 - imprime os jogadores e seus saldos iniciais
         System.out.println("Imprimindo os Jogadores...\n");
         List<Jogador> jogadores = Jogador.gerarJogadores(quantidadeJogadores);
 
+        // Implementação d.2 - imprime a lista de resultados da roleta e as apostas
+        // associadas a cada jogador
         SensorDeApostas.gerarApostasParaJogadores(jogadores, rodadas);
     }
 

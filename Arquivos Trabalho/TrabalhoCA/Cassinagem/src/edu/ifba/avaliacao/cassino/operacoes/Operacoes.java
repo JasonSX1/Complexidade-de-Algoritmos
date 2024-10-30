@@ -6,11 +6,11 @@ import edu.ifba.avaliacao.cassino.impl.Aposta;
 import edu.ifba.avaliacao.cassino.impl.Roleta;
 
 public interface Operacoes<Jogador, Aposta> {
-    // Implementação d.1 - imprime as apostas realizadas
+    // Implementação d.1 - imprime os jogadores e seus saldos iniciais
     void imprimir(List<Aposta> monitorados);
 
     // Implementação d.2 - imprime a lista de resultados da roleta e as apostas associadas a cada jogador
-    void imprimir(Map<Jogador, List<Aposta>> leituras);
+    void apostar(Map<Jogador, List<Aposta>> leituras);
 
     // Implementação d.3 - ordena apostas por lucro
     Map<Jogador, List<Aposta>> ordenar(Map<Jogador, List<Aposta>> apostas);

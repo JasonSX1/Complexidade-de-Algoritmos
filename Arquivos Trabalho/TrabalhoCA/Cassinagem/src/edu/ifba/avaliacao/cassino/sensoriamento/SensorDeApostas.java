@@ -84,11 +84,47 @@ public class SensorDeApostas {
     
 
     public static String formatarResultadoAposta(Aposta aposta, double saldoResultante) {
+        final String VERDE = "\u001B[32m";
+        final String VERMELHO = "\u001B[31m";
+        final String RESET = "\u001B[0m";
+    
+        // Formatação condicional do resultado em cores
         String resultadoFormatado = (aposta.getResultado() >= 0 ? VERDE : VERMELHO) +
-                String.format("%.2f", aposta.getResultado()) + RESET;
-        return String.format("%d        | %.2f   | %d      | %d - %s - %s  | %s     | %.2f",
-                aposta.getNumeroDaRodada(), aposta.getEntrada(), aposta.getNumeroApostado(), aposta.getNumeroRoleta(),
-                aposta.getCorRoleta(), aposta.getParidadeRoleta(), resultadoFormatado, saldoResultante);
+                                    String.format("%9.2f", aposta.getResultado()) + RESET;
+    
+        // Número da rodada com ajuste de alinhamento
+        String numeroRodada = aposta.getNumeroDaRodada() < 10 ? " " + aposta.getNumeroDaRodada()
+                                                               : String.valueOf(aposta.getNumeroDaRodada());
+    
+        // Ajuste para exibir zero à esquerda nos números da roleta e da aposta
+        String numeroApostadoFormatado = aposta.getNumeroApostado() >= 0
+                                         ? String.format("%02d", aposta.getNumeroApostado())
+                                         : "--";
+        String numeroRoletaFormatado = String.format("%02d", aposta.getNumeroRoleta());
+    
+        // Formatação do tipo de aposta (exibe apenas o valor, sem o tipo)
+        String apostaDetalhe = switch (aposta.getTipoAposta()) {
+            case "NUMERO" -> numeroApostadoFormatado;
+            case "COR" -> aposta.getCorApostada();
+            case "PARIDADE" -> aposta.getParidadeApostada();
+            default -> "";
+        };
+    
+        // Ajuste do tamanho do tipo de aposta e valor de aposta para alinhamento
+        String tipoApostaFormatado = String.format("%-7s", aposta.getTipoAposta());
+        String apostaDetalheFormatado = String.format("%-8s", apostaDetalhe);
+    
+        // Retorna a linha formatada
+        return String.format("%s     | %-8s | %7.2f | %-8s | %02d - %-8s - %-7s | %s | %14.2f",
+                             numeroRodada,
+                             tipoApostaFormatado,
+                             aposta.getEntrada(),
+                             apostaDetalheFormatado,
+                             aposta.getNumeroRoleta(),
+                             aposta.getCorRoleta(),
+                             aposta.getParidadeRoleta(),
+                             resultadoFormatado,
+                             saldoResultante);
     }
     
 
