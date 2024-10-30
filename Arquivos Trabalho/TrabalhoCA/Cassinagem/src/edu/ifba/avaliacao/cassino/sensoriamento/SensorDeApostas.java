@@ -44,22 +44,22 @@ public class SensorDeApostas {
         for (Jogador jogador : jogadores) {
             System.out.printf("Jogador apostando: id: %d, Nome: %s, Saldo Inicial: %.2f, Saldo final: %s\n",
                     jogador.getId(), jogador.getNomeCompleto(), jogador.getSaldoInicial(),
-                    formatarSaldoFinal(jogador.getSaldo()));
+                    formatarSaldoFinal(jogador.getSaldo(), jogador.getSaldoInicial()));
 
         }
 
     }
 
-    public static String formatarResultadoAposta(Aposta aposta, Jogador jogador) {
+    public static String formatarResultadoAposta(Aposta aposta, double saldoResultante) {
         String resultadoFormatado = (aposta.getResultado() >= 0 ? VERDE : VERMELHO) +
                 String.format("%.2f", aposta.getResultado()) + RESET;
         return String.format("%d        | %.2f   | %d      | %d - %s - %s  | %s     | %.2f",
                 aposta.getNumeroDaRodada(), aposta.getEntrada(), aposta.getNumeroApostado(), aposta.getNumeroRoleta(),
-                aposta.getCorRoleta(), aposta.getParidadeRoleta(), resultadoFormatado, jogador.getSaldo());
+                aposta.getCorRoleta(), aposta.getParidadeRoleta(), resultadoFormatado, saldoResultante);
     }
+    
 
-    public static String formatarSaldoFinal(double saldoFinal) {
-        String corFormatacao = saldoFinal < 0 ? VERMELHO : VERDE;
-        return corFormatacao + String.format("%.2f", saldoFinal) + RESET;
+    public static String formatarSaldoFinal(double saldoFinal, double saldoInicial) {
+        return (saldoFinal >= saldoInicial ? VERDE : VERMELHO) + String.format("%.2f", saldoFinal) + RESET;
     }
 }

@@ -10,6 +10,7 @@ public class Jogador {
     private String nome;
     private String sobrenome;
     private double saldo;
+    private double saldoInicial;
     private List<Aposta> historicoApostas;
 
     public Jogador(int id, String nome, String sobrenome, double saldo) {
@@ -17,6 +18,7 @@ public class Jogador {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.saldo = saldo;
+        this.saldoInicial = saldo;
         this.historicoApostas = new ArrayList<>();
     }
 
@@ -33,7 +35,7 @@ public class Jogador {
     }
 
     public double getSaldoInicial() {
-        return saldo;
+        return saldoInicial;
     }
 
     public void setSaldo(double saldo) {
@@ -72,9 +74,12 @@ public class Jogador {
     public void apostar() {
         System.out.printf("\nApostas do %s:\n", getNomeCompleto());
         System.out.println("RODADA | ENTRADA | APOSTA | RESULTADO DA ROLETA | RESULTADO | SALDO RESULTANTE");
-
+    
+        double saldoAtualizado = saldoInicial; // Começa com o saldo inicial
         for (Aposta aposta : historicoApostas) {
-            System.out.println(SensorDeApostas.formatarResultadoAposta(aposta, this));
+            saldoAtualizado += aposta.getResultado(); // Atualiza o saldo com o resultado da aposta atual
+            System.out.println(SensorDeApostas.formatarResultadoAposta(aposta, saldoAtualizado));
         }
     }
+    
 }

@@ -10,6 +10,11 @@ public interface Operacoes<Jogador, Aposta> {
     void imprimir(List<Aposta> monitorados);
 
     // Implementação d.2 - imprime a lista de resultados da roleta e as apostas associadas a cada jogador
-    SensorDeApostas.gerarApostasParaJogadores(jogadores, rodadas);
+    void imprimir(Map<Jogador, List<Aposta>> leituras);
 
+    // Implementação d.3 - ordena apostas por lucro
+    Map<Jogador, List<Aposta>> ordenar(Map<Jogador, List<Aposta>> apostas);
+
+    // Implementação d.4 - calcula retorno de uma aposta com base no resultado da roleta
+    double calcularRetorno(Aposta aposta, Roleta resultado);
 }
