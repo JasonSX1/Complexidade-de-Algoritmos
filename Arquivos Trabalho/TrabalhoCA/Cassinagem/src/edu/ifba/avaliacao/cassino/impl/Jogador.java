@@ -6,14 +6,17 @@ import java.util.Random;
 import edu.ifba.avaliacao.cassino.sensoriamento.*;
 
 public class Jogador {
+    private static final int SALDO_MINIMO = 100;
+    private static final int SALDO_MAXIMO = 1000;
+
     private int id;
     private String nome;
     private String sobrenome;
-    private double saldo;
-    private double saldoInicial;
+    private int saldo;
+    private int saldoInicial;
     private List<Aposta> historicoApostas;
 
-    public Jogador(int id, String nome, String sobrenome, double saldo) {
+    public Jogador(int id, String nome, String sobrenome, int saldo) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -30,15 +33,15 @@ public class Jogador {
         return nome + " " + sobrenome;
     }
 
-    public double getSaldo() {
+    public int getSaldo() {
         return saldo;
     }
 
-    public double getSaldoInicial() {
+    public int getSaldoInicial() {
         return saldoInicial;
     }
 
-    public void setSaldo(double saldo) {
+    public void setSaldo(int saldo) {
         this.saldo = saldo;
     }
 
@@ -62,9 +65,9 @@ public class Jogador {
         for (int i = 0; i < quantidade; i++) {
             String nome = nomes[random.nextInt(nomes.length)];
             String sobrenome = sobrenomes[random.nextInt(sobrenomes.length)];
-            double saldo = 100 + (900 * random.nextDouble());
+            int saldo = SALDO_MINIMO + random.nextInt(SALDO_MAXIMO - SALDO_MINIMO + 1); // Gera saldo entre os limites
             Jogador jogador = new Jogador(i + 1, nome, sobrenome, saldo);
-            System.out.printf("Jogador apostando: id: %d, Nome: %s, Saldo Inicial: %.2f\n",
+            System.out.printf("Jogador apostando: id: %d, Nome: %s, Saldo Inicial: %d\n",
                     jogador.getId(), jogador.getNomeCompleto(), jogador.getSaldoInicial());
             jogadores.add(jogador);
         }
@@ -77,17 +80,12 @@ public class Jogador {
                 "RODADA | TIPO     | ENTRADA | APOSTA   | RESULTADO DA ROLETA     | RESULTADO | SALDO RESULTANTE");
         System.out.println("");
     
-        double saldoAtual = saldoInicial; // Inicializa o saldo com o valor inicial para acompanhar as atualizações
+        int saldoAtual = saldoInicial;
     
         for (Aposta aposta : historicoApostas) {
-            // Atualiza o saldo atual do jogador com o resultado da aposta
             saldoAtual += aposta.getResultado();
-    
-            // Usa o método formatarResultadoAposta para formatar o resultado da rodada com cores condicionais
             String resultadoFormatado = SensorDeApostas.formatarResultadoAposta(aposta, saldoAtual);
-            
-            // Exibe o resultado formatado
             System.out.println(resultadoFormatado);
         }
-}
+    }
 }
