@@ -1,9 +1,9 @@
 package edu.ifba.avaliacao.cassino.impl;
 
-import edu.ifba.avaliacao.cassino.sensoriamento.SensorDeApostas;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import edu.ifba.avaliacao.cassino.sensoriamento.*;
 
 public class Jogador {
     private int id;
@@ -46,34 +46,35 @@ public class Jogador {
 
     public void adicionarAposta(Aposta aposta) {
         historicoApostas.add(aposta);
-        saldo += aposta.getResultado(); // Atualiza saldo com o resultado da aposta
+        saldo += aposta.getResultado();
     }
 
     public static List<Jogador> gerarJogadores(int quantidade) {
         List<Jogador> jogadores = new ArrayList<>();
         Random random = new Random();
-        String[] nomes = {"André", "João", "Maria", "Carla", "Pedro"};
-        String[] sobrenomes = {"Silva", "Santos", "Pereira", "Oliveira", "Lima"};
+        String[] nomes = {"Lucas", "Beatriz", "Pedro", "Maria", "Paulo", "João"};
+        String[] sobrenomes = {"Silva", "Almeida", "Oliveira", "Barbosa", "Lima"};
 
+        System.out.println("Imprimindo os Jogadores...");
+        System.out.println("\nLista de jogadores monitorados:");
         for (int i = 0; i < quantidade; i++) {
             String nome = nomes[random.nextInt(nomes.length)];
             String sobrenome = sobrenomes[random.nextInt(sobrenomes.length)];
             double saldo = 100 + (900 * random.nextDouble());
-            jogadores.add(new Jogador(i + 1, nome, sobrenome, saldo));
+            Jogador jogador = new Jogador(i + 1, nome, sobrenome, saldo);
+            System.out.printf("Jogador apostando: id: %d, Nome: %s, Saldo Inicial: %.2f\n",
+                    jogador.getId(), jogador.getNomeCompleto(), jogador.getSaldoInicial());
+            jogadores.add(jogador);
         }
         return jogadores;
     }
 
     public void apostar() {
-        System.out.printf("\nJogador: %s (ID: %d)\n", getNomeCompleto(), getId());
+        System.out.printf("\nApostas do %s:\n", getNomeCompleto());
         System.out.println("RODADA | ENTRADA | APOSTA | RESULTADO DA ROLETA | RESULTADO | SALDO RESULTANTE");
 
         for (Aposta aposta : historicoApostas) {
             System.out.println(SensorDeApostas.formatarResultadoAposta(aposta, this));
         }
-
-        System.out.printf("Saldo final de %s: %s\n",
-                getNomeCompleto(),
-                SensorDeApostas.formatarSaldoFinal(getSaldo(), getSaldoInicial()));
     }
 }

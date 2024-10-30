@@ -7,6 +7,7 @@ public class Aposta {
     private String corRoleta;
     private String paridadeRoleta;
     private double resultado;
+    private int numeroDaRodada;
 
     public Aposta(double entrada, int numeroApostado, int numeroRoleta, String corRoleta, String paridadeRoleta, double resultado) {
         this.entrada = entrada;
@@ -39,5 +40,13 @@ public class Aposta {
 
     public int getNumeroApostado() {
         return numeroApostado;
+    }
+
+    public int getNumeroDaRodada() {
+        return numeroDaRodada;
+    }
+    
+    public void setNumeroDaRodada(int numeroDaRodada) {
+        this.numeroDaRodada = numeroDaRodada;
     }
 }
