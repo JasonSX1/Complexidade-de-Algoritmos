@@ -73,17 +73,23 @@ public class Jogador {
 
     public void apostar() {
         System.out.printf("\nApostas de %s:\n", getNomeCompleto());
-        System.out.println("RODADA | TIPO     | ENTRADA | APOSTA   | RESULTADO DA ROLETA     | RESULTADO | SALDO RESULTANTE");
+        System.out.println(
+                "RODADA | TIPO     | ENTRADA | APOSTA   | RESULTADO DA ROLETA     | RESULTADO | SALDO RESULTANTE");
         System.out.println("");
-    
+
+        double saldoAtual = saldoInicial; // Inicializa o saldo com o valor inicial para acompanhar as atualizações
+
         for (Aposta aposta : historicoApostas) {
             // Número da rodada com ajuste de alinhamento
-            String numeroRodada = aposta.getNumeroDaRodada() < 10 ? " " + aposta.getNumeroDaRodada() : String.valueOf(aposta.getNumeroDaRodada());
-    
+            String numeroRodada = aposta.getNumeroDaRodada() < 10 ? " " + aposta.getNumeroDaRodada()
+                    : String.valueOf(aposta.getNumeroDaRodada());
+
             // Ajuste para exibir zero à esquerda nos números da roleta e da aposta
-            String numeroApostadoFormatado = aposta.getNumeroApostado() >= 0 ? String.format("%02d", aposta.getNumeroApostado()) : "--";
+            String numeroApostadoFormatado = aposta.getNumeroApostado() >= 0
+                    ? String.format("%02d", aposta.getNumeroApostado())
+                    : "--";
             String numeroRoletaFormatado = String.format("%02d", aposta.getNumeroRoleta());
-    
+
             // Formatação do tipo de aposta (exibe apenas o valor, sem o tipo)
             String apostaDetalhe = switch (aposta.getTipoAposta()) {
                 case "NUMERO" -> numeroApostadoFormatado;
@@ -91,22 +97,25 @@ public class Jogador {
                 case "PARIDADE" -> aposta.getParidadeApostada();
                 default -> "";
             };
-    
+
             // Ajuste do tamanho do tipo de aposta e valor de aposta para alinhamento
             String tipoApostaFormatado = String.format("%-7s", aposta.getTipoAposta());
-            String apostaDetalheFormatado = String.format("%-7s", apostaDetalhe);
-    
+            String apostaDetalheFormatado = String.format("%-8s", apostaDetalhe);
+
+            // Atualiza o saldo atual do jogador com o resultado da aposta
+            saldoAtual += aposta.getResultado();
+
             // Imprime a linha formatada com alinhamento adequado
             System.out.printf("%s     | %-8s | %7.2f | %-8s | %02d - %-8s - %-7s | %9.2f | %14.2f\n",
-                              numeroRodada,
-                              tipoApostaFormatado,
-                              aposta.getEntrada(),
-                              apostaDetalheFormatado,
-                              aposta.getNumeroRoleta(),
-                              aposta.getCorRoleta(),
-                              aposta.getParidadeRoleta(),
-                              aposta.getResultado(),
-                              getSaldo());
+                    numeroRodada,
+                    tipoApostaFormatado,
+                    aposta.getEntrada(),
+                    apostaDetalheFormatado,
+                    aposta.getNumeroRoleta(),
+                    aposta.getCorRoleta(),
+                    aposta.getParidadeRoleta(),
+                    aposta.getResultado(),
+                    saldoAtual);
         }
-    }    
+    }
 }
