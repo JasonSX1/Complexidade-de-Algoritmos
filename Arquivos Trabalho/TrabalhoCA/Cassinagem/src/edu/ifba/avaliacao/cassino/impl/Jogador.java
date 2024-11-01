@@ -76,18 +76,19 @@ public class Jogador {
         System.out.println(
                 "RODADA | TIPO     | ENTRADA | APOSTA   | RESULTADO DA ROLETA     | RESULTADO | SALDO RESULTANTE");
         System.out.println("");
-    
+
         double saldoAtual = saldoInicial; // Inicializa o saldo com o valor inicial para acompanhar as atualizações
-    
+
         for (Aposta aposta : historicoApostas) {
             // Atualiza o saldo atual do jogador com o resultado da aposta
             saldoAtual += aposta.getResultado();
-    
-            // Usa o método formatarResultadoAposta para formatar o resultado da rodada com cores condicionais
+
+            // Usa o método formatarResultadoAposta para formatar o resultado da rodada com
+            // cores condicionais
             String resultadoFormatado = SensorDeApostas.formatarResultadoAposta(aposta, saldoAtual);
-            
+
             // Exibe o resultado formatado
             System.out.println(resultadoFormatado);
         }
-}
+    }
 }

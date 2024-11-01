@@ -27,16 +27,25 @@ public class OperacoesImpl implements Operacoes {
         SensorDeApostas.exibirSaldoFinalDosJogadores(jogadores);
     }
 
+    @Override
     public void ordenarApostas() {
-        // Ordena e exibe as apostas por lucro
         for (Jogador jogador : jogadores) {
-            List<Aposta> apostas = jogador.getHistoricoApostas(); // Obtém as apostas do jogador
-            List<Aposta> apostasOrdenadas = ordenadorDeApostas.ordenarPorLucro(apostas); // Ordena as apostas
-
+            List<Aposta> apostas = jogador.getHistoricoApostas();
+            List<Aposta> apostasOrdenadas = ordenadorDeApostas.ordenarPorLucro(apostas);
+            System.out.println(" ");
             System.out.println("Apostas ordenadas por lucro para o jogador " + jogador.getNomeCompleto() + ":");
+            System.out.println(" ");
+            System.out.println(
+                    "RODADA | TIPO     | ENTRADA | APOSTA   | RESULTADO DA ROLETA     | RESULTADO | SALDO RESULTANTE");
+            System.out.println(" ");
+            double saldoAtual = jogador.getSaldoInicial();
+
             for (Aposta aposta : apostasOrdenadas) {
-                System.out.println(aposta);
+                saldoAtual += aposta.getResultado();
+                String apostaFormatada = SensorDeApostas.formatarResultadoAposta(aposta, saldoAtual);
+                System.out.println(apostaFormatada);
             }
         }
     }
+
 }

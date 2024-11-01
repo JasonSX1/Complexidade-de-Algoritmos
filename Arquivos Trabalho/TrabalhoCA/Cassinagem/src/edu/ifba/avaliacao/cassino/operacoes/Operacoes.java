@@ -18,8 +18,7 @@ public interface Operacoes<Jogador, Aposta> {
     void resultadoAposApostas();
 
     // d.3 - Ordena as apostas por lucro e imprime
-    Map<Jogador, List<Aposta>> ordenarApostas(Map<Jogador, List<Aposta>> apostas);
-
+    void ordenarApostas();
     // d.4 - Calcula o retorno de uma aposta com base no resultado da roleta
     //double calcularRetorno(Aposta aposta, Roleta resultado);
 }

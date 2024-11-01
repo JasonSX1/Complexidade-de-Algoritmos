@@ -21,7 +21,7 @@ public class App {
                 operacoes.resultadoAposApostas();
 
                 // d.3 Ordena as apostas por lucro e exibe
-                //operacoes.ordenarApostas();
+                operacoes.ordenarApostas();
         }
 
 }
