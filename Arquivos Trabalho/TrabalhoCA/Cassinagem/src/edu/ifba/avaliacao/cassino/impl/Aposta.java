@@ -5,6 +5,7 @@ public class Aposta {
     private int numeroRoleta;
     private String corApostada;
     private String paridadeApostada;
+    
     public String getCorApostada() {
         return corApostada;
     }

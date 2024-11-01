@@ -45,14 +45,17 @@
             "id": "1b3da864859c8599",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "2ª Unidade.md",
-                "mode": "source",
-                "source": false
+                "file": "1ª Unidade.canvas",
+                "viewState": {
+                  "x": 3381.545932410159,
+                  "y": -376.7614406598102,
+                  "zoom": 0.365678441722659
+                }
               },
-              "icon": "lucide-file",
-              "title": "2ª Unidade"
+              "icon": "lucide-layout-dashboard",
+              "title": "1ª Unidade"
             }
           }
         ],
@@ -199,9 +202,9 @@
   },
   "active": "1b3da864859c8599",
   "lastOpenFiles": [
-    "1ª Unidade.canvas",
     "2ª Unidade.md",
     "Trabalho - CA.md",
+    "1ª Unidade.canvas",
     "Imagens/Pasted image 20241010113939.png",
     "Imagens/Pasted image 20240928165324.png",
     "Imagens/Pasted image 20240928161823.png",

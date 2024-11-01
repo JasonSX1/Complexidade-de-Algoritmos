@@ -9,17 +9,16 @@ import edu.ifba.avaliacao.cassino.impl.Roleta;
 public interface Operacoes<Jogador, Aposta> {
 
     // d.1 - Imprime as informações sobre os jogadores e seus saldos iniciais
-    void imprimirJogadores(int quantidade);
+    void gerarJogadores(int quantidade);
 
     // d.2 - Imprime as apostas e os resultados da roleta associados a cada jogador
-    void imprimirJogadoresApostas(Roleta roleta, int rodadas);
+    void gerarApostas(int rodadas);
 
     // d.2.1 - Imprime o resultado final do saldo dos jogadores
-    void exibirResultadoFinal();
-
+    void resultadoAposApostas();
 
     // d.3 - Ordena as apostas por lucro e imprime
-    //Map<Jogador, List<Aposta>> ordenarApostas(Map<Jogador, List<Aposta>> apostas);
+    Map<Jogador, List<Aposta>> ordenarApostas(Map<Jogador, List<Aposta>> apostas);
 
     // d.4 - Calcula o retorno de uma aposta com base no resultado da roleta
     //double calcularRetorno(Aposta aposta, Roleta resultado);

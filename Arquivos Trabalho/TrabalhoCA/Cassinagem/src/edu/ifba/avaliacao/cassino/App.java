@@ -1,15 +1,7 @@
 package edu.ifba.avaliacao.cassino;
 
-import java.io.IOException;
-import java.util.Scanner;
-import java.util.List;
-import java.util.Map;
-import edu.ifba.avaliacao.cassino.impl.Jogador;
 import edu.ifba.avaliacao.cassino.impl.OperacoesImpl;
-import edu.ifba.avaliacao.cassino.impl.Roleta;
 import edu.ifba.avaliacao.cassino.operacoes.Operacoes;
-import edu.ifba.avaliacao.cassino.sensoriamento.SensorDeApostas;
-import edu.ifba.avaliacao.cassino.impl.Aposta;
 
 public class App {
         public static void main(String[] args) throws Exception {
@@ -20,15 +12,15 @@ public class App {
                 Operacoes operacoes = new OperacoesImpl();
 
                 // d.1 Imprime jogadores e seus saldos iniciais
-                operacoes.imprimirJogadores(quantidadeJogadores);
-
-                Roleta roleta = new Roleta();
+                operacoes.gerarJogadores(quantidadeJogadores);
 
                 // d.2 Realiza as apostas e exibe o saldo dos jogadores após as rodadas
-                operacoes.imprimirJogadoresApostas(roleta, rodadas);
+                operacoes.gerarApostas(rodadas);
 
                 // d.2.1 Exibe o resultado final de cada jogador
-                operacoes.exibirResultadoFinal();
+                operacoes.resultadoAposApostas();
+
+                //operacoes.ordenarApostas();
         }
 
 }
