@@ -20,7 +20,6 @@ public class App {
                 Operacoes operacoes = new OperacoesImpl();
 
                 // d.1 Imprime jogadores e seus saldos iniciais
-                System.out.println("Lista de Jogadores e Saldos Iniciais:");
                 operacoes.imprimirJogadores(quantidadeJogadores);
 
                 Roleta roleta = new Roleta();
