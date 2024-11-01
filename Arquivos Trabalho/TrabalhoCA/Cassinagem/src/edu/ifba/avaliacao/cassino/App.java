@@ -20,6 +20,7 @@ public class App {
                 // d.2.1 Exibe o resultado final de cada jogador
                 operacoes.resultadoAposApostas();
 
+                // d.3 Ordena as apostas por lucro e exibe
                 //operacoes.ordenarApostas();
         }
 
