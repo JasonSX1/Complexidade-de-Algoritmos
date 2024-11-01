@@ -1,4 +1,5 @@
 package edu.ifba.avaliacao.cassino.operacoes;
+
 import java.util.List;
 import java.util.Map;
 import edu.ifba.avaliacao.cassino.impl.Jogador;
@@ -6,15 +7,20 @@ import edu.ifba.avaliacao.cassino.impl.Aposta;
 import edu.ifba.avaliacao.cassino.impl.Roleta;
 
 public interface Operacoes<Jogador, Aposta> {
-    // Implementação d.1 - imprime os jogadores e seus saldos iniciais
-    void imprimir(List<Aposta> monitorados);
 
-    // Implementação d.2 - imprime a lista de resultados da roleta e as apostas associadas a cada jogador
-    void apostar(Map<Jogador, List<Aposta>> leituras);
+    // d.1 - Imprime as informações sobre os jogadores e seus saldos iniciais
+    void imprimirJogadores(int quantidade);
 
-    // Implementação d.3 - ordena apostas por lucro
-    Map<Jogador, List<Aposta>> ordenar(Map<Jogador, List<Aposta>> apostas);
+    // d.2 - Imprime as apostas e os resultados da roleta associados a cada jogador
+    void imprimirJogadoresApostas(Roleta roleta, int rodadas);
 
-    // Implementação d.4 - calcula retorno de uma aposta com base no resultado da roleta
-    double calcularRetorno(Aposta aposta, Roleta resultado);
+    // d.2.1 - Imprime o resultado final do saldo dos jogadores
+    void exibirResultadoFinal();
+
+
+    // d.3 - Ordena as apostas por lucro e imprime
+    //Map<Jogador, List<Aposta>> ordenarApostas(Map<Jogador, List<Aposta>> apostas);
+
+    // d.4 - Calcula o retorno de uma aposta com base no resultado da roleta
+    //double calcularRetorno(Aposta aposta, Roleta resultado);
 }

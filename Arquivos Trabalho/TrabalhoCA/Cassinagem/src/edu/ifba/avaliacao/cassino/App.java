@@ -5,41 +5,31 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.Map;
 import edu.ifba.avaliacao.cassino.impl.Jogador;
+import edu.ifba.avaliacao.cassino.impl.OperacoesImpl;
+import edu.ifba.avaliacao.cassino.impl.Roleta;
+import edu.ifba.avaliacao.cassino.operacoes.Operacoes;
 import edu.ifba.avaliacao.cassino.sensoriamento.SensorDeApostas;
 import edu.ifba.avaliacao.cassino.impl.Aposta;
 
 public class App {
-    public static void main(String[] args) throws Exception {
-        int quantidadeJogadores = 10; // Quantidade padrão de jogadores
-        int rodadas = 10; // Define a quantidade de apostas para cada jogador
+        public static void main(String[] args) throws Exception {
+                int quantidadeJogadores = 10;
+                int rodadas = 10;
 
-        // Código ANSI para vermelho
-        final String VERMELHO = "\u001B[31m";
-        // Código ANSI para resetar a cor
-        final String RESET = "\u001B[0m";
+                // Instancia a classe que implementa as operações
+                Operacoes operacoes = new OperacoesImpl();
 
-        System.out.println(
-                VERMELHO + "▄▀▄▄▄▄   ▄▀▀█▄   ▄▀▀▀▀▄  ▄▀▀▀▀▄  ▄▀▀█▀▄    ▄▀▀▄ ▀▄  ▄▀▀█▄   ▄▀▀▀▀▄   ▄▀▀█▄▄▄▄  ▄▀▀▄ ▄▀▄");
-        System.out.println(
-                VERMELHO + "█ █    ▀ ▀ ▄▀ ▀▄ █ █   ▀ █ █   ▀ █   █  █  █  █ █ █ ▀ ▄▀ ▀▄ █        ▀  ▄▀   ▀ █  █ ▀  █ ");
-        System.out.println(
-                VERMELHO + "▀ █        █▄▄▄█    ▀▄      ▀▄   ▀   █  ▀  ▀  █  ▀█   █▄▄▄█ █    ▀▄▄   █▄▄▄▄▄  ▀  █    █ ");
-        System.out.println(
-                VERMELHO + "  █       ▄▀   █ ▀▄   █  ▀▄   █      █       █   █   ▄▀   █ █     █ █  █    ▀    █    █");
-        System.out.println(
-                VERMELHO + " ▄▀▄▄▄▄▀ █   ▄▀   █▀▀▀    █▀▀▀    ▄▀▀▀▀▀▄  ▄▀   █   █   ▄▀  ▀▀▄▄▄▄▀ ▀ ▄▀▄▄▄▄   ▄▀   ▄▀  ");
-        System.out.println(
-                VERMELHO + "█     ▀  ▀   ▀    ▀       ▀      █       █ █    ▀   ▀   ▀   ▀         █    ▀   █    █    ");
-        System.out.println(
-                VERMELHO + "▀                                ▀       ▀ ▀                          ▀        ▀    ▀    ");
-        System.out.println(RESET);
+                // d.1 Imprime jogadores e seus saldos iniciais
+                System.out.println("Lista de Jogadores e Saldos Iniciais:");
+                operacoes.imprimirJogadores(quantidadeJogadores);
 
-        // Implementação d.1 - imprime os jogadores e seus saldos iniciais
-        List<Jogador> jogadores = Jogador.gerarJogadores(quantidadeJogadores);
+                Roleta roleta = new Roleta();
 
-        // Implementação d.2 - imprime a lista de resultados da roleta e as apostas
-        // associadas a cada jogador
-        SensorDeApostas.gerarApostasParaJogadores(jogadores, rodadas);
-    }
+                // d.2 Realiza as apostas e exibe o saldo dos jogadores após as rodadas
+                operacoes.imprimirJogadoresApostas(roleta, rodadas);
+
+                // d.2.1 Exibe o resultado final de cada jogador
+                operacoes.exibirResultadoFinal();
+        }
 
 }
