@@ -13,7 +13,7 @@ public abstract class Ordenador<TipoDado> {
     public List<TipoDado> getLeituras() {
         return leituras;
     }
-
+    
     public abstract void ordenar();
 
 }

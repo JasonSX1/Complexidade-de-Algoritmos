@@ -61,9 +61,9 @@ public class SensorDeApostas {
         for (Jogador jogador : jogadores) {
             jogador.apostar();
         }
-    
-
+    //FUNÇÃO EXTRA - CRIADA À PARTE, SOMENTE PARA FINS DE DEMONSTRAÇÃO
         System.out.println("\nSaldo final de cada jogador:");
+        System.out.println(" ");
         for (Jogador jogador : jogadores) {
             System.out.printf("Jogador apostando: id: %d, Nome: %s, Saldo Inicial: %.2f, Saldo final: %s\n",
                     jogador.getId(), jogador.getNomeCompleto(), jogador.getSaldoInicial(),

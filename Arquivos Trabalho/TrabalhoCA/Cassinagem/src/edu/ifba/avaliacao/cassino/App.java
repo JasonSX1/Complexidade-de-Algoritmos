@@ -35,7 +35,6 @@ public class App {
         System.out.println(RESET);
 
         // Implementação d.1 - imprime os jogadores e seus saldos iniciais
-        System.out.println("Imprimindo os Jogadores...\n");
         List<Jogador> jogadores = Jogador.gerarJogadores(quantidadeJogadores);
 
         // Implementação d.2 - imprime a lista de resultados da roleta e as apostas

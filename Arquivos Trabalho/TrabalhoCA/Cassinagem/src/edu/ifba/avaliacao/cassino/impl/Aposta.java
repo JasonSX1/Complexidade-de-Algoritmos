@@ -25,7 +25,7 @@ public class Aposta {
     private String paridadeRoleta;
     private double resultado;
     private int numeroDaRodada;
-    private String tipoAposta; // NOVO: tipo de aposta ("NUMERO", "COR" ou "PARIDADE")
+    private String tipoAposta;
 
     public Aposta(double entrada, String tipoAposta, int numeroApostado, String corApostada, String paridadeApostada,
                   int numeroRoleta, String corRoleta, String paridadeRoleta, double resultado) {
