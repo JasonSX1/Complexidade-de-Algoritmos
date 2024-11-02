@@ -1,12 +1,6 @@
 package edu.ifba.avaliacao.cassino.operacoes;
 
-import java.util.List;
-import java.util.Map;
-import edu.ifba.avaliacao.cassino.impl.Jogador;
-import edu.ifba.avaliacao.cassino.impl.Aposta;
-import edu.ifba.avaliacao.cassino.impl.Roleta;
-
-public interface Operacoes<Jogador, Aposta> {
+public interface Operacoes{
 
     // d.1 - Imprime as informações sobre os jogadores e seus saldos iniciais
     void gerarJogadores(int quantidade);

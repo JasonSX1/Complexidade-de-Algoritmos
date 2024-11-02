@@ -11,6 +11,8 @@ public class SensorDeApostas {
     private static final String VERMELHO = "\u001B[31m";
     private static final String RESET = "\u001B[0m";
 
+    // Método para gerar apostas para os jogadores - O(N * M)
+
     public static void gerarApostasParaJogadores(List<Jogador> jogadores, int rodadas) {
         Random random = new Random();
         Roleta roleta = new Roleta();
@@ -76,6 +78,7 @@ public class SensorDeApostas {
         }
     }
 
+    // Método para formatar a linha de resultado de uma aposta - O(N)
     public static String formatarResultadoAposta(Aposta aposta, double saldoResultante) {
         final String VERDE = "\u001B[32m";
         final String VERMELHO = "\u001B[31m";
@@ -93,7 +96,6 @@ public class SensorDeApostas {
         String numeroApostadoFormatado = aposta.getNumeroApostado() >= 0
                 ? String.format("%02d", aposta.getNumeroApostado())
                 : "--";
-        String numeroRoletaFormatado = String.format("%02d", aposta.getNumeroRoleta());
 
         // Formatação do tipo de aposta (exibe apenas o valor, sem o tipo)
         String apostaDetalhe = switch (aposta.getTipoAposta()) {
@@ -120,10 +122,12 @@ public class SensorDeApostas {
                 saldoResultante);
     }
 
+    // Método para formatar o saldo final de um jogador - O(N)
     public static String formatarSaldoFinal(double saldoFinal, double saldoInicial) {
         return (saldoFinal >= saldoInicial ? VERDE : VERMELHO) + String.format("%.2f", saldoFinal) + RESET;
     }
 
+    // Método para exibir o saldo final de cada jogador - O(N)
     public static void exibirSaldoFinalDosJogadores(List<Jogador> jogadores) {
         System.out.println("\nSaldo final de cada jogador:");
         System.out.println(" ");

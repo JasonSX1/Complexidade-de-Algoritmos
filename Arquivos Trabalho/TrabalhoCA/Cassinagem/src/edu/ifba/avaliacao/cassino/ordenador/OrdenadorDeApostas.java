@@ -7,7 +7,4 @@ public interface OrdenadorDeApostas {
 
     // Ordena as apostas pelo lucro em ordem crescente
     public List<Aposta> ordenarPorLucro(List<Aposta> apostas);
-
-    // Ordena as apostas de acordo com a ordem crescente das entradas do jogador
-    //public List<Aposta> ordenarPorAposta(List<Aposta> apostas);
 }

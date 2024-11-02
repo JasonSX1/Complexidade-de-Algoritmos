@@ -51,6 +51,10 @@ public class Jogador {
         saldo += aposta.getResultado();
     }
 
+    // Complexidade O(N), tendo em vista que utiliza laço for para gerar a
+    // quantidade de jogadores especificada e escolhe nomes aleatórios nos arrays de nomes e sobrenomes
+    // e saldos aleatórios entre 100 e 1000, o N corresponde à quantidade de jogadores gerados
+
     public static List<Jogador> gerarJogadores(int quantidade) {
         List<Jogador> jogadores = new ArrayList<>();
         Random random = new Random();
@@ -70,6 +74,9 @@ public class Jogador {
         }
         return jogadores;
     }
+
+    //Complexidade O(N), onde N é a quantidade de rodadas, pois o método gera apostas para cada jogador por meio
+    //de um laço for
 
     public void apostar() {
         System.out.printf("\nApostas de %s:\n", getNomeCompleto());

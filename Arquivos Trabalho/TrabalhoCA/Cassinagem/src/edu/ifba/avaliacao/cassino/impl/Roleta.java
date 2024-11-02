@@ -4,8 +4,10 @@ import java.util.Random;
 
 public class Roleta {
 
+    //Complexidade geral da classe - O(1)
+
     private int numeroSorteado;
-    private String corSorteada;
+    private String corSorteada; //Vermelho/Preto/Verde
     private String tipoSorteado; // Ímpar/Par
 
     private static final int[] NUMEROS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
@@ -37,7 +39,7 @@ public class Roleta {
     // Gira a roleta e define o número, a cor e o tipo (par/ímpar)
     public void girar() { 
         Random random = new Random();
-        int indice = random.nextInt(NUMEROS.length); // Gera índice para sortear 0 a 36, incluindo o 00
+        int indice = random.nextInt(NUMEROS.length);
         numeroSorteado = NUMEROS[indice];
         corSorteada = CORES[indice];
         tipoSorteado = (numeroSorteado != 0 && numeroSorteado % 2 == 0) ? "PAR" : "ÍMPAR";

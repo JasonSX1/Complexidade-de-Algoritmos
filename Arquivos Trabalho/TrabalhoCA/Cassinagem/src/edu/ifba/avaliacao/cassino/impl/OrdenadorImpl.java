@@ -1,13 +1,16 @@
 package edu.ifba.avaliacao.cassino.impl;
 
 import edu.ifba.avaliacao.cassino.ordenador.OrdenadorDeApostas;
-import edu.ifba.avaliacao.cassino.impl.Aposta;
-
 import java.util.List;
 import java.util.ArrayList;
 
 public class OrdenadorImpl implements OrdenadorDeApostas {
 
+    /*Complexidade geral da classe - O(n log n)
+    * O método ordenarPorLucro em cada chamada recursiva divide a lista em duas metades, levando a log n divisões
+    * e a cada divisão, a função merge é chamada, que tem complexidade O(n), onde n é o tamanho da lista, 
+    * resultando em uma complexidade de O(n log n) já que é necessario mesclar todas as divisões em todas as chamadas
+    */
     @Override
     public List<Aposta> ordenarPorLucro(List<Aposta> apostas) {
         if (apostas.size() <= 1) {

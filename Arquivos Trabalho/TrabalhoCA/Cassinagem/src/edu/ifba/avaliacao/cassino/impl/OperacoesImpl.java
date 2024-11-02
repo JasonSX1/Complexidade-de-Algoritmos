@@ -4,32 +4,33 @@ import edu.ifba.avaliacao.cassino.operacoes.Operacoes;
 import edu.ifba.avaliacao.cassino.ordenador.OrdenadorDeApostas;
 import edu.ifba.avaliacao.cassino.sensoriamento.SensorDeApostas;
 import java.util.List;
-import java.util.ArrayList;
 
 public class OperacoesImpl implements Operacoes {
     private List<Jogador> jogadores;
     private OrdenadorDeApostas ordenadorDeApostas = new OrdenadorImpl(); // Instância do ordenador de apostasF
 
+
     @Override
     public void gerarJogadores(int quantidade) {
-        // Gera jogadores e armazena a lista
+        // Gera jogadores e armazena a lista - O(N)
         jogadores = Jogador.gerarJogadores(quantidade);
     }
 
     @Override
     public void gerarApostas(int rodadas) {
-        // Executa as rodadas e gera apostas para os jogadores
+        // Executa as rodadas e gera apostas para os jogadores - O(N * M)
         SensorDeApostas.gerarApostasParaJogadores(jogadores, rodadas);
     }
 
     @Override
     public void resultadoAposApostas() {
-        // Exibe o saldo final de cada jogador após todas as rodadas
+        // Exibe o saldo final de cada jogador após todas as rodadas - O(N)
         SensorDeApostas.exibirSaldoFinalDosJogadores(jogadores);
     }
 
     @Override
     public void ordenarApostas() {
+        // Ordena as apostas por lucro e imprime, isso baseado num algoritmo de Merge Sort - O(N log N)
         for (Jogador jogador : jogadores) {
             List<Aposta> apostas = jogador.getHistoricoApostas();
             List<Aposta> apostasOrdenadas = ordenadorDeApostas.ordenarPorLucro(apostas);
@@ -48,6 +49,12 @@ public class OperacoesImpl implements Operacoes {
             }
         }
     }
+
+    /*Calcula o melhor lucro para todas as combinações possíveis de grupos de três jogadores
+     * Complexidade de Tempo: O(N^3 * M) onde N é o número de jogadores (devido à combinação de grupos de três) e 
+     * M é o número de apostas feitas por cada jogador, tendo me vista que o calculo do lucro de cada pessoa é linear
+     * em relação ao número de apostas
+     */
 
     public void calcularMelhoresResultadosGruposDeTres() {
         int quantidadeJogadores = jogadores.size();
@@ -83,6 +90,8 @@ public class OperacoesImpl implements Operacoes {
         }
     }
     
+    // Calcula o lucro total de um grupo de jogadores - O(M), onde M é o número de apostas em todas as listas dos jogadores
+    //nos grupos de 3.
     private double calcularLucroGrupo(List<Jogador> grupo) {
         double lucroTotal = 0;
     
@@ -90,9 +99,7 @@ public class OperacoesImpl implements Operacoes {
         for (Jogador jogador : grupo) {
             List<Aposta> apostas = jogador.getHistoricoApostas();
             for (Aposta aposta : apostas) {
-                // Aqui você pode adicionar a lógica para calcular o lucro de cada aposta
-                // Considerando as apostas feitas em diferentes rodadas
-                lucroTotal += aposta.getResultado(); // Exemplo simplificado
+                lucroTotal += aposta.getResultado();
             }
         }
         return lucroTotal;

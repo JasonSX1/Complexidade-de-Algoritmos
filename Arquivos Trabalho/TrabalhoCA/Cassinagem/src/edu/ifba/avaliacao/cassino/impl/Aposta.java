@@ -1,11 +1,16 @@
 package edu.ifba.avaliacao.cassino.impl;
+
 public class Aposta {
     private double entrada;
     private int numeroApostado;
     private int numeroRoleta;
     private String corApostada;
     private String paridadeApostada;
-    
+
+    // A complexidade geral da classe é O(1), tendo em vista que nenhum dos métodos
+    // dela como os Getters e Setters possuem laços de repetição ou algo que
+    // incremente sua complexidade
+
     public String getCorApostada() {
         return corApostada;
     }
@@ -29,7 +34,7 @@ public class Aposta {
     private String tipoAposta;
 
     public Aposta(double entrada, String tipoAposta, int numeroApostado, String corApostada, String paridadeApostada,
-                  int numeroRoleta, String corRoleta, String paridadeRoleta, double resultado) {
+            int numeroRoleta, String corRoleta, String paridadeRoleta, double resultado) {
         this.entrada = entrada;
         this.tipoAposta = tipoAposta;
         this.numeroApostado = numeroApostado;
@@ -72,7 +77,7 @@ public class Aposta {
     public int getNumeroDaRodada() {
         return numeroDaRodada;
     }
-    
+
     public void setNumeroDaRodada(int numeroDaRodada) {
         this.numeroDaRodada = numeroDaRodada;
     }
