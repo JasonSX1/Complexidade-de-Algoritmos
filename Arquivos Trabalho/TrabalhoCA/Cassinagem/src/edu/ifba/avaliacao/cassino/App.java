@@ -14,14 +14,27 @@ public class App {
                 // d.1 Imprime jogadores e seus saldos iniciais
                 operacoes.gerarJogadores(quantidadeJogadores);
 
+                System.out.println("/----------------------------------------------------------------------------------------------/");
+
                 // d.2 Realiza as apostas e exibe o saldo dos jogadores após as rodadas
                 operacoes.gerarApostas(rodadas);
+
+                System.out.println("/----------------------------------------------------------------------------------------------/");
 
                 // d.2.1 Exibe o resultado final de cada jogador
                 operacoes.resultadoAposApostas();
 
+                System.out.println("/----------------------------------------------------------------------------------------------/");
+
                 // d.3 Ordena as apostas por lucro e exibe
                 operacoes.ordenarApostas();
+
+                System.out.println("/----------------------------------------------------------------------------------------------/");
+
+                //d.4 
+                operacoes.calcularMelhoresResultadosGruposDeTres();
+
+                
         }
 
 }

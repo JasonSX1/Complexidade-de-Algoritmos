@@ -19,6 +19,8 @@ public interface Operacoes<Jogador, Aposta> {
 
     // d.3 - Ordena as apostas por lucro e imprime
     void ordenarApostas();
-    // d.4 - Calcula o retorno de uma aposta com base no resultado da roleta
-    //double calcularRetorno(Aposta aposta, Roleta resultado);
+
+    // d.4 - 
+    void calcularMelhoresResultadosGruposDeTres();
+    
 }
