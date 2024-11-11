@@ -53,7 +53,8 @@ public class OperacoesImpl implements Operacoes {
     /*Calcula o melhor lucro para todas as combinações possíveis de grupos de três jogadores
      * Complexidade de Tempo: O(N^3 * M) onde N é o número de jogadores (devido à combinação de grupos de três) e 
      * M é o número de apostas feitas por cada jogador, tendo me vista que o calculo do lucro de cada pessoa é linear
-     * em relação ao número de apostas
+     * em relação ao número de apostas, entretanto esse tipo de cálculo se torna impraticável em uma execução 
+     * em larga escala, tendo em vista que a complexidade cúbica se torna um grande gargalo computacional
      */
 
     public void calcularMelhoresResultadosGruposDeTres() {
@@ -91,7 +92,7 @@ public class OperacoesImpl implements Operacoes {
     }
     
     // Calcula o lucro total de um grupo de jogadores - O(M), onde M é o número de apostas em todas as listas dos jogadores
-    //nos grupos de 3.
+    //nos grupos de 3, então o loop irá executar até passar todas as apostas de todos os jogadores.
     private double calcularLucroGrupo(List<Jogador> grupo) {
         double lucroTotal = 0;
     
