@@ -28,8 +28,4 @@ public class Rotas {
         System.out.println("dados de biometria: " + biometria);
         return "ok";
     }
-
-    @GET
-    @Path("{id}/{batimentos}/{temperatura}")
-    @Produces(MediaType.TEXT_PLAIN)
 }
