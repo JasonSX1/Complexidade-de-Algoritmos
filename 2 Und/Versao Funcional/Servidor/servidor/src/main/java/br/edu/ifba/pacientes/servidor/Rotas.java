@@ -1,6 +1,19 @@
 package br.edu.ifba.pacientes.servidor;
 
 import br.edu.ifba.pacientes.servidor.modelo.Biometria;
+<<<<<<< Updated upstream
+=======
+import br.edu.ifba.pacientes.servidor.modelo.Paciente;
+import br.edu.ifba.pacientes.servidor.operacoes.*;
+import br.edu.ifba.pacientes.servidor.modelo.*;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+import br.edu.ifba.pacientes.servidor.impl.*;
+>>>>>>> Stashed changes
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -11,6 +24,19 @@ import jakarta.ws.rs.core.MediaType;
 @Path("biometria")
 public class Rotas {
 
+<<<<<<< Updated upstream
+=======
+    // singleton => padrão de instancia unica
+    private static Operacoes<Paciente, Biometria> operacoes = null;
+    public static Operacoes<Paciente, Biometria> getOperacoes() {
+        if (operacoes == null) {
+            operacoes = new OperacoesImpl();
+        }
+
+        return operacoes;
+    }
+
+>>>>>>> Stashed changes
     @GET
     @Path("informacoes")
     @Produces(MediaType.TEXT_PLAIN)
@@ -30,6 +56,24 @@ public class Rotas {
     }
 
     @GET
-    @Path("{id}/{batimentos}/{temperatura}")
+    @Path("{id}/{nome}/{batimentos}/{temperatura}")
     @Produces(MediaType.TEXT_PLAIN)
+<<<<<<< Updated upstream
+=======
+    public String gravarBiometria(@PathParam("id") String id,@PathParam("nome") String nome, @PathParam("batimentos") int batimentos, @PathParam("temperatura") int temperatura) {
+        Biometria biometria = new Biometria(batimentos, temperatura);
+        Paciente paciente;
+        try{
+            paciente = new Paciente(id, URLDecoder.decode(nome, StandardCharsets.UTF_8.toString()));
+            getOperacoes().gravarBiometria(paciente, biometria);
+
+            System.out.println("recebidos dados de biometria (" + biometria + ") do paciente: " + paciente);
+        } catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+        
+        return "ok";
+    }
+>>>>>>> Stashed changes
 }
