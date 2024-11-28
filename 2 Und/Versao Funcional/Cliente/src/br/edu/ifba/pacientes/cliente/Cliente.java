@@ -12,7 +12,7 @@ import br.edu.ifba.pacientes.cliente.impl.SensoriamentoImpl;
 import br.edu.ifba.pacientes.cliente.modelo.Paciente;
 
 public class Cliente {
-    private static final int TOTAL_DE_PACIENTES = 100;
+    private static final int TOTAL_DE_PACIENTES = 1;
 
     public static void main(String[] args) throws Exception {
 
