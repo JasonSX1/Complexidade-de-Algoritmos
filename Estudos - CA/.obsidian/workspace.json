@@ -15,9 +15,9 @@
               "state": {
                 "file": "1ª Unidade.canvas",
                 "viewState": {
-                  "x": 2000.1868664668614,
-                  "y": -453.8345333450496,
-                  "zoom": -1.6666666666666665
+                  "x": -275.54966419413444,
+                  "y": 1357.2315386913328,
+                  "zoom": -0.9999999999999998
                 }
               },
               "icon": "lucide-layout-dashboard",
@@ -25,41 +25,20 @@
             }
           },
           {
-            "id": "218c970fee9f8785",
+            "id": "3cf8da7fa663250a",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "1ª Unidade.canvas",
-                "viewState": {
-                  "x": 1565,
-                  "y": -600.5,
-                  "zoom": -2.0097376372827673
-                }
+                "file": "2ª Unidade.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "1ª Unidade"
-            }
-          },
-          {
-            "id": "1b3da864859c8599",
-            "type": "leaf",
-            "state": {
-              "type": "canvas",
-              "state": {
-                "file": "1ª Unidade.canvas",
-                "viewState": {
-                  "x": 247.86494800238972,
-                  "y": 894.188505588415,
-                  "zoom": -0.6666666666666663
-                }
-              },
-              "icon": "lucide-layout-dashboard",
-              "title": "1ª Unidade"
+              "icon": "lucide-file",
+              "title": "2ª Unidade"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -200,7 +179,7 @@
       "command-palette:Abrir paleta de comandos": false
     }
   },
-  "active": "1b3da864859c8599",
+  "active": "a8be002c0de8b9e2",
   "lastOpenFiles": [
     "2ª Unidade.md",
     "Trabalho - CA.md",

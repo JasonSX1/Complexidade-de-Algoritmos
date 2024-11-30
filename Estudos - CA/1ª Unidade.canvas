@@ -43,8 +43,10 @@
 		{"id":"7ed42a7080c5f5e9","type":"text","text":"Problema do caixeiro-viajante","x":1835,"y":-1041,"width":290,"height":50,"color":"3"},
 		{"id":"074a4f4fcac0c4e0","type":"text","text":"Consiste em calcular todas as possibilidades de soma dentro de um vetor para se obter um número específico","x":1778,"y":-1880,"width":279,"height":125,"color":"3"},
 		{"id":"eca3e5f5bb566434","type":"text","text":"23/11","x":-489,"y":1040,"width":104,"height":50,"color":"4"},
-		{"id":"e3370891e1764afc","x":0,"y":860,"width":250,"height":60,"type":"text","text":"Edge Computing"},
-		{"id":"493589eaeb035b10","x":-43,"y":990,"width":337,"height":150,"type":"text","text":"Se refere ao procesamento, analise e armazenamento dos dados mais próximos de onde eles são gerados, para agilizar a analise e o processamento dos dados"}
+		{"id":"e3370891e1764afc","type":"text","text":"Edge Computing","x":0,"y":860,"width":250,"height":60},
+		{"id":"493589eaeb035b10","type":"text","text":"Se refere ao procesamento, analise e armazenamento dos dados mais próximos de onde eles são gerados, para agilizar a analise e o processamento dos dados","x":-43,"y":990,"width":337,"height":150},
+		{"id":"19c0c7d520b51d52","type":"text","text":"30/11","x":-489,"y":1400,"width":104,"height":50,"color":"4"},
+		{"id":"d9080602c911fdc0","x":1,"y":1390,"width":250,"height":60,"type":"text","text":"Complexidade de Grafos"}
 	],
 	"edges":[
 		{"id":"885196dfa8b38a89","fromNode":"7bce111f54f37204","fromSide":"right","toNode":"d5dec6f87aee6703","toSide":"left"},
@@ -88,6 +90,7 @@
 		{"id":"d28da3805e3791eb","fromNode":"5f27860f22495919","fromSide":"top","toNode":"7ed42a7080c5f5e9","toSide":"bottom"},
 		{"id":"3f8caa7fff63c840","fromNode":"586740ea2c193773","fromSide":"top","toNode":"074a4f4fcac0c4e0","toSide":"bottom"},
 		{"id":"26943506fa7d0f6e","fromNode":"eca3e5f5bb566434","fromSide":"right","toNode":"e3370891e1764afc","toSide":"left"},
-		{"id":"c51d8c815231809b","fromNode":"e3370891e1764afc","fromSide":"bottom","toNode":"493589eaeb035b10","toSide":"top"}
+		{"id":"c51d8c815231809b","fromNode":"e3370891e1764afc","fromSide":"bottom","toNode":"493589eaeb035b10","toSide":"top"},
+		{"id":"e73687e79e9e041a","fromNode":"19c0c7d520b51d52","fromSide":"right","toNode":"d9080602c911fdc0","toSide":"left"}
 	]
 }
