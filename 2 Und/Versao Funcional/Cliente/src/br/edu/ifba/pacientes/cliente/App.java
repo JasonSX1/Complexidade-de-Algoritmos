@@ -1,6 +1,8 @@
 package br.edu.ifba.pacientes.cliente;
 
 import java.util.List;
+
+import com.github.javafaker.*;
 import java.util.ArrayList;
 
 import br.edu.ifba.pacientes.cliente.impl.ClienteImpl;
