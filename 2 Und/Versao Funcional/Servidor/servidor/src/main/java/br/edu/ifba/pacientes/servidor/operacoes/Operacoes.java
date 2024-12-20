@@ -6,7 +6,7 @@ public interface Operacoes<Monitorado, Sensor> {
 
     public void gravarBiometria(Monitorado monitorado, Sensor sensor);
 
-    public int procurarPadrao(List<Sensor> padrao); 
+    public List<Monitorado> detectarEmergencias(); 
 
 }
 

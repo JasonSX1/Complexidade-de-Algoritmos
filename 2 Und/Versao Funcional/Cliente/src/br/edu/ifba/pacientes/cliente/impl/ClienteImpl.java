@@ -6,7 +6,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+
+import com.github.javafaker.HitchhikersGuideToTheGalaxy;
 
 import br.edu.ifba.pacientes.cliente.comunicacao.Cliente;
 import br.edu.ifba.pacientes.cliente.modelo.Biometria;
@@ -20,26 +25,34 @@ public class ClienteImpl implements Cliente<Paciente, Biometria>, Runnable {
     private static final String URL_SERVIDOR = "http://localhost:8080/";
     private static final String URL_BIOMETRIA = URL_SERVIDOR + "biometria/";
 
-    private static final int LIMIAR_OSCILACAO_BATIMENTOS = 5;
-    private static final int LIMIAR_OSCILACAO_TEMPERATURA = 3;
+    private static final int LIMIAR_OSCILACAO_DE_BATIMENTOS = 5;
+    private static final int LIMIAR_OSCILACAO_DE_TEMPERATURA = 3;
 
-    private static final Biometria ultimaLeitura = new Biometria(0, 0);
+    private List<Biometria> padrao = new ArrayList<>();
+    private Queue<Biometria> historicoDeLeituras = new LinkedList<>();
+    private Biometria ultimaLeitura = new Biometria(0, 0);
+
+    private static final int TAMANHO_MAXIMO_HISTORICO = 50;
 
     private Paciente monitorado = null;
     private Sensoriamento<Biometria> sensoriamento = null;
 
-    public void configurar(Paciente monitorado, Sensoriamento<Biometria> sensoriamento) {
+    public void configurar(Paciente monitorado, Sensoriamento<Biometria> sensoriamento, List<Biometria> padrao) {
         this.monitorado = monitorado;
         this.sensoriamento = sensoriamento;
+        this.padrao = padrao;
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public String enviar(Biometria sensor) throws Exception {
+
+        int emergencias = detectarEmergencias();
+
         URL url = new URL(URL_BIOMETRIA + monitorado.getIdentificacao() + "/"
                 + URLEncoder.encode(monitorado.getNome(), StandardCharsets.UTF_8.toString()) + "/"
                 + sensor.getBatimentos() + "/"
-                + sensor.getTemperatura());
+                + sensor.getTemperatura() + "/" + emergencias);
 
         HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
         conexao.setRequestMethod("GET");
@@ -61,28 +74,58 @@ public class ClienteImpl implements Cliente<Paciente, Biometria>, Runnable {
         List<Biometria> leituras = sensoriamento.gerar(TOTAL_DE_LEITURAS);
 
         for (Biometria leitura : leituras) {
-            int diferencaBatimentos = Math.abs(leitura.getBatimentos() - ultimaLeitura.getBatimentos());
-            int diferencaTemperatura = Math.abs(leitura.getTemperatura() - ultimaLeitura.getTemperatura());
+            if (Math.abs(leitura.getBatimentos() - ultimaLeitura.getBatimentos()) > LIMIAR_OSCILACAO_DE_BATIMENTOS
+                    || Math.abs(leitura.getTemperatura()
+                            - ultimaLeitura.getTemperatura()) > LIMIAR_OSCILACAO_DE_TEMPERATURA) {
 
-            if (diferencaBatimentos >= LIMIAR_OSCILACAO_BATIMENTOS
-                    || diferencaTemperatura >= LIMIAR_OSCILACAO_TEMPERATURA) {
-                ultimaLeitura.setBatimentos(leitura.getBatimentos());
-                ultimaLeitura.setTemperatura(leitura.getTemperatura());
+                ultimaLeitura = leitura;
+
+                historicoDeLeituras.add(ultimaLeitura);
+                if (historicoDeLeituras.size() > TAMANHO_MAXIMO_HISTORICO) {
+                    historicoDeLeituras.remove();
+                }
 
                 try {
                     String resposta = enviar(leitura);
-                    System.out.println(resposta.equals("ok") ? "leitura enviada do paciente: " + monitorado
+                    System.out.println(resposta.equals("ok")
+                            ? "leitura enviada do paciente: " + monitorado
                             : "falha no envio da leitura");
 
                     Thread.sleep(500);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             } else {
-                System.out.println("Leitura ignorada, sem diferenças significativas");
+                System.out.println("leitura ignorada, não ocorreu oscilação significativa");
             }
         }
     }
 
+    // Complexidade O(N^2)
+
+    @Override
+    public int detectarEmergencias() {
+        int totalDeDeteccoes = 0;
+
+        List<Biometria> historico = new ArrayList<>(historicoDeLeituras);
+
+        inicioPesquisaPorPadrao:
+            for (int i = 0; i < historico.size() - padrao.size(); i++) {
+                for (int j = 0; j < padrao.size(); j++) {
+                    if (historico.get(i + j).getBatimentos() == padrao.get(j).getBatimentos()) {
+                        totalDeDeteccoes++;
+
+                        if (totalDeDeteccoes == padrao.size()) {
+                            break inicioPesquisaPorPadrao;
+                        } 
+                    } else {
+                        totalDeDeteccoes = 0;
+
+                        break;
+                    }
+                }
+            }
+
+    return totalDeDeteccoes;
+}
 }

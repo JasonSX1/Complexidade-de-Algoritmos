@@ -43,32 +43,26 @@ public class Rotas {
 
 
     @GET 
-    @Path("{id}/{batimentos}/{temperatura}")
+    @Path("{id}/{batimentos}/{temperatura}/{emergencia}")
     @Produces()
-    public String gravarBiometria(@PathParam("id") String id, @PathParam("batimentos") int batimentos, @PathParam("temperatura")int temperatura){
+    public String gravarBiometria(@PathParam("id") String id, @PathParam("batimentos") int batimentos, @PathParam("temperatura")int temperatura, @PathParam("emergencia") int emergencias) {
         
         Biometria biometria = new Biometria(batimentos, temperatura);
+        Paciente paciente = new Paciente(id, "paciente #" + id, emergencias > 0);
+        getOperacoes().gravarBiometria(paciente, biometria);
+
         System.out.println("dados de biometria: " + biometria);
+        
         return "ok";
     }
 
     @GET
-    @Path("{id}/{nome}/{batimentos}/{temperatura}")
+    @Path("emergencias")
     @Produces(MediaType.TEXT_PLAIN)
-    public String gravarBiometria(@PathParam("id") String id,@PathParam("nome") String nome, @PathParam("batimentos") int batimentos, @PathParam("temperatura") int temperatura) {
-        Biometria biometria = new Biometria(batimentos, temperatura);
-        Paciente paciente;
-        try{
-            paciente = new Paciente(id, URLDecoder.decode(nome, StandardCharsets.UTF_8.toString()));
-            getOperacoes().gravarBiometria(paciente, biometria);
+    public String verificarEmergencia() {
+        int emergencias = getOperacoes().detectarEmergencias().size();
 
-            System.out.println("recebidos dados de biometria (" + biometria + ") do paciente: " + paciente);
-        } catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-        }
-
-        
-        return "ok";
+        return emergencias + "";
     }
 
 }

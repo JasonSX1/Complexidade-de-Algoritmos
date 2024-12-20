@@ -13,6 +13,9 @@ public class OperacoesImpl implements Operacoes<Paciente, Biometria> {
 
     private Map<Paciente, List<Biometria>> bancoDeDados = new TreeMap<>();
 
+
+    //Complexidade linear, O(N)
+
     @Override
     public void gravarBiometria(Paciente monitorado, Biometria sensor) {
         List<Biometria> leituras = new ArrayList<>();        
@@ -27,39 +30,21 @@ public class OperacoesImpl implements Operacoes<Paciente, Biometria> {
     }
 
     /**
-     * complexidade cubica, O(N^3)
-     * 
-     * tem a possibilidade de gerar uma situacao de brute force, porque exige
-     * avaliar uma sequencia de dados biometricos de todos os pacientes monitorados. Dependendo da quantidade de pacientes e leituras realizadas, a execucao deste algoritmo pode elevar o seu tempo/custo e torna-lo ineficiente e ineficaz.
+     * complexidade cubica, O(N)
      */
     @Override
-    public int procurarPadrao(List<Biometria> padrao) {
-        int totalDeIguais = 0;
+    public List<Paciente> detectarEmergencias() {
+        List<Paciente> pacientes = new ArrayList<>();
 
-        inicioPesquisaPorPadrao:
         for (Paciente paciente: bancoDeDados.keySet()) {
-            System.out.println("procurando por padrão nas leituras do paciente: " + paciente);
-
-            List<Biometria> biometrias = bancoDeDados.get(paciente);
-            for (int i = 0; i < biometrias.size() - padrao.size(); i++) {
-                for (int j = 0; j < padrao.size(); j++) {
-                    if (biometrias.get(i + j).getBatimentos() == padrao.get(j).getBatimentos()) {
-                        totalDeIguais++;
-
-                        if (totalDeIguais == padrao.size()) {
-                            break inicioPesquisaPorPadrao;
-                        } 
-                    } else {
-                        totalDeIguais = 0;
-
-                        break;
-                    }
-                }
+            if (paciente.emEmergencia()) {
+                pacientes.add(paciente);
             }
         }
 
-        return totalDeIguais;
+        return pacientes;
     }
+        
 
     
 }
