@@ -1,4 +1,4 @@
 # Ignorar arquivos de video usados para a geração das chaves de criptografia
-*.class
 
 *.mp4
+*.class
