@@ -14,7 +14,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("biometria")
+@Path("resultado")
 public class Rotas {
 
     // singleton => padrão de instancia unica
@@ -64,5 +64,4 @@ public class Rotas {
 
         return "ok";
     }
-
 }
