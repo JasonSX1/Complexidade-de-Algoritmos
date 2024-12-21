@@ -8,19 +8,22 @@ public class Jogador {
     private String nome;
     private double saldoInicial;
     private double saldoAtual;
+    private double saldoFinal;
     private int totalApostas;
     private List<Aposta> historicoApostas;
-    private List<String> historicoFormatado; // Para armazenar o histórico formatado
+    private List<String> historicoFormatado;
     private String mesaId; // Identificação da mesa
 
     public Jogador(int id, String nome, double saldoInicial, int totalApostas) {
         this.id = id;
         this.nome = nome;
-        this.saldoInicial = saldoInicial;
-        this.saldoAtual = saldoInicial;
+        this.saldoInicial = Math.round(saldoInicial * 100.0) / 100.0;
+        this.saldoAtual = this.saldoInicial;
+        this.saldoFinal = 0.0;
         this.totalApostas = totalApostas;
         this.historicoApostas = new ArrayList<>();
         this.historicoFormatado = new ArrayList<>();
+        this.mesaId = null;
     }
 
     public int getId() {
@@ -39,21 +42,36 @@ public class Jogador {
         return saldoAtual;
     }
 
+    public void setSaldoAtual(double saldoAtual) {
+        this.saldoAtual = Math.max(0, Math.round(saldoAtual * 100.0) / 100.0);
+    }
+
+    public double getSaldoFinal() {
+        return saldoFinal;
+    }
+
+    public void setSaldoFinal(double saldoFinal) {
+        this.saldoFinal = Math.max(0, Math.round(saldoFinal * 100.0) / 100.0);
+    }
+
     public int getTotalApostas() {
         return totalApostas;
+    }
+
+    public void setTotalApostas(int totalApostas) {
+        this.totalApostas = totalApostas;
     }
 
     public List<Aposta> getHistoricoApostas() {
         return historicoApostas;
     }
 
-    public List<String> getHistoricoFormatado() {
-        return historicoFormatado;
-    }
-
     public void adicionarAposta(Aposta aposta) {
         historicoApostas.add(aposta);
-        saldoAtual += aposta.getResultado();
+    }
+
+    public List<String> getHistoricoFormatado() {
+        return historicoFormatado;
     }
 
     public void adicionarHistoricoAposta(String historico) {
@@ -68,21 +86,15 @@ public class Jogador {
         this.mesaId = mesaId;
     }
 
-    public void setSaldoFinal(double saldoAtual) {
-        this.saldoAtual = saldoAtual;
-    }
-
-    public double getSaldoFinal() {
-        return saldoAtual;
-    }
-
     public double getLucro() {
-        return saldoAtual - saldoInicial;
+        return Math.round((saldoFinal - saldoInicial) * 100.0) / 100.0;
     }
 
     @Override
     public String toString() {
-        return String.format("ID: %d, Nome: %s, Saldo Inicial: %.2f, Saldo Atual: %.2f, Total de Apostas: %d",
-                id, nome, saldoInicial, saldoAtual, totalApostas);
+        return String.format(
+            "ID: %d, Nome: %s, Saldo Inicial: %.2f, Saldo Atual: %.2f, Saldo Final: %.2f, Total de Apostas: %d",
+            id, nome, saldoInicial, saldoAtual, saldoFinal, totalApostas
+        );
     }
 }

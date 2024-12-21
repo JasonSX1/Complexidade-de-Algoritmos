@@ -1,4 +1,3 @@
-// Classe ClienteImpl
 package br.edu.ifba.cassino.cliente.impl;
 
 import java.io.OutputStream;
@@ -48,6 +47,7 @@ public class ClienteImpl implements Runnable {
             atualizarMelhorGrupo(jogador);
 
             // Enviar dados ao servidor quando o jogador terminar as apostas
+            System.out.println("Jogador " + jogador.getNome() + " está parando de apostar e saindo da mesa.");
             enviarDadosJogadorAoServidor(jogador);
         }
     }
@@ -59,7 +59,7 @@ public class ClienteImpl implements Runnable {
 
         for (int i = 0; i < quantidade; i++) {
             String nome = faker.name().fullName();
-            double saldoInicial = 500 + random.nextDouble() * 1500; // Saldo entre 500 e 2000
+            double saldoInicial = Math.round((500 + random.nextDouble() * 1500) * 100.0) / 100.0; // Saldo entre 500 e 2000
             int totalApostas = random.nextInt(16) + 10; // Entre 10 e 25 apostas
     
             jogadores.add(new Jogador(i + 1, nome, saldoInicial, totalApostas));
@@ -100,14 +100,15 @@ public class ClienteImpl implements Runnable {
     
             if (aposta != null) {
                 jogador.adicionarAposta(aposta);
+                double novoSaldo = Math.max(0, jogador.getSaldoAtual() + aposta.getResultado());
+                jogador.setSaldoAtual(Math.round(novoSaldo * 100.0) / 100.0); // Arredonda para duas casas decimais
                 jogador.adicionarHistoricoAposta(tipoAposta + "/" + resultado); // Adiciona ao histórico como string formatada
             }
         }
     
         // Atualiza o saldo final do jogador após todas as apostas
-        jogador.setSaldoFinal(jogador.getSaldoAtual());
+        jogador.setSaldoFinal(Math.max(0, Math.round(jogador.getSaldoAtual() * 100.0) / 100.0));
     }
-
 
     private void atualizarMelhorGrupo(Jogador jogador) {
         melhorGrupo.add(jogador);
@@ -115,7 +116,7 @@ public class ClienteImpl implements Runnable {
             melhorGrupo.poll();
         }
 
-        double lucroAtual = melhorGrupo.stream().mapToDouble(Jogador::getSaldoAtual).sum();
+        double lucroAtual = melhorGrupo.stream().mapToDouble(j -> j.getSaldoAtual() - j.getSaldoInicial()).sum();
         if (lucroAtual > lucroMelhorGrupo) {
             lucroMelhorGrupo = lucroAtual;
             enviarMelhorGrupoAoServidor();
@@ -133,7 +134,7 @@ public class ClienteImpl implements Runnable {
 
             // Serializar o grupo em JSON
             String jsonInputString = new Gson().toJson(melhorGrupo);
-            System.out.println("Enviando melhor grupo: " + jsonInputString); // Log para depuração
+            System.out.println("Enviando melhor grupo ao servidor: " + jsonInputString); // Log detalhado
 
             try (OutputStream os = conexao.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
@@ -183,13 +184,14 @@ public class ClienteImpl implements Runnable {
     }    
 
     private JogadorDTO converterParaDTO(Jogador jogador) {
-    return new JogadorDTO(
-        jogador.getId(),
-        jogador.getNome(),
-        jogador.getSaldoInicial(),
-        jogador.getSaldoFinal(),
-        jogador.getMesaId()
-    );
-}
+        return new JogadorDTO(
+            jogador.getId(),
+            jogador.getNome(),
+            Math.round(jogador.getSaldoInicial() * 100.0) / 100.0,
+            Math.round(jogador.getSaldoFinal() * 100.0) / 100.0,
+            mesaId // Associa o ID da mesa ao jogador
+            );
+        
+    }
 
 }
