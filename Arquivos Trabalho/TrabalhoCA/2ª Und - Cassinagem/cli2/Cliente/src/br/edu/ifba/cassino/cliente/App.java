@@ -8,11 +8,12 @@ public class App {
         final int jogadoresPorMesa = 5;
 
         for (int i = 0; i < totalMesas; i++) {
-            ClienteImpl clienteMesa = new ClienteImpl();
+            String mesaId = "Mesa-" + (i + 1); // Identificação única para cada mesa
+            ClienteImpl clienteMesa = new ClienteImpl(mesaId);
             clienteMesa.configurar(jogadoresPorMesa);
 
             Thread threadMesa = new Thread(clienteMesa);
-            threadMesa.setName("Mesa-" + (i + 1));
+            threadMesa.setName(mesaId);
             threadMesa.start();
 
             System.out.println("Iniciando thread para " + threadMesa.getName());

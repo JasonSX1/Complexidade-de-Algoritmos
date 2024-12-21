@@ -10,6 +10,8 @@ public class Jogador {
     private double saldoAtual;
     private int totalApostas;
     private List<Aposta> historicoApostas;
+    private List<String> historicoFormatado; // Para armazenar o histórico formatado
+    private String mesaId; // Identificação da mesa
 
     public Jogador(int id, String nome, double saldoInicial, int totalApostas) {
         this.id = id;
@@ -18,6 +20,7 @@ public class Jogador {
         this.saldoAtual = saldoInicial;
         this.totalApostas = totalApostas;
         this.historicoApostas = new ArrayList<>();
+        this.historicoFormatado = new ArrayList<>();
     }
 
     public int getId() {
@@ -44,14 +47,42 @@ public class Jogador {
         return historicoApostas;
     }
 
+    public List<String> getHistoricoFormatado() {
+        return historicoFormatado;
+    }
+
     public void adicionarAposta(Aposta aposta) {
         historicoApostas.add(aposta);
         saldoAtual += aposta.getResultado();
     }
 
+    public void adicionarHistoricoAposta(String historico) {
+        historicoFormatado.add(historico);
+    }
+
+    public String getMesaId() {
+        return mesaId;
+    }
+
+    public void setMesaId(String mesaId) {
+        this.mesaId = mesaId;
+    }
+
+    public void setSaldoFinal(double saldoAtual) {
+        this.saldoAtual = saldoAtual;
+    }
+
+    public double getSaldoFinal() {
+        return saldoAtual;
+    }
+
+    public double getLucro() {
+        return saldoAtual - saldoInicial;
+    }
+
     @Override
     public String toString() {
         return String.format("ID: %d, Nome: %s, Saldo Inicial: %.2f, Saldo Atual: %.2f, Total de Apostas: %d",
-                             id, nome, saldoInicial, saldoAtual, totalApostas);
+                id, nome, saldoInicial, saldoAtual, totalApostas);
     }
 }

@@ -7,21 +7,16 @@ public class Jogador {
     private int id;
     private String nome;
     private double saldoInicial;
+    private double saldoAtual;
     private double saldoFinal;
-    private double lucro;
-    private List<String> historicoApostas;
+    private int totalApostas;
+    private List<String> historicoFormatado = new ArrayList<>();
+    private String mesaId;
 
+    // Construtor Padrão
     public Jogador() {}
 
-    public Jogador(int id, String nome, double saldoInicial, double saldoFinal, double lucro, List<String> historicoApostas) {
-        this.id = id;
-        this.nome = nome;
-        this.saldoInicial = saldoInicial;
-        this.saldoFinal = saldoFinal;
-        this.lucro = lucro;
-        this.historicoApostas = historicoApostas;
-    }
-
+    // Getters e Setters
     public int getId() {
         return id;
     }
@@ -46,6 +41,14 @@ public class Jogador {
         this.saldoInicial = saldoInicial;
     }
 
+    public double getSaldoAtual() {
+        return saldoAtual;
+    }
+
+    public void setSaldoAtual(double saldoAtual) {
+        this.saldoAtual = saldoAtual;
+    }
+
     public double getSaldoFinal() {
         return saldoFinal;
     }
@@ -54,19 +57,46 @@ public class Jogador {
         this.saldoFinal = saldoFinal;
     }
 
+    public int getTotalApostas() {
+        return totalApostas;
+    }
+
+    public void setTotalApostas(int totalApostas) {
+        this.totalApostas = totalApostas;
+    }
+
+    public List<String> getHistoricoFormatado() {
+        return historicoFormatado;
+    }
+
+    public void setHistoricoFormatado(List<String> historicoFormatado) {
+        this.historicoFormatado = historicoFormatado;
+    }
+
+    public String getMesaId() {
+        return mesaId;
+    }
+
+    public void setMesaId(String mesaId) {
+        this.mesaId = mesaId;
+    }
+
+    // Método para calcular o lucro
     public double getLucro() {
-        return lucro;
+        return saldoFinal - saldoInicial;
     }
 
-    public void setLucro(double lucro) {
-        this.lucro = lucro;
-    }
-
-    public List<String> getHistoricoApostas() {
-        return historicoApostas;
-    }
-
-    public void setHistoricoApostas(List<String> historicoApostas) {
-        this.historicoApostas = historicoApostas;
+    @Override
+    public String toString() {
+        return "Jogador{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", saldoInicial=" + saldoInicial +
+                ", saldoAtual=" + saldoAtual +
+                ", saldoFinal=" + saldoFinal +
+                ", totalApostas=" + totalApostas +
+                ", historicoFormatado=" + historicoFormatado +
+                ", mesaId='" + mesaId + '\'' +
+                '}';
     }
 }

@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import br.edu.ifba.cassino.servidor.impl.*;
 import br.edu.ifba.cassino.servidor.modelo.*;
 import br.edu.ifba.cassino.servidor.operacoes.*;
@@ -28,11 +30,17 @@ public class Rotas {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String gravarDadosJogador(Jogador jogador) {
-        System.out.println("Jogador recebido: " + jogador);
-        operacoes.gravarDadosJogador(jogador);
-        return "Jogador registrado: " + jogador.getNome();
+        //System.out.println("JSON Recebido: " + new Gson().toJson(jogador));
+        System.out.println("Dados recebidos da mesa: " + jogador.getMesaId());
+        System.out.println("Jogador: " + jogador.getNome());
+        System.out.println("Lucro: " + jogador.getLucro());
+        //System.out.println("Saldo Final: " + jogador.getSaldoFinal());
+        System.out.println("Histórico de Apostas: " + jogador.getHistoricoFormatado());
+        System.out.println("");
+        return "ok";
     }
-
+    
+    
     @POST
     @Path("grupo")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -40,6 +48,18 @@ public class Rotas {
     public String registrarMelhorGrupo(List<Jogador> grupo) {
         operacoes.registrarMelhorGrupo(grupo);
         return "Grupo registrado com sucesso.";
+    }
+
+    @POST
+    @Path("melhorGrupo")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String gravarMelhorGrupo(List<Jogador> melhorGrupo) {
+        System.out.println("Melhor grupo recebido:");
+        for (Jogador jogador : melhorGrupo) {
+            System.out.println("Jogador: " + jogador.getNome() + ", Lucro: " + jogador.getLucro());
+        }
+        return "ok";
     }
 
     @GET
@@ -63,22 +83,23 @@ public class Rotas {
         return "Servidor funcionando!";
     }
 
-    @GET
-    @Path("jogador")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String gravarDadosJogador(
-            @QueryParam("id") int id,
-            @QueryParam("nome") String nome,
-            @QueryParam("saldoInicial") double saldoInicial,
-            @QueryParam("saldoFinal") double saldoFinal,
-            @QueryParam("totalApostas") int totalApostas) {
-        System.out.println("Jogador recebido:");
-        System.out.println("ID: " + id);
-        System.out.println("Nome: " + nome);
-        System.out.println("Saldo Inicial: " + saldoInicial);
-        System.out.println("Saldo Final: " + saldoFinal);
-        System.out.println("Total de Apostas: " + totalApostas);
-        return "ok";
-    }
+    // comentado para evitar conflito com a rota /jogador - esse daqui é só pra dados nao serializados
+    // @GET
+    // @Path("jogador")
+    // @Produces(MediaType.TEXT_PLAIN)
+    // public String gravarDadosJogador(
+    //         @QueryParam("id") int id,
+    //         @QueryParam("nome") String nome,
+    //         @QueryParam("saldoInicial") double saldoInicial,
+    //         @QueryParam("saldoFinal") double saldoFinal,
+    //         @QueryParam("totalApostas") int totalApostas) {
+    //     System.out.println("Jogador recebido:");
+    //     System.out.println("ID: " + id);
+    //     System.out.println("Nome: " + nome);
+    //     System.out.println("Saldo Inicial: " + saldoInicial);
+    //     System.out.println("Saldo Final: " + saldoFinal);
+    //     System.out.println("Total de Apostas: " + totalApostas);
+    //     return "ok";
+    // }
 
 }
