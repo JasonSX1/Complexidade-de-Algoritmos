@@ -13,6 +13,7 @@ public class Jogador {
     private List<Aposta> historicoApostas;
     private List<String> historicoFormatado;
     private String mesaId; // Identificação da mesa
+    private boolean terminouApostas; // Variavel de controle de status do jogador
 
     public Jogador(int id, String nome, double saldoInicial, int totalApostas) {
         this.id = id;
@@ -24,6 +25,14 @@ public class Jogador {
         this.historicoApostas = new ArrayList<>();
         this.historicoFormatado = new ArrayList<>();
         this.mesaId = null;
+    }
+
+    public boolean isTerminouApostas() {
+        return terminouApostas;
+    }
+    
+    public void setTerminouApostas(boolean terminouApostas) {
+        this.terminouApostas = terminouApostas;
     }
 
     public int getId() {
