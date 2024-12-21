@@ -156,36 +156,31 @@ public class ClienteImpl implements Runnable {
 
     private void enviarDadosJogadorAoServidor(Jogador jogador) {
         try {
-            jogador.setMesaId(mesaId); // Adicionar o ID da mesa ao jogador
-            String jsonInputString = new Gson().toJson(jogador);
-
+            JogadorDTO jogadorDTO = converterParaDTO(jogador); // Converter para DTO
+            String jsonInputString = new Gson().toJson(jogadorDTO);
+    
             URL url = new URL(URL_JOGADOR);
             HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
+    
             conexao.setDoOutput(true);
             conexao.setRequestMethod("POST");
             conexao.setRequestProperty("Content-Type", "application/json");
-
+    
             try (OutputStream os = conexao.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
-
-            int responseCode = conexao.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                System.out.println("Dados enviados com sucesso para o jogador: " + jogador.getNome());
-                System.out.println("");
-                System.out.println("Enviando jogador: " + new Gson().toJson(jogador));
-                System.out.println("");
-            } else {
-                throw new Exception("Falha ao enviar dados do jogador. Código de resposta: " + responseCode);
+    
+            if (conexao.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new Exception("Falha ao enviar dados do jogador. Código de resposta: " + conexao.getResponseCode());
             }
-
+    
             conexao.disconnect();
         } catch (Exception e) {
             System.err.println("Erro ao enviar dados do jogador: " + jogador.getNome());
             e.printStackTrace();
         }
-    }
+    }    
 
     private JogadorDTO converterParaDTO(Jogador jogador) {
     return new JogadorDTO(
