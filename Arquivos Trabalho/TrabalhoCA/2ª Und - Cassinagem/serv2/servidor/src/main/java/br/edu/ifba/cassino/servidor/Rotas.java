@@ -24,19 +24,21 @@ import jakarta.ws.rs.core.MediaType;
 public class Rotas {
 
     private static final Operacoes operacoes = new OperacoesImpl();
-    
+
     @POST
     @Path("jogador")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String gravarDadosJogador(JogadorDTO jogadorDTO) {
-        System.out.println("Dados recebidos da mesa: " + jogadorDTO.getMesaId());
-        System.out.println("Jogador: " + jogadorDTO.getNome());
-        System.out.println("Saldo Inicial: " + jogadorDTO.getSaldoInicial());
-        System.out.println("Saldo Final: " + jogadorDTO.getSaldoFinal());
+    public String gravarDadosJogador(Jogador jogador) {
+        //System.out.println("JSON Recebido: " + new Gson().toJson(jogador));
+        System.out.println("Dados recebidos da mesa: " + jogador.getMesaId());
+        System.out.println("Jogador: " + jogador.getNome());
+        System.out.println("Lucro: " + jogador.getLucro());
+        //System.out.println("Saldo Final: " + jogador.getSaldoFinal());
+        System.out.println("Histórico de Apostas: " + jogador.getHistoricoFormatado());
+        System.out.println("");
         return "ok";
     }
-    
     
     
     @POST
