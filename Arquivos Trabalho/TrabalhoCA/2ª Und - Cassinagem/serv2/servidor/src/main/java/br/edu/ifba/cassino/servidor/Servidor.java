@@ -1,4 +1,4 @@
-package br.edu.ifba.pacientes.servidor;
+package br.edu.ifba.cassino.servidor;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -14,7 +14,7 @@ public class Servidor {
 
     public static HttpServer startServer() {
 
-        final ResourceConfig rc = new ResourceConfig().packages("br.edu.ifba.pacientes.servidor");
+        final ResourceConfig rc = new ResourceConfig().packages("br.edu.ifba.cassino.servidor");
 
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);

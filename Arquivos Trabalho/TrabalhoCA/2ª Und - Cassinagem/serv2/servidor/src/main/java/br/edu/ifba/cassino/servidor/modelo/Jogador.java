@@ -1,4 +1,4 @@
-package br.edu.ifba.pacientes.servidor.modelo;
+package br.edu.ifba.cassino.servidor.modelo;
 
 import java.util.ArrayList;
 import java.util.List;

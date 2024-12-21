@@ -1,8 +1,8 @@
-package br.edu.ifba.pacientes.servidor.operacoes;
+package br.edu.ifba.cassino.servidor.operacoes;
 
 import java.util.List;
 
-import br.edu.ifba.pacientes.servidor.modelo.Jogador;
+import br.edu.ifba.cassino.servidor.modelo.Jogador;
 
 public interface Operacoes {
     void gravarDadosJogador(Jogador jogador);

@@ -1,4 +1,4 @@
-package br.edu.ifba.pacientes.servidor.modelo;
+package br.edu.ifba.cassino.cliente.modelo;
 
 public class Aposta {
     private double entrada;

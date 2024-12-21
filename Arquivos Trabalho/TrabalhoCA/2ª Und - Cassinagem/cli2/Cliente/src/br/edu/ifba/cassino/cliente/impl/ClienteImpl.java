@@ -1,5 +1,4 @@
-package br.edu.ifba.avaliacao.cliente.impl;
-
+package br.edu.ifba.cassino.cliente.impl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,9 +17,9 @@ import java.util.Random;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
 
-import br.edu.ifba.avaliacao.cliente.modelo.Jogador;
-import br.edu.ifba.avaliacao.cliente.modelo.Aposta;
-import br.edu.ifba.avaliacao.cliente.modelo.Roleta;
+import br.edu.ifba.cassino.cliente.modelo.Aposta;
+import br.edu.ifba.cassino.cliente.modelo.Jogador;
+import br.edu.ifba.cassino.cliente.modelo.Roleta;
 
 public class ClienteImpl implements Runnable {
 

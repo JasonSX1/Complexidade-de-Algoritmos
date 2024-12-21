@@ -1,9 +1,9 @@
-package br.edu.ifba.pacientes.servidor.impl;
+package br.edu.ifba.cassino.servidor.impl;
 
 import java.util.*;
 
-import br.edu.ifba.pacientes.servidor.modelo.Jogador;
-import br.edu.ifba.pacientes.servidor.operacoes.Operacoes;
+import br.edu.ifba.cassino.servidor.modelo.Jogador;
+import br.edu.ifba.cassino.servidor.operacoes.Operacoes;
 
 public class OperacoesImpl implements Operacoes {
     private Map<Integer, Jogador> jogadores = new TreeMap<>();

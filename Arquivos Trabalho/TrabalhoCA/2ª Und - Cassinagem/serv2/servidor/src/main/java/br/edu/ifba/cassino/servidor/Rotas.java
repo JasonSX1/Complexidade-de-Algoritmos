@@ -1,7 +1,4 @@
-package br.edu.ifba.pacientes.servidor;
-
-import br.edu.ifba.pacientes.servidor.operacoes.*;
-import br.edu.ifba.pacientes.servidor.modelo.*;
+package br.edu.ifba.cassino.servidor;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -9,7 +6,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import br.edu.ifba.pacientes.servidor.impl.*;
+import br.edu.ifba.cassino.servidor.impl.*;
+import br.edu.ifba.cassino.servidor.modelo.*;
+import br.edu.ifba.cassino.servidor.operacoes.*;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
