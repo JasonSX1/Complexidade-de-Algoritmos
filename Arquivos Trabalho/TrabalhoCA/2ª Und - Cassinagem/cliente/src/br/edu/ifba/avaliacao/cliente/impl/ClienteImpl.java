@@ -23,7 +23,7 @@ import br.edu.ifba.avaliacao.cliente.modelo.Roleta;
 public class ClienteImpl implements Runnable {
 
     private static final String URL_SERVIDOR = "http://localhost:8080/";
-    private static final String URL_JOGADOR = URL_SERVIDOR + "jogador/";
+    private static final String URL_JOGADOR = URL_SERVIDOR + "cassino/jogador/";
 
     private static final int TAMANHO_MAXIMO_HISTORICO = 3;
 
@@ -114,31 +114,37 @@ public class ClienteImpl implements Runnable {
             e.printStackTrace();
         }
     }
-
-    @SuppressWarnings("deprecation")
+    
     private void enviarDadosJogadorAoServidor(Jogador jogador) {
         try {
+            // Montar a URL com os dados do jogador como query parameters
             String dados = String.format(
-                "%d/%s/%.2f/%.2f/%d",
-                jogador.getId(), URLEncoder.encode(jogador.getNome(), StandardCharsets.UTF_8.toString()),
-                jogador.getSaldoInicial(), jogador.getSaldoAtual(), jogador.getHistoricoApostas().size()
+                "id=%d&nome=%s&saldoInicial=%.2f&saldoFinal=%.2f&totalApostas=%d",
+                jogador.getId(),
+                URLEncoder.encode(jogador.getNome(), StandardCharsets.UTF_8.toString()),
+                jogador.getSaldoInicial(),
+                jogador.getSaldoAtual(),
+                jogador.getHistoricoApostas().size()
             );
-
+    
             URL url = new URL(URL_JOGADOR + "?" + dados);
             HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
             conexao.setRequestMethod("GET");
-
-            if (conexao.getResponseCode() != 200) {
-                throw new Exception("Falha ao enviar dados do jogador.");
+    
+            // Verificar a resposta do servidor
+            int responseCode = conexao.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(conexao.getInputStream()))) {
+                    String resposta = br.readLine();
+                    System.out.println("Resposta do servidor: " + resposta);
+                }
+            } else {
+                throw new Exception("Falha ao enviar dados do jogador. Código de resposta: " + responseCode);
             }
-
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(conexao.getInputStream()))) {
-                String resposta = br.readLine();
-                System.out.println(resposta.equals("ok") ? "Dados enviados com sucesso." : "Erro ao enviar dados.");
-            }
-
+    
             conexao.disconnect();
         } catch (Exception e) {
+            System.err.println("Erro ao enviar dados do jogador: " + jogador.getNome());
             e.printStackTrace();
         }
     }

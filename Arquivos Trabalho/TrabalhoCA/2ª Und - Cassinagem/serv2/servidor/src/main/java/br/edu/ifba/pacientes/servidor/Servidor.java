@@ -22,9 +22,11 @@ public class Servidor {
 
     public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
-        System.out.println("aguardando biometrias...");
+        System.out.println("Servidor iniciado em " + BASE_URI);
+        System.out.println("Aguardando dados das mesas... Pressione ENTER para encerrar.");
         System.in.read();
         server.shutdownNow();
+        System.out.println("Servidor encerrado.");
     }
 }
 
