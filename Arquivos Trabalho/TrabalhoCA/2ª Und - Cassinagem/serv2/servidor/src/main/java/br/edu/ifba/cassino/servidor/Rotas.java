@@ -31,11 +31,13 @@ public class Rotas {
     @Produces(MediaType.TEXT_PLAIN)
     public String gravarDadosJogador(Jogador jogador) {
         //System.out.println("JSON Recebido: " + new Gson().toJson(jogador));
+        System.out.println("");
         System.out.println("Dados recebidos da mesa: " + jogador.getMesaId());
         System.out.println("Jogador: " + jogador.getNome());
+        System.out.println("Saldo Inicial: " + jogador.getSaldoInicial());
+        System.out.println("Saldo Final: " + jogador.getSaldoFinal());
         System.out.println("Lucro: " + jogador.getLucro());
-        //System.out.println("Saldo Final: " + jogador.getSaldoFinal());
-        System.out.println("Histórico de Apostas: " + jogador.getHistoricoFormatado());
+        //System.out.println("Histórico de Apostas: " + jogador.getHistoricoFormatado());
         System.out.println("");
         return "ok";
     }
