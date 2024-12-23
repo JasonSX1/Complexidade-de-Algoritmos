@@ -49,6 +49,7 @@ public class ClienteImpl implements Runnable {
             // Enviar dados ao servidor quando o jogador terminar as apostas
             System.out.println("Jogador " + jogador.getNome() + " está parando de apostar e saindo da mesa.");
             enviarDadosJogadorAoServidor(jogador);
+            
         }
     }
 
@@ -111,17 +112,34 @@ public class ClienteImpl implements Runnable {
     }
 
     private void atualizarMelhorGrupo(Jogador jogador) {
+        // Adiciona o jogador ao grupo de análise
         melhorGrupo.add(jogador);
         if (melhorGrupo.size() > TAMANHO_MAXIMO_HISTORICO) {
-            melhorGrupo.poll();
+            melhorGrupo.poll(); // Remove o jogador mais antigo se exceder o tamanho máximo
         }
-
-        double lucroAtual = melhorGrupo.stream().mapToDouble(j -> j.getSaldoAtual() - j.getSaldoInicial()).sum();
+    
+        // Calcula o lucro total do grupo atual
+        double lucroAtual = Math.round(
+            melhorGrupo.stream()
+                       .mapToDouble(j -> j.getSaldoAtual() - j.getSaldoInicial()) // Calcula o lucro individual
+                       .sum() * 100.0 // Arredonda para duas casas decimais
+        ) / 100.0;
+    
+        // Se o lucro atual for maior que o do melhor grupo anterior, atualiza
         if (lucroAtual > lucroMelhorGrupo) {
             lucroMelhorGrupo = lucroAtual;
+    
+            // Log para debug mostrando o grupo atualizado
+            System.out.println("Novo melhor grupo identificado com lucro: " + lucroMelhorGrupo);
+            melhorGrupo.forEach(j -> System.out.println(
+                String.format("Jogador: %s, Lucro: %.2f", j.getNome(), j.getSaldoAtual() - j.getSaldoInicial())
+            ));
+    
+            // Envia os dados atualizados do melhor grupo ao servidor
             enviarMelhorGrupoAoServidor();
         }
     }
+    
 
     private void enviarMelhorGrupoAoServidor() {
         try {
