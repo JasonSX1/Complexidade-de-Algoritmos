@@ -1,46 +1,41 @@
 package br.edu.ifba.cassino.servidor;
 
-import java.util.List;
-import jakarta.ws.rs.core.Response;
 import br.edu.ifba.cassino.servidor.impl.OperacoesImpl;
 import br.edu.ifba.cassino.servidor.modelo.Jogador;
-import br.edu.ifba.cassino.servidor.modelo.JogadoresWrapper;
 import br.edu.ifba.cassino.servidor.operacoes.Operacoes;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
+import java.util.List;
 
 @Path("/cassino")
 public class Rotas {
     private static final Operacoes operacoes = new OperacoesImpl();
+    private static final Gson gson = new Gson(); // Objeto Gson para processar JSON
 
     @POST
     @Path("/jogadores")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response receberJogadores(JogadoresWrapper wrapper) {
-        if (wrapper == null || wrapper.getJogadores() == null) {
-            System.err.println("[ERRO] JSON recebido está nulo ou mal formatado.");
-            return Response.status(Response.Status.BAD_REQUEST)
-                           .entity("Erro: JSON enviado está mal formatado ou vazio.")
-                           .build();
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response receberJogadores(String json) {
+        try {
+            System.out.println("[DEBUG] JSON recebido: " + json);
+
+            // Converte manualmente a String JSON para uma lista de jogadores
+            List<Jogador> jogadores = gson.fromJson(json, new TypeToken<List<Jogador>>(){}.getType());
+
+            System.out.println("[DEBUG] Lista de jogadores processada: " + jogadores);
+            operacoes.processarJogadores(jogadores);
+
+            return Response.ok("Jogadores processados com sucesso.").build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.serverError().entity("Erro ao processar jogadores: " + e.getMessage()).build();
         }
-    
-        System.out.println("[DEBUG] JSON recebido: " + wrapper.getJogadores());
-        operacoes.processarJogadores(wrapper.getJogadores());
-        return Response.ok().build();
-    }    
-    
-    // @GET
-    // @Path("jogadores")
-    // @Produces(MediaType.APPLICATION_JSON)
-    // public List<Jogador> listarJogadores() {
-    //     return operacoes.listarJogadores();
-    // }
+    }
 
     @GET
     @Path("/melhores")
@@ -56,30 +51,4 @@ public class Rotas {
     public String getInfo() {
         return "API de gerenciamento de apostas do cassino, versão 1.0";
     }
-
-    @GET
-    @Path("/raiz")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String raiz() {
-        return "Servidor funcionando!";
-    }
-
-    // comentado para evitar conflito com a rota /jogador - esse daqui é só pra dados nao serializados
-    // @GET
-    // @Path("jogador")
-    // @Produces(MediaType.TEXT_PLAIN)
-    // public String gravarDadosJogador(
-    //         @QueryParam("id") int id,
-    //         @QueryParam("nome") String nome,
-    //         @QueryParam("saldoInicial") double saldoInicial,
-    //         @QueryParam("saldoFinal") double saldoFinal,
-    //         @QueryParam("totalApostas") int totalApostas) {
-    //     System.out.println("Jogador recebido:");
-    //     System.out.println("ID: " + id);
-    //     System.out.println("Nome: " + nome);
-    //     System.out.println("Saldo Inicial: " + saldoInicial);
-    //     System.out.println("Saldo Final: " + saldoFinal);
-    //     System.out.println("Total de Apostas: " + totalApostas);
-    //     return "ok";
-    // }
 }
