@@ -1,85 +1,64 @@
 package br.edu.ifba.cassino.servidor;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-
-import com.google.gson.Gson;
-
-import br.edu.ifba.cassino.servidor.impl.*;
-import br.edu.ifba.cassino.servidor.modelo.*;
-import br.edu.ifba.cassino.servidor.operacoes.*;
+import jakarta.ws.rs.core.Response;
+import br.edu.ifba.cassino.servidor.impl.OperacoesImpl;
+import br.edu.ifba.cassino.servidor.modelo.Jogador;
+import br.edu.ifba.cassino.servidor.modelo.JogadoresWrapper;
+import br.edu.ifba.cassino.servidor.operacoes.Operacoes;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("cassino")
-public class Rotas {
 
+@Path("/cassino")
+public class Rotas {
     private static final Operacoes operacoes = new OperacoesImpl();
 
     @POST
-    @Path("jogador")
+    @Path("/jogadores")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String gravarDadosJogador(Jogador jogador) {
-        //System.out.println("JSON Recebido: " + new Gson().toJson(jogador));
-        System.out.println("");
-        System.out.println("Dados recebidos da mesa: " + jogador.getMesaId());
-        System.out.println("Jogador: " + jogador.getNome());
-        System.out.println("Saldo Inicial: " + jogador.getSaldoInicial());
-        System.out.println("Saldo Final: " + jogador.getSaldoFinal());
-        System.out.println("Lucro: " + jogador.getLucro());
-        //System.out.println("Histórico de Apostas: " + jogador.getHistoricoFormatado());
-        System.out.println("");
-        return "ok";
-    }
-    
-    
-    @POST
-    @Path("grupo")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String registrarMelhorGrupo(List<Jogador> grupo) {
-        operacoes.registrarMelhorGrupo(grupo);
-        return "Grupo registrado com sucesso.";
-    }
-
-    @POST
-    @Path("melhorGrupo")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String gravarMelhorGrupo(List<Jogador> melhorGrupo) {
-        System.out.println("Melhor grupo recebido:");
-        for (Jogador jogador : melhorGrupo) {
-            System.out.println("Jogador: " + jogador.getNome() + ", Lucro: " + jogador.getLucro());
-        }
-        return "ok";
-    }
-
-    @GET
-    @Path("jogadores")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Jogador> listarJogadores() {
-        return operacoes.listarJogadores();
+    public Response receberJogadores(JogadoresWrapper wrapper) {
+        if (wrapper == null || wrapper.getJogadores() == null) {
+            System.err.println("[ERRO] JSON recebido está nulo ou mal formatado.");
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity("Erro: JSON enviado está mal formatado ou vazio.")
+                           .build();
+        }
+    
+        System.out.println("[DEBUG] JSON recebido: " + wrapper.getJogadores());
+        operacoes.processarJogadores(wrapper.getJogadores());
+        return Response.ok().build();
+    }    
+    
+    // @GET
+    // @Path("jogadores")
+    // @Produces(MediaType.APPLICATION_JSON)
+    // public List<Jogador> listarJogadores() {
+    //     return operacoes.listarJogadores();
+    // }
+
+    @GET
+    @Path("/melhores")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obterMelhoresJogadores() {
+        List<Jogador> melhores = operacoes.getMelhoresJogadores();
+        return Response.ok(melhores).build();
     }
 
     @GET
-    @Path("info")
+    @Path("/info")
     @Produces(MediaType.TEXT_PLAIN)
     public String getInfo() {
         return "API de gerenciamento de apostas do cassino, versão 1.0";
     }
 
     @GET
-    @Path("/")
+    @Path("/raiz")
     @Produces(MediaType.TEXT_PLAIN)
     public String raiz() {
         return "Servidor funcionando!";
@@ -103,5 +82,4 @@ public class Rotas {
     //     System.out.println("Total de Apostas: " + totalApostas);
     //     return "ok";
     // }
-
 }

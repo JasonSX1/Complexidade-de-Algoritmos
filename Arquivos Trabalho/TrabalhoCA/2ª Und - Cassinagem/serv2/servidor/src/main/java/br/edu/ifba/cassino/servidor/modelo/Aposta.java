@@ -1,84 +1,58 @@
+// Classe que representa uma Aposta no sistema
 package br.edu.ifba.cassino.servidor.modelo;
 
 public class Aposta {
-    private double entrada;
-    private int numeroApostado;
-    private int numeroRoleta;
-    private String corApostada;
-    private String paridadeApostada;
+    private String jogador;
+    private double valor;
+    private String tipo;
+    private String resultado;
 
-    // A complexidade geral da classe é O(1), tendo em vista que nenhum dos métodos
-    // dela como os Getters e Setters possuem laços de repetição ou algo que
-    // incremente sua complexidade
-
-    public String getCorApostada() {
-        return corApostada;
-    }
-
-    public void setCorApostada(String corApostada) {
-        this.corApostada = corApostada;
-    }
-
-    public String getParidadeApostada() {
-        return paridadeApostada;
-    }
-
-    public void setParidadeApostada(String paridadeApostada) {
-        this.paridadeApostada = paridadeApostada;
-    }
-
-    private String corRoleta;
-    private String paridadeRoleta;
-    private double resultado;
-    private int numeroDaRodada;
-    private String tipoAposta;
-
-    public Aposta(double entrada, String tipoAposta, int numeroApostado, String corApostada, String paridadeApostada,
-            int numeroRoleta, String corRoleta, String paridadeRoleta, double resultado) {
-        this.entrada = entrada;
-        this.tipoAposta = tipoAposta;
-        this.numeroApostado = numeroApostado;
-        this.corApostada = corApostada;
-        this.paridadeApostada = paridadeApostada;
-        this.numeroRoleta = numeroRoleta;
-        this.corRoleta = corRoleta;
-        this.paridadeRoleta = paridadeRoleta;
+    public Aposta(String jogador, double valor, String tipo, String resultado) {
+        this.jogador = jogador;
+        this.valor = valor;
+        this.tipo = tipo;
         this.resultado = resultado;
     }
 
-    public double getResultado() {
+    public String getJogador() {
+        return jogador;
+    }
+
+    public void setJogador(String jogador) {
+        this.jogador = jogador;
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getResultado() {
         return resultado;
     }
 
-    public String getTipoAposta() {
-        return tipoAposta;
+    public void setResultado(String resultado) {
+        this.resultado = resultado;
     }
 
-    public int getNumeroRoleta() {
-        return numeroRoleta;
-    }
-
-    public String getCorRoleta() {
-        return corRoleta;
-    }
-
-    public String getParidadeRoleta() {
-        return paridadeRoleta;
-    }
-
-    public double getEntrada() {
-        return entrada;
-    }
-
-    public int getNumeroApostado() {
-        return numeroApostado;
-    }
-
-    public int getNumeroDaRodada() {
-        return numeroDaRodada;
-    }
-
-    public void setNumeroDaRodada(int numeroDaRodada) {
-        this.numeroDaRodada = numeroDaRodada;
+    @Override
+    public String toString() {
+        return "Aposta{" +
+                "jogador='" + jogador + '\'' +
+                ", valor=" + valor +
+                ", tipo='" + tipo + '\'' +
+                ", resultado='" + resultado + '\'' +
+                '}';
     }
 }

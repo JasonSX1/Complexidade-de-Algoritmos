@@ -1,11 +1,13 @@
+// Interface que define as operações do Servidor
 package br.edu.ifba.cassino.servidor.operacoes;
 
+import br.edu.ifba.cassino.servidor.modelo.Jogador;
 import java.util.List;
 
-import br.edu.ifba.cassino.servidor.modelo.Jogador;
-
 public interface Operacoes {
-    void gravarDadosJogador(Jogador jogador);
-    void registrarMelhorGrupo(List<Jogador> grupo);
-    List<Jogador> listarJogadores();
+    // Processa os jogadores recebidos do cliente
+    void processarJogadores(List<Jogador> jogadores);
+
+    // Retorna os 3 jogadores mais lucrativos
+    List<Jogador> getMelhoresJogadores();
 }

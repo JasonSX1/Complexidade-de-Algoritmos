@@ -1,3 +1,4 @@
+// deixar essa class aq por enquanto
 package br.edu.ifba.cassino.servidor.modelo;
 
 import java.util.Random;
