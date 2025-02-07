@@ -31,7 +31,7 @@ public class Rotas {
             System.out.println("\n===============================================");
             System.out.printf(" Dados recebidos da MESA %s%n", resultado.getMesaId());
             System.out.println("===============================================");
-            System.out.printf(" Lucro total da mesa: %.2f%n", lucroTotalMesa);
+            System.out.printf(" Lucro do cassino: %.2f\n", -lucroTotalMesa);
             System.out.println("-----------------------------------------------");
             System.out.println(" Melhores jogadores:");
             System.out.println(" ID |    Nome Completo      | Saldo Inicial |  Saldo Final |   Lucro  ");

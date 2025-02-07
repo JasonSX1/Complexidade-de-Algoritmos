@@ -125,13 +125,15 @@ public class ClienteImpl implements Cliente, Runnable {
                 return;
             }
     
-            // 🔹 Calcular o lucro total da mesa
-            double saldoInicialMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldoInicial).sum();
-            double saldoFinalMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldo).sum();
+            // 🔹 Calcular o lucro total da mesa considerando TODOS os jogadores
+            double saldoInicialMesa = jogadores.stream().mapToDouble(Jogador::getSaldoInicial).sum();
+            double saldoFinalMesa = jogadores.stream().mapToDouble(Jogador::getSaldo).sum();
             double lucroTotalMesa = saldoFinalMesa - saldoInicialMesa;
     
             // 🔹 Criar DTO para envio
-            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, lucroTotalMesa, new ArrayList<>(melhoresJogadores));
+            MesaResultadoDTO resultado = new MesaResultadoDTO(
+                    mesaId, lucroTotalMesa, new ArrayList<>(melhoresJogadores)
+            );
             String json = new Gson().toJson(resultado);
     
             // 🔹 Exibir os dados antes de enviar
@@ -181,5 +183,6 @@ public class ClienteImpl implements Cliente, Runnable {
     private String formatarNome(String nome) {
         return nome.length() > 20 ? nome.substring(0, 17) + "..." : nome;
     }
+    
       
 }
