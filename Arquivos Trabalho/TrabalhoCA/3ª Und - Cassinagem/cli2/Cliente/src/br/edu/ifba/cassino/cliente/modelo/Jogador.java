@@ -44,6 +44,14 @@ public class Jogador {
         this.saldo = saldo;
     }
 
+    public double getTotalApostado() {
+        return this.saldoInicial - this.saldo;
+    }
+
+    public double getTotalGanho() {
+        return this.saldo - this.saldoInicial;
+    }
+
     public List<Aposta> getHistoricoApostas() {
         return historicoApostas;
     }
