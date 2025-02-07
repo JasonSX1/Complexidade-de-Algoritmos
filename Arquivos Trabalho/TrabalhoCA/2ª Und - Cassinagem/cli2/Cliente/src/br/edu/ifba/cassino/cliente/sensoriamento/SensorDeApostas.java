@@ -19,8 +19,6 @@ public class SensorDeApostas {
             return;
         }
 
-        System.out.println("[DEBUG] Chamando gerarApostasParaJogadores() para " + jogadores.size() + " jogadores.");
-
         Random random = new Random();
         Roleta roleta = new Roleta();
 
@@ -30,12 +28,7 @@ public class SensorDeApostas {
             String corSorteada = roleta.getCorSorteada();
             String tipoSorteado = roleta.getTipoSorteado();
 
-            System.out.printf("\n[DEBUG] Resultados da roleta para a rodada %d: Número: %d - Cor: %s - Tipo: %s\n",
-                    rodada, numeroSorteado, corSorteada, tipoSorteado);
-
             for (Jogador jogador : jogadores) {
-                System.out.println("[DEBUG] Gerando aposta para " + jogador.getNomeCompleto());
-
                 double entrada = 10 + random.nextInt(40);
                 String tipoAposta = escolherTipoAposta(random);
                 int numeroApostado = -1;
@@ -64,15 +57,8 @@ public class SensorDeApostas {
 
                 // 🔹 GARANTINDO QUE AS APOSTAS SÃO REALMENTE ARMAZENADAS
                 jogador.adicionarAposta(aposta);
-
-                System.out.printf(
-                        "[DEBUG] Aposta gerada para %s: Tipo: %s, Entrada: %.2f, Resultado: %.2f, Total de apostas: %d\n",
-                        jogador.getNomeCompleto(), aposta.getTipoAposta(), aposta.getEntrada(), aposta.getResultado(),
-                        jogador.getHistoricoApostas().size());
             }
         }
-
-        System.out.println("[DEBUG] Fim de gerarApostasParaJogadores()");
     }
 
     // Método auxiliar para escolher o tipo de aposta

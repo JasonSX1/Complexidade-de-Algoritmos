@@ -4,6 +4,7 @@ import br.edu.ifba.cassino.cliente.sensoriamento.SensorDeApostas;
 import com.github.javafaker.Faker;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class Jogador {
@@ -57,7 +58,6 @@ public class Jogador {
         saldo += aposta.getResultado();
 
         System.out.printf(
-                "[DEBUG] Aposta armazenada para %s: Tipo: %s, Entrada: %.2f, Resultado: %.2f, Total de apostas: %d\n",
                 getNomeCompleto(), aposta.getTipoAposta(), aposta.getEntrada(), aposta.getResultado(),
                 historicoApostas.size());
     }
@@ -66,7 +66,7 @@ public class Jogador {
     // Faker
     public static List<Jogador> gerarJogadores(int quantidade) {
         List<Jogador> jogadores = new ArrayList<>();
-        Faker faker = new Faker();
+        Faker faker = new Faker(new Locale("pt", "BR"));
         Random random = new Random();
 
         System.out.println("[GERAÇÃO DE JOGADORES] Criando " + quantidade + " jogadores...");
@@ -82,8 +82,6 @@ public class Jogador {
             System.out.printf("[JOGADOR CRIADO] ID: %d, Nome: %s, Sobrenome: %s, Saldo Inicial: %.2f\n",
                     jogador.getId(), jogador.nome, jogador.sobrenome, jogador.getSaldoInicial());
         }
-
-        System.out.println("[DEBUG] Total de jogadores criados: " + jogadores.size());
 
         return jogadores;
     }

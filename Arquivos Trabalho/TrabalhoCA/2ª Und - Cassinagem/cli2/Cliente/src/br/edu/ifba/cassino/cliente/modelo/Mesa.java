@@ -26,44 +26,30 @@ public class Mesa extends Thread {
 
     public synchronized void adicionarJogador(Jogador jogador) {
         jogadores.add(jogador);
-        System.out.println("[MESA " + mesaId + "] Jogador " + jogador.getNomeCompleto() + " adicionado. Total na mesa: "
+        System.out.println("[ " + mesaId + "] Jogador " + jogador.getNomeCompleto() + " adicionado. Total na mesa: "
                 + jogadores.size());
     }
 
     @Override
     public void run() {
-        System.out.println("[DEBUG] Iniciando thread da mesa " + mesaId);
 
         while (!jogadores.isEmpty()) {
-            System.out.println("[DEBUG] Chamando processarApostas() para a mesa " + mesaId);
             processarApostas();
             renovarJogadores();
         }
 
-        System.out.println("[MESA " + mesaId + "] Finalizou todas as rodadas de apostas.");
+        System.out.println("[ " + mesaId + "] Finalizou todas as rodadas de apostas.");
     }
 
     private void processarApostas() {
-        System.out.println("[MESA " + mesaId + "] Processando apostas para " + jogadores.size() + " jogadores...");
+        System.out.println("[ " + mesaId + "] Processando apostas para " + jogadores.size() + " jogadores...");
 
         if (jogadores.isEmpty()) {
             System.err.println("[ERRO] Lista de jogadores está vazia na mesa " + mesaId);
             return;
         }
 
-        for (Jogador jogador : jogadores) {
-            System.out.println("[DEBUG] Jogador na mesa: " + jogador.getNomeCompleto());
-        }
-
-        // 🔹 GARANTINDO QUE AS APOSTAS SERÃO GERADAS
-        System.out.println("[DEBUG] Chamando gerarApostasParaJogadores() antes de apostar.");
         SensorDeApostas.gerarApostasParaJogadores(jogadores, 5);
-
-        for (Jogador jogador : jogadores) {
-            System.out.println("[DEBUG] Verificando histórico de apostas antes de apostar: "
-                    + jogador.getHistoricoApostas().size());
-            jogador.apostar();
-        }
     }
 
     private void enviarResultados() {
@@ -101,7 +87,7 @@ public class Mesa extends Thread {
     }
 
     private void renovarJogadores() {
-        System.out.println("[MESA " + mesaId + "] Renovando jogadores, removendo todos da mesa.");
+        System.out.println("[ " + mesaId + "] Renovando jogadores, removendo todos da mesa.");
         while (!jogadores.isEmpty()) {
             jogadores.remove(0);
         }

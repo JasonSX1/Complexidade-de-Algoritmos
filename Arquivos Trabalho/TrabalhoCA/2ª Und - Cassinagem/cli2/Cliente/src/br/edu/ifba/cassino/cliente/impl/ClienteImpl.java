@@ -3,6 +3,8 @@ package br.edu.ifba.cassino.cliente.impl;
 import br.edu.ifba.cassino.cliente.comunicacao.Cliente;
 import br.edu.ifba.cassino.cliente.modelo.Jogador;
 import br.edu.ifba.cassino.cliente.modelo.MesaResultadoDTO;
+import br.edu.ifba.cassino.cliente.sensoriamento.SensorDeApostas;
+
 import com.google.gson.Gson;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -35,13 +37,8 @@ public class ClienteImpl implements Cliente, Runnable {
 
     @Override
     public void configurar(int totalJogadores, int jogadoresPorLeva) {
-        System.out.println("[DEBUG] Chamando configurar() com " + totalJogadores + " jogadores...");
-    
         this.jogadores = Jogador.gerarJogadores(totalJogadores);
-        
-        System.out.println("[DEBUG] Jogadores armazenados na lista após gerarJogadores(): " + jogadores.size());
     }
-    
 
     @Override
     public void iniciar() {
@@ -53,7 +50,8 @@ public class ClienteImpl implements Cliente, Runnable {
         System.out.println("[MESA " + mesaId + "] Iniciando apostas...");
 
         if (jogadores.size() != totalJogadores) {
-            System.err.println("[ERRO] Quantidade de jogadores incorreta! Esperado: " + totalJogadores + ", Obtido: " + jogadores.size());
+            System.err.println("[ERRO] Quantidade de jogadores incorreta! Esperado: " + totalJogadores + ", Obtido: "
+                    + jogadores.size());
             return;
         }
 
@@ -66,7 +64,7 @@ public class ClienteImpl implements Cliente, Runnable {
             int fim = Math.min(i + jogadoresPorLeva, jogadores.size());
             List<Jogador> levaJogadores = new ArrayList<>(jogadores.subList(i, fim));
 
-            System.out.println("[DEBUG] Processando jogadores de índice " + i + " até " + (fim - 1));
+            SensorDeApostas.gerarApostasParaJogadores(levaJogadores, 5);
 
             levaJogadores.forEach(Jogador::apostar);
             atualizarMelhoresJogadores(levaJogadores);
@@ -104,7 +102,8 @@ public class ClienteImpl implements Cliente, Runnable {
                 return;
             }
 
-            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, saldoFinalMesa, new ArrayList<>(melhoresJogadores));
+            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, saldoFinalMesa,
+                    new ArrayList<>(melhoresJogadores));
             String json = new Gson().toJson(resultado);
 
             URL url = new URL(URL_MESA);
