@@ -1,74 +1,46 @@
 package br.edu.ifba.cassino.cliente.modelo;
 
+import br.edu.ifba.cassino.cliente.sensoriamento.SensorDeApostas;
+import com.github.javafaker.Faker;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Jogador {
     private int id;
     private String nome;
+    private String sobrenome;
+    private double saldo;
     private double saldoInicial;
-    private double saldoAtual;
-    private double saldoFinal;
-    private int totalApostas;
     private List<Aposta> historicoApostas;
-    private List<String> historicoFormatado;
-    private String mesaId; // Identificação da mesa
-    private boolean terminouApostas; // Variavel de controle de status do jogador
 
-    public Jogador(int id, String nome, double saldoInicial, int totalApostas) {
+    public Jogador(int id, String nome, String sobrenome, double saldo) {
         this.id = id;
         this.nome = nome;
-        this.saldoInicial = Math.round(saldoInicial * 100.0) / 100.0;
-        this.saldoAtual = this.saldoInicial;
-        this.saldoFinal = 0.0;
-        this.totalApostas = totalApostas;
+        this.sobrenome = sobrenome;
+        this.saldo = saldo;
+        this.saldoInicial = saldo;
         this.historicoApostas = new ArrayList<>();
-        this.historicoFormatado = new ArrayList<>();
-        this.mesaId = null;
-    }
-
-    public boolean isTerminouApostas() {
-        return terminouApostas;
-    }
-    
-    public void setTerminouApostas(boolean terminouApostas) {
-        this.terminouApostas = terminouApostas;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeCompleto() {
+        return nome + " " + sobrenome;
+    }
+
+    public double getSaldo() {
+        return saldo;
     }
 
     public double getSaldoInicial() {
         return saldoInicial;
     }
 
-    public double getSaldoAtual() {
-        return saldoAtual;
-    }
-
-    public void setSaldoAtual(double saldoAtual) {
-        this.saldoAtual = Math.max(0, Math.round(saldoAtual * 100.0) / 100.0);
-    }
-
-    public double getSaldoFinal() {
-        return saldoFinal;
-    }
-
-    public void setSaldoFinal(double saldoFinal) {
-        this.saldoFinal = Math.max(0, Math.round(saldoFinal * 100.0) / 100.0);
-    }
-
-    public int getTotalApostas() {
-        return totalApostas;
-    }
-
-    public void setTotalApostas(int totalApostas) {
-        this.totalApostas = totalApostas;
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 
     public List<Aposta> getHistoricoApostas() {
@@ -77,33 +49,52 @@ public class Jogador {
 
     public void adicionarAposta(Aposta aposta) {
         historicoApostas.add(aposta);
+        saldo += aposta.getResultado();
     }
 
-    public List<String> getHistoricoFormatado() {
-        return historicoFormatado;
+    // Gera uma lista de jogadores com nomes e sobrenomes aleatórios usando Java Faker
+    public static List<Jogador> gerarJogadores(int quantidade) {
+        List<Jogador> jogadores = new ArrayList<>();
+        Faker faker = new Faker();
+        Random random = new Random();
+
+        System.out.println("[GERAÇÃO DE JOGADORES] Criando " + quantidade + " jogadores...");
+
+        for (int i = 0; i < quantidade; i++) {
+            String nome = faker.name().firstName();  // Nome aleatório
+            String sobrenome = faker.name().lastName();  // Sobrenome aleatório
+            double saldo = 1000 + (random.nextDouble() * 4000); // Saldo inicial entre 1000 e 5000
+
+            Jogador jogador = new Jogador(i + 1, nome, sobrenome, saldo);
+            jogadores.add(jogador);
+
+            System.out.printf("[JOGADOR CRIADO] ID: %d, Nome: %s, Sobrenome: %s, Saldo Inicial: %.2f\n",
+                    jogador.getId(), jogador.nome, jogador.sobrenome, jogador.getSaldoInicial());
+        }
+
+        System.out.println("[DEBUG] Total de jogadores criados: " + jogadores.size());
+
+        return jogadores;
     }
 
-    public void adicionarHistoricoAposta(String historico) {
-        historicoFormatado.add(historico);
-    }
+    // Método para realizar as apostas do jogador
+    public void apostar() {
+        System.out.printf("\nApostas de %s:\n", getNomeCompleto());
+        System.out.println(
+                "RODADA | TIPO     | ENTRADA | APOSTA   | RESULTADO DA ROLETA     | RESULTADO | SALDO RESULTANTE");
+        System.out.println("");
 
-    public String getMesaId() {
-        return mesaId;
-    }
+        double saldoAtual = saldoInicial; // Inicializa o saldo com o valor inicial para acompanhar as atualizações
 
-    public void setMesaId(String mesaId) {
-        this.mesaId = mesaId;
-    }
+        for (Aposta aposta : historicoApostas) {
+            // Atualiza o saldo atual do jogador com o resultado da aposta
+            saldoAtual += aposta.getResultado();
 
-    public double getLucro() {
-        return Math.round((saldoFinal - saldoInicial) * 100.0) / 100.0;
-    }
+            // Usa o método formatarResultadoAposta para formatar o resultado da rodada
+            String resultadoFormatado = SensorDeApostas.formatarResultadoAposta(aposta, saldoAtual);
 
-    @Override
-    public String toString() {
-        return String.format(
-            "ID: %d, Nome: %s, Saldo Inicial: %.2f, Saldo Atual: %.2f, Saldo Final: %.2f, Total de Apostas: %d",
-            id, nome, saldoInicial, saldoAtual, saldoFinal, totalApostas
-        );
+            // Exibe o resultado formatado
+            System.out.println(resultadoFormatado);
+        }
     }
 }

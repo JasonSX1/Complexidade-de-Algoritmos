@@ -1,3 +1,4 @@
+
 package br.edu.ifba.cassino.cliente.modelo;
 
 import java.util.Random;
