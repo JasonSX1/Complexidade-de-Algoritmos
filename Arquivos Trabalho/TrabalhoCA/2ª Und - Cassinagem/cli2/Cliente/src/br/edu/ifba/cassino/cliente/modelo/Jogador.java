@@ -75,7 +75,7 @@ public class Jogador {
             String nome = faker.name().firstName(); // Nome aleatório
             String sobrenome = faker.name().lastName(); // Sobrenome aleatório
             double saldo = 1000 + (random.nextDouble() * 4000); // Saldo inicial entre 1000 e 5000
-
+            saldo = (int) (saldo * 100) / 100.0; // Ajuste para duas casas decimais
             Jogador jogador = new Jogador(i + 1, nome, sobrenome, saldo);
             jogadores.add(jogador);
 
