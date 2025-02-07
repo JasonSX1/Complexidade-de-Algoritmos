@@ -28,14 +28,31 @@
             "id": "f9d7560086879d12",
             "type": "leaf",
             "state": {
+              "type": "canvas",
+              "state": {
+                "file": "1ª Unidade.canvas",
+                "viewState": {
+                  "x": 1565,
+                  "y": -215,
+                  "zoom": -2.2957781654533216
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "1ª Unidade"
+            }
+          },
+          {
+            "id": "68ca4a3a0141b7be",
+            "type": "leaf",
+            "state": {
               "type": "markdown",
               "state": {
-                "file": "Trabalho - CA 2a unidade.md",
+                "file": "Review Trabalho UND 2.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Trabalho - CA 2a unidade"
+              "title": "Review Trabalho UND 2"
             }
           },
           {
@@ -53,7 +70,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -72,7 +89,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Explorador de arquivos"
@@ -194,11 +212,13 @@
       "command-palette:Abrir paleta de comandos": false
     }
   },
-  "active": "f9d7560086879d12",
+  "active": "68ca4a3a0141b7be",
   "lastOpenFiles": [
-    "Trabalho - CA.md",
-    "Trabalho - CA 2a unidade.md",
     "1ª Unidade.canvas",
+    "Review Trabalho UND 2.md",
+    "Trabalho - CA 2a unidade.md",
+    "Sem título",
+    "Trabalho - CA.md",
     "2ª Unidade.md",
     "Imagens/Pasted image 20241010113939.png",
     "Imagens/Pasted image 20240928165324.png",

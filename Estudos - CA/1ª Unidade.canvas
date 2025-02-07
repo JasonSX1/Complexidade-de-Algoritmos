@@ -46,7 +46,7 @@
 		{"id":"e3370891e1764afc","type":"text","text":"Edge Computing","x":0,"y":860,"width":250,"height":60},
 		{"id":"493589eaeb035b10","type":"text","text":"Se refere ao procesamento, analise e armazenamento dos dados mais próximos de onde eles são gerados, para agilizar a analise e o processamento dos dados","x":-43,"y":990,"width":337,"height":150},
 		{"id":"19c0c7d520b51d52","type":"text","text":"30/11","x":-489,"y":1400,"width":104,"height":50,"color":"4"},
-		{"id":"d9080602c911fdc0","x":1,"y":1390,"width":250,"height":60,"type":"text","text":"Complexidade de Grafos"}
+		{"id":"d9080602c911fdc0","type":"text","text":"Complexidade de Grafos","x":1,"y":1390,"width":250,"height":60}
 	],
 	"edges":[
 		{"id":"885196dfa8b38a89","fromNode":"7bce111f54f37204","fromSide":"right","toNode":"d5dec6f87aee6703","toSide":"left"},
