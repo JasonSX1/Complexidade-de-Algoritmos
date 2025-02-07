@@ -125,24 +125,35 @@ public class ClienteImpl implements Cliente, Runnable {
                 return;
             }
     
+            // 🔹 Calcular o lucro total da mesa
+            double saldoInicialMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldoInicial).sum();
+            double saldoFinalMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldo).sum();
+            double lucroTotalMesa = saldoFinalMesa - saldoInicialMesa;
+    
+            // 🔹 Criar DTO para envio
+            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, lucroTotalMesa, new ArrayList<>(melhoresJogadores));
+            String json = new Gson().toJson(resultado);
+    
             // 🔹 Exibir os dados antes de enviar
             System.out.println("===============================================");
             System.out.println(" Dados enviados ao SERVIDOR pela MESA " + mesaId);
             System.out.println("===============================================");
-            System.out.println(" ID |    Nome     | Saldo Inicial |  Saldo Final");
-            System.out.println("----|-------------|---------------|--------------");
+            System.out.printf(" Lucro total da mesa: %.2f\n", lucroTotalMesa);
+            System.out.println("-----------------------------------------------");
+            System.out.println(" Melhores jogadores:");
+            System.out.println(" ID |    Nome Completo      | Saldo Inicial |  Saldo Final |   Lucro  ");
+            System.out.println("----|----------------------|---------------|--------------|----------");
     
             for (Jogador jogador : melhoresJogadores) {
-                System.out.printf(" %2d | %-12s | %13.2f | %13.2f\n",
-                        jogador.getId(), jogador.getNomeCompleto(), jogador.getSaldoInicial(), jogador.getSaldo());
+                double lucroJogador = jogador.getSaldo() - jogador.getSaldoInicial();
+                System.out.printf(" %2d | %-20s | %13.2f | %13.2f | %8.2f%n",
+                        jogador.getId(), formatarNome(jogador.getNomeCompleto()),
+                        jogador.getSaldoInicial(), jogador.getSaldo(), lucroJogador);
             }
     
             System.out.println("===============================================");
     
-            // 🔹 Criando o DTO para envio
-            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, saldoFinalMesa, new ArrayList<>(melhoresJogadores));
-            String json = new Gson().toJson(resultado);
-    
+            // 🔹 Enviar os dados ao servidor
             URL url = new URL(URL_MESA);
             HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
     
@@ -162,5 +173,13 @@ public class ClienteImpl implements Cliente, Runnable {
             System.err.println("[MESA " + mesaId + "] Erro ao enviar dados.");
             e.printStackTrace();
         }
-    }    
+    }
+    
+    /**
+     * 🔹 Formata o nome para não ultrapassar um limite de 20 caracteres
+     */
+    private String formatarNome(String nome) {
+        return nome.length() > 20 ? nome.substring(0, 17) + "..." : nome;
+    }
+      
 }

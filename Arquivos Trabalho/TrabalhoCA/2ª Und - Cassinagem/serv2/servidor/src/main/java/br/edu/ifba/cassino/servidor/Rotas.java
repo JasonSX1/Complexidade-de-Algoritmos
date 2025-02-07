@@ -23,20 +23,26 @@ public class Rotas {
                     .build();
         }
     
-        // 🔹 Garante que apenas uma mesa imprime os dados por vez
+        // 🔹 O cliente já enviou o lucro total da mesa corretamente, então só exibimos
+        double lucroTotalMesa = resultado.getSaldoFinalMesa();
+    
+        // 🔹 Sincronização para evitar sobreposição de prints
         synchronized (System.out) {
             System.out.println("\n===============================================");
             System.out.printf(" Dados recebidos da MESA %s%n", resultado.getMesaId());
             System.out.println("===============================================");
-            System.out.printf(" Saldo final da mesa: %.2f%n", resultado.getSaldoFinalMesa());
+            System.out.printf(" Lucro total da mesa: %.2f%n", lucroTotalMesa);
             System.out.println("-----------------------------------------------");
             System.out.println(" Melhores jogadores:");
-            System.out.println(" ID |    Nome     | Saldo Inicial |  Saldo Final ");
-            System.out.println("----|-------------|---------------|--------------");
+            System.out.println(" ID |    Nome Completo      | Saldo Inicial |  Saldo Final |   Lucro  ");
+            System.out.println("----|----------------------|---------------|--------------|----------");
     
-            resultado.getMelhoresJogadores().forEach(jogador -> System.out.printf(" %2d | %-11s |  %12.2f |  %12.2f %n",
-                    jogador.getId(), jogador.getNome(),
-                    jogador.getSaldoInicial(), jogador.getSaldo()));
+            resultado.getMelhoresJogadores().forEach(jogador -> {
+                double lucroJogador = jogador.getSaldo() - jogador.getSaldoInicial();
+                System.out.printf(" %2d | %-20s | %13.2f | %13.2f | %8.2f%n",
+                        jogador.getId(), formatarNome(jogador.getNomeCompleto()),
+                        jogador.getSaldoInicial(), jogador.getSaldo(), lucroJogador);
+            });
     
             System.out.println("===============================================\n");
         }
@@ -44,7 +50,14 @@ public class Rotas {
         operacoes.processarJogadores(resultado.getMelhoresJogadores());
     
         return Response.ok("Dados da mesa " + resultado.getMesaId() + " recebidos com sucesso!").build();
-    }    
+    }
+    
+    /**
+     * 🔹 Formata o nome para não ultrapassar um limite de 20 caracteres
+     */
+    private String formatarNome(String nome) {
+        return nome.length() > 20 ? nome.substring(0, 17) + "..." : nome;
+    }      
 
     @GET
     @Path("/melhores")
