@@ -1,215 +1,185 @@
 package br.edu.ifba.cassino.cliente.impl;
 
+import br.edu.ifba.cassino.cliente.comunicacao.Cliente;
+import br.edu.ifba.cassino.cliente.modelo.Jogador;
+import br.edu.ifba.cassino.cliente.modelo.MesaResultadoDTO;
+import br.edu.ifba.cassino.cliente.sensoriamento.SensorDeApostas;
+
+import com.google.gson.Gson;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Queue;
-import java.util.Random;
-import com.github.javafaker.Faker;
-import com.google.gson.Gson;
-import br.edu.ifba.cassino.cliente.modelo.Aposta;
-import br.edu.ifba.cassino.cliente.modelo.Jogador;
-import br.edu.ifba.cassino.cliente.modelo.JogadorDTO;
-import br.edu.ifba.cassino.cliente.modelo.Roleta;
+import java.util.LinkedList;
 
-public class ClienteImpl implements Runnable {
-
+public class ClienteImpl implements Cliente, Runnable {
     private static final String URL_SERVIDOR = "http://localhost:8080/";
-    private static final String URL_JOGADOR = URL_SERVIDOR + "cassino/jogador/";
+    private static final String URL_MESA = URL_SERVIDOR + "cassino/melhorGrupo";
 
-    private static final int TAMANHO_MAXIMO_HISTORICO = 3;
-
-    private List<Jogador> jogadores;
-    private Queue<Jogador> melhorGrupo;
-    private double lucroMelhorGrupo;
+    private final int totalJogadores;
+    private final int jogadoresPorLeva;
     private final String mesaId;
+    private List<Jogador> jogadores;
+    private Queue<Jogador> melhoresJogadores;
+    private double saldoFinalMesa;
 
-    public ClienteImpl(String mesaId) {
+    public ClienteImpl(String mesaId, int totalJogadores, int jogadoresPorLeva) {
         this.mesaId = mesaId;
+        this.totalJogadores = totalJogadores;
+        this.jogadoresPorLeva = jogadoresPorLeva;
         this.jogadores = new ArrayList<>();
-        this.melhorGrupo = new LinkedList<>();
-        this.lucroMelhorGrupo = Double.NEGATIVE_INFINITY;
+        this.melhoresJogadores = new LinkedList<>();
+        this.saldoFinalMesa = 0.0;
     }
 
-    public void configurar(int quantidadeJogadores) {
-        this.jogadores = gerarJogadores(quantidadeJogadores);
+    @Override
+    public void configurar(int totalJogadores, int jogadoresPorLeva) {
+        this.jogadores = Jogador.gerarJogadores(totalJogadores);
+    }
+
+    @Override
+    public void iniciar() {
+        new Thread(this).start();
     }
 
     @Override
     public void run() {
-        for (Jogador jogador : jogadores) {
-            gerarApostasParaJogador(jogador);
-            atualizarMelhorGrupo(jogador);
+        System.out.println("[" + mesaId + "] Iniciando apostas...");
 
-            // Enviar dados ao servidor quando o jogador terminar as apostas
-            System.out.println("Jogador " + jogador.getNome() + " está parando de apostar e saindo da mesa.");
-            enviarDadosJogadorAoServidor(jogador);
-            
-        }
-    }
-
-    private List<Jogador> gerarJogadores(int quantidade) {
-        Faker faker = new Faker(Locale.forLanguageTag("pt-BR"));
-        Random random = new Random();
-        List<Jogador> jogadores = new ArrayList<>();
-
-        for (int i = 0; i < quantidade; i++) {
-            String nome = faker.name().fullName();
-            double saldoInicial = Math.round((500 + random.nextDouble() * 1500) * 100.0) / 100.0; // Saldo entre 500 e 2000
-            int totalApostas = random.nextInt(16) + 10; // Entre 10 e 25 apostas
-    
-            jogadores.add(new Jogador(i + 1, nome, saldoInicial, totalApostas));
+        if (jogadores.size() != totalJogadores) {
+            System.err.println("[ERRO] Quantidade de jogadores incorreta! Esperado: " + totalJogadores + ", Obtido: "
+                    + jogadores.size());
+            return;
         }
 
-        return jogadores;
-    }
-
-    private void gerarApostasParaJogador(Jogador jogador) {
-        Roleta roleta = new Roleta(); // Cria uma nova instância da roleta
-        Random random = new Random();
-    
-        for (int i = 0; i < jogador.getTotalApostas(); i++) {
-            roleta.girar(); // Gira a roleta
-    
-            int entrada = random.nextInt(100) + 1; // Gera uma entrada entre 1 e 100 (valores inteiros)
-            String tipoAposta = SensorDeApostas.escolherTipoAposta(random);
-    
-            int resultado; // Resultado da aposta, que será inteiro
-            Aposta aposta = null;
-    
-            // Escolhe o tipo de aposta e calcula o resultado
-            switch (tipoAposta) {
-                case "NUMERO" -> {
-                    aposta = SensorDeApostas.gerarApostaNumero(roleta, entrada, random);
-                    resultado = (int) Math.round(aposta.getResultado()); // Converte o resultado para int
-                }
-                case "COR" -> {
-                    aposta = SensorDeApostas.gerarApostaCor(roleta, entrada, random);
-                    resultado = (int) Math.round(aposta.getResultado()); // Converte o resultado para int
-                }
-                case "PARIDADE" -> {
-                    aposta = SensorDeApostas.gerarApostaParidade(roleta, entrada, random);
-                    resultado = (int) Math.round(aposta.getResultado()); // Converte o resultado para int
-                }
-                default -> resultado = 0; // Caso nenhum tipo de aposta seja escolhido
+        for (int i = 0; i < totalJogadores; i += jogadoresPorLeva) {
+            if (i >= jogadores.size()) {
+                System.err.println("[ERRO] Tentativa de acessar subList além do tamanho da lista. Encerrando loop.");
+                break;
             }
+
+            int fim = Math.min(i + jogadoresPorLeva, jogadores.size());
+            List<Jogador> levaJogadores = new ArrayList<>(jogadores.subList(i, fim));
+
+            SensorDeApostas.gerarApostasParaJogadores(levaJogadores, 5);
+
+            levaJogadores.forEach(Jogador::apostar);
+            atualizarMelhoresJogadores(levaJogadores);
+            enviarDadosMesa();
+        }
+    }
+
+    private void atualizarMelhoresJogadores(List<Jogador> leva) {
+        // 🔹 Garante que sempre tentamos pegar os três melhores
+        if (leva.size() < 3) {
+            System.err.println("[ERRO] Menos de 3 jogadores na leva. Enviando todos disponíveis.");
+            melhoresJogadores = new LinkedList<>(leva);
+            return;
+        }
     
-            if (aposta != null) {
-                jogador.adicionarAposta(aposta);
-                double novoSaldo = Math.max(0, jogador.getSaldoAtual() + aposta.getResultado());
-                jogador.setSaldoAtual(Math.round(novoSaldo * 100.0) / 100.0); // Arredonda para duas casas decimais
-                jogador.adicionarHistoricoAposta(tipoAposta + "/" + resultado); // Adiciona ao histórico como string formatada
+        melhoresJogadores = new LinkedList<>();
+        Jogador primeiro = null, segundo = null, terceiro = null;
+    
+        for (Jogador jogador : leva) {
+            double lucro = jogador.getSaldo() - jogador.getSaldoInicial();
+    
+            if (primeiro == null || lucro > (primeiro.getSaldo() - primeiro.getSaldoInicial())) {
+                terceiro = segundo;
+                segundo = primeiro;
+                primeiro = jogador;
+            } else if (segundo == null || lucro > (segundo.getSaldo() - segundo.getSaldoInicial())) {
+                terceiro = segundo;
+                segundo = jogador;
+            } else if (terceiro == null || lucro > (terceiro.getSaldo() - terceiro.getSaldoInicial())) {
+                terceiro = jogador;
             }
         }
     
-        // Atualiza o saldo final do jogador após todas as apostas
-        jogador.setSaldoFinal(Math.max(0, Math.round(jogador.getSaldoAtual() * 100.0) / 100.0));
-    }
-
-    private void atualizarMelhorGrupo(Jogador jogador) {
-        // Adiciona o jogador ao grupo de análise
-        melhorGrupo.add(jogador);
-        if (melhorGrupo.size() > TAMANHO_MAXIMO_HISTORICO) {
-            melhorGrupo.poll(); // Remove o jogador mais antigo se exceder o tamanho máximo
+        // 🔹 Garante que os três melhores são enviados
+        if (primeiro != null) melhoresJogadores.add(primeiro);
+        if (segundo != null) melhoresJogadores.add(segundo);
+        if (terceiro != null) melhoresJogadores.add(terceiro);
+    
+        // 🔹 Exibe quem foi selecionado
+        System.out.println("[DEBUG] Melhores jogadores selecionados para envio:");
+        for (Jogador j : melhoresJogadores) {
+            System.out.printf("[DEBUG] %s | Saldo Inicial: %.2f | Saldo Final: %.2f\n",
+                    j.getNomeCompleto(), j.getSaldoInicial(), j.getSaldo());
         }
     
-        // Calcula o lucro total do grupo atual
-        double lucroAtual = Math.round(
-            melhorGrupo.stream()
-                       .mapToDouble(j -> j.getSaldoAtual() - j.getSaldoInicial()) // Calcula o lucro individual
-                       .sum() * 100.0 // Arredonda para duas casas decimais
-        ) / 100.0;
-    
-        // Se o lucro atual for maior que o do melhor grupo anterior, atualiza
-        if (lucroAtual > lucroMelhorGrupo) {
-            lucroMelhorGrupo = lucroAtual;
-    
-            // Log para debug mostrando o grupo atualizado
-            System.out.println("Novo melhor grupo identificado com lucro: " + lucroMelhorGrupo);
-            melhorGrupo.forEach(j -> System.out.println(
-                String.format("Jogador: %s, Lucro: %.2f", j.getNome(), j.getSaldoAtual() - j.getSaldoInicial())
-            ));
-    
-            // Envia os dados atualizados do melhor grupo ao servidor
-            enviarMelhorGrupoAoServidor();
+        saldoFinalMesa = 0.0;
+        for (Jogador jogador : leva) {
+            saldoFinalMesa += jogador.getSaldo();
         }
     }
     
 
-    private void enviarMelhorGrupoAoServidor() {
+    @Override
+    public void enviarDadosMesa() {
         try {
-            URL url = new URL(URL_SERVIDOR + "cassino/melhorGrupo");
+            if (melhoresJogadores.isEmpty()) {
+                System.err.println("[MESA " + mesaId + "] Nenhum jogador qualificado para envio.");
+                return;
+            }
+    
+            // 🔹 Calcular o lucro total da mesa
+            double saldoInicialMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldoInicial).sum();
+            double saldoFinalMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldo).sum();
+            double lucroTotalMesa = saldoFinalMesa - saldoInicialMesa;
+    
+            // 🔹 Criar DTO para envio
+            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, lucroTotalMesa, new ArrayList<>(melhoresJogadores));
+            String json = new Gson().toJson(resultado);
+    
+            // 🔹 Exibir os dados antes de enviar
+            System.out.println("===============================================");
+            System.out.println(" Dados enviados ao SERVIDOR pela MESA " + mesaId);
+            System.out.println("===============================================");
+            System.out.printf(" Lucro total da mesa: %.2f\n", lucroTotalMesa);
+            System.out.println("-----------------------------------------------");
+            System.out.println(" Melhores jogadores:");
+            System.out.println(" ID |    Nome Completo      | Saldo Inicial |  Saldo Final |   Lucro  ");
+            System.out.println("----|----------------------|---------------|--------------|----------");
+    
+            for (Jogador jogador : melhoresJogadores) {
+                double lucroJogador = jogador.getSaldo() - jogador.getSaldoInicial();
+                System.out.printf(" %2d | %-20s | %13.2f | %13.2f | %8.2f%n",
+                        jogador.getId(), formatarNome(jogador.getNomeCompleto()),
+                        jogador.getSaldoInicial(), jogador.getSaldo(), lucroJogador);
+            }
+    
+            System.out.println("===============================================");
+    
+            // 🔹 Enviar os dados ao servidor
+            URL url = new URL(URL_MESA);
             HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
-            
+    
             conexao.setDoOutput(true);
             conexao.setRequestMethod("POST");
             conexao.setRequestProperty("Content-Type", "application/json");
-
-            // Serializar o grupo em JSON
-            String jsonInputString = new Gson().toJson(melhorGrupo);
-            System.out.println("Enviando melhor grupo ao servidor: " + jsonInputString); // Log detalhado
-
+    
             try (OutputStream os = conexao.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                byte[] input = json.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
-
+    
             int responseCode = conexao.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                System.out.println("Melhor grupo enviado com sucesso.");
-            } else {
-                throw new Exception("Falha ao enviar o melhor grupo. Código de resposta: " + responseCode);
-            }
-
+            System.out.println("[MESA " + mesaId + "] Resposta do servidor: " + responseCode);
             conexao.disconnect();
         } catch (Exception e) {
-            System.err.println("Erro ao enviar melhor grupo.");
+            System.err.println("[MESA " + mesaId + "] Erro ao enviar dados.");
             e.printStackTrace();
         }
     }
-
-    private void enviarDadosJogadorAoServidor(Jogador jogador) {
-        try {
-            JogadorDTO jogadorDTO = converterParaDTO(jogador); // Converter para DTO
-            String jsonInputString = new Gson().toJson(jogadorDTO);
     
-            URL url = new URL(URL_JOGADOR);
-            HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
-    
-            conexao.setDoOutput(true);
-            conexao.setRequestMethod("POST");
-            conexao.setRequestProperty("Content-Type", "application/json");
-    
-            try (OutputStream os = conexao.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-    
-            if (conexao.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new Exception("Falha ao enviar dados do jogador. Código de resposta: " + conexao.getResponseCode());
-            }
-    
-            conexao.disconnect();
-        } catch (Exception e) {
-            System.err.println("Erro ao enviar dados do jogador: " + jogador.getNome());
-            e.printStackTrace();
-        }
-    }    
-
-    private JogadorDTO converterParaDTO(Jogador jogador) {
-        return new JogadorDTO(
-            jogador.getId(),
-            jogador.getNome(),
-            Math.round(jogador.getSaldoInicial() * 100.0) / 100.0,
-            Math.round(jogador.getSaldoFinal() * 100.0) / 100.0,
-            mesaId // Associa o ID da mesa ao jogador
-            );
-        
+    /**
+     * 🔹 Formata o nome para não ultrapassar um limite de 20 caracteres
+     */
+    private String formatarNome(String nome) {
+        return nome.length() > 20 ? nome.substring(0, 17) + "..." : nome;
     }
-
+      
 }
