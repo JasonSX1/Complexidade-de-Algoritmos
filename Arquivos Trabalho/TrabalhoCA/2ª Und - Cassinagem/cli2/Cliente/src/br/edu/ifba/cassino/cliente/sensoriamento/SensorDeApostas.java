@@ -14,26 +14,35 @@ public class SensorDeApostas {
     // Método para gerar apostas para os jogadores - O(N * M)
 
     public static void gerarApostasParaJogadores(List<Jogador> jogadores, int rodadas) {
+        if (jogadores.isEmpty()) {
+            System.err.println("[ERRO] Lista de jogadores vazia em gerarApostasParaJogadores!");
+            return;
+        }
+
+        System.out.println("[DEBUG] Chamando gerarApostasParaJogadores() para " + jogadores.size() + " jogadores.");
+
         Random random = new Random();
         Roleta roleta = new Roleta();
-    
+
         for (int rodada = 1; rodada <= rodadas; rodada++) {
             roleta.girar();
             int numeroSorteado = roleta.getNumeroSorteado();
             String corSorteada = roleta.getCorSorteada();
             String tipoSorteado = roleta.getTipoSorteado();
-    
+
             System.out.printf("\n[DEBUG] Resultados da roleta para a rodada %d: Número: %d - Cor: %s - Tipo: %s\n",
                     rodada, numeroSorteado, corSorteada, tipoSorteado);
-    
+
             for (Jogador jogador : jogadores) {
+                System.out.println("[DEBUG] Gerando aposta para " + jogador.getNomeCompleto());
+
                 double entrada = 10 + random.nextInt(40);
                 String tipoAposta = escolherTipoAposta(random);
                 int numeroApostado = -1;
                 String corApostada = null;
                 String paridadeApostada = null;
                 double resultado = -entrada;
-    
+
                 switch (tipoAposta) {
                     case "NUMERO":
                         numeroApostado = random.nextInt(37);
@@ -48,17 +57,23 @@ public class SensorDeApostas {
                         resultado = (paridadeApostada.equals(tipoSorteado)) ? entrada * 1.5 : -entrada;
                         break;
                 }
-    
+
                 Aposta aposta = new Aposta(entrada, tipoAposta, numeroApostado, corApostada, paridadeApostada,
                         numeroSorteado, corSorteada, tipoSorteado, resultado);
                 aposta.setNumeroDaRodada(rodada);
+
+                // 🔹 GARANTINDO QUE AS APOSTAS SÃO REALMENTE ARMAZENADAS
                 jogador.adicionarAposta(aposta);
-    
-                System.out.printf("[DEBUG] Aposta adicionada: Jogador %s, Tipo: %s, Entrada: %.2f, Resultado: %.2f\n",
-                        jogador.getNomeCompleto(), tipoAposta, entrada, resultado);
+
+                System.out.printf(
+                        "[DEBUG] Aposta gerada para %s: Tipo: %s, Entrada: %.2f, Resultado: %.2f, Total de apostas: %d\n",
+                        jogador.getNomeCompleto(), aposta.getTipoAposta(), aposta.getEntrada(), aposta.getResultado(),
+                        jogador.getHistoricoApostas().size());
             }
         }
-    }    
+
+        System.out.println("[DEBUG] Fim de gerarApostasParaJogadores()");
+    }
 
     // Método auxiliar para escolher o tipo de aposta
     private static String escolherTipoAposta(Random random) {

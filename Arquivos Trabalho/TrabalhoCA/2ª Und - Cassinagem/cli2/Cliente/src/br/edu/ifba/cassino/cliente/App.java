@@ -10,6 +10,7 @@ public class App {
     private static final int JOGADORES_POR_LEVA = 10; // Jogadores processados por rodada na mesa
 
     public static void main(String[] args) {
+        
         System.out.println("[CLIENTE] Iniciando Cassino...");
 
         List<Thread> threadsMesas = new ArrayList<>();

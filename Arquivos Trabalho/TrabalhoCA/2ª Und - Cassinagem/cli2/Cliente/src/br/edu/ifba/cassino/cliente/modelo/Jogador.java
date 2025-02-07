@@ -48,11 +48,22 @@ public class Jogador {
     }
 
     public void adicionarAposta(Aposta aposta) {
+        if (aposta == null) {
+            System.err.println("[ERRO] Tentativa de adicionar uma aposta nula ao jogador " + getNomeCompleto());
+            return;
+        }
+
         historicoApostas.add(aposta);
         saldo += aposta.getResultado();
+
+        System.out.printf(
+                "[DEBUG] Aposta armazenada para %s: Tipo: %s, Entrada: %.2f, Resultado: %.2f, Total de apostas: %d\n",
+                getNomeCompleto(), aposta.getTipoAposta(), aposta.getEntrada(), aposta.getResultado(),
+                historicoApostas.size());
     }
 
-    // Gera uma lista de jogadores com nomes e sobrenomes aleatórios usando Java Faker
+    // Gera uma lista de jogadores com nomes e sobrenomes aleatórios usando Java
+    // Faker
     public static List<Jogador> gerarJogadores(int quantidade) {
         List<Jogador> jogadores = new ArrayList<>();
         Faker faker = new Faker();
@@ -61,8 +72,8 @@ public class Jogador {
         System.out.println("[GERAÇÃO DE JOGADORES] Criando " + quantidade + " jogadores...");
 
         for (int i = 0; i < quantidade; i++) {
-            String nome = faker.name().firstName();  // Nome aleatório
-            String sobrenome = faker.name().lastName();  // Sobrenome aleatório
+            String nome = faker.name().firstName(); // Nome aleatório
+            String sobrenome = faker.name().lastName(); // Sobrenome aleatório
             double saldo = 1000 + (random.nextDouble() * 4000); // Saldo inicial entre 1000 e 5000
 
             Jogador jogador = new Jogador(i + 1, nome, sobrenome, saldo);
@@ -79,22 +90,24 @@ public class Jogador {
 
     // Método para realizar as apostas do jogador
     public void apostar() {
+        if (historicoApostas.isEmpty()) {
+            System.out.println(
+                    "[ERRO] Nenhuma aposta foi gerada para " + getNomeCompleto() + "! Criando aposta de teste...");
+            Aposta aposta = new Aposta(50, "COR", -1, "VERMELHO", null, 10, "VERMELHO", "PAR", 75);
+            adicionarAposta(aposta);
+        }
+
         System.out.printf("\nApostas de %s:\n", getNomeCompleto());
         System.out.println(
                 "RODADA | TIPO     | ENTRADA | APOSTA   | RESULTADO DA ROLETA     | RESULTADO | SALDO RESULTANTE");
-        System.out.println("");
 
-        double saldoAtual = saldoInicial; // Inicializa o saldo com o valor inicial para acompanhar as atualizações
+        double saldoAtual = saldoInicial;
 
         for (Aposta aposta : historicoApostas) {
-            // Atualiza o saldo atual do jogador com o resultado da aposta
             saldoAtual += aposta.getResultado();
-
-            // Usa o método formatarResultadoAposta para formatar o resultado da rodada
             String resultadoFormatado = SensorDeApostas.formatarResultadoAposta(aposta, saldoAtual);
-
-            // Exibe o resultado formatado
             System.out.println(resultadoFormatado);
         }
     }
+
 }

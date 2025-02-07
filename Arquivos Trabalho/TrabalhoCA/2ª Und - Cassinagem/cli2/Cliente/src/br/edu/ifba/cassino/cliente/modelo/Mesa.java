@@ -26,16 +26,17 @@ public class Mesa extends Thread {
 
     public synchronized void adicionarJogador(Jogador jogador) {
         jogadores.add(jogador);
-        System.out.println("[MESA " + mesaId + "] Jogador " + jogador.getNomeCompleto() + " adicionado. Total na mesa: " + jogadores.size());
+        System.out.println("[MESA " + mesaId + "] Jogador " + jogador.getNomeCompleto() + " adicionado. Total na mesa: "
+                + jogadores.size());
     }
 
     @Override
     public void run() {
-        System.out.println("[MESA " + mesaId + "] Iniciando apostas...");
+        System.out.println("[DEBUG] Iniciando thread da mesa " + mesaId);
 
         while (!jogadores.isEmpty()) {
+            System.out.println("[DEBUG] Chamando processarApostas() para a mesa " + mesaId);
             processarApostas();
-            enviarResultados();
             renovarJogadores();
         }
 
@@ -45,9 +46,23 @@ public class Mesa extends Thread {
     private void processarApostas() {
         System.out.println("[MESA " + mesaId + "] Processando apostas para " + jogadores.size() + " jogadores...");
 
+        if (jogadores.isEmpty()) {
+            System.err.println("[ERRO] Lista de jogadores está vazia na mesa " + mesaId);
+            return;
+        }
+
         for (Jogador jogador : jogadores) {
-            System.out.println("[MESA " + mesaId + "] Jogador " + jogador.getNomeCompleto() + " apostando...");
-            SensorDeApostas.gerarApostasParaJogadores(List.of(jogador), rodadasPorJogador);
+            System.out.println("[DEBUG] Jogador na mesa: " + jogador.getNomeCompleto());
+        }
+
+        // 🔹 GARANTINDO QUE AS APOSTAS SERÃO GERADAS
+        System.out.println("[DEBUG] Chamando gerarApostasParaJogadores() antes de apostar.");
+        SensorDeApostas.gerarApostasParaJogadores(jogadores, 5);
+
+        for (Jogador jogador : jogadores) {
+            System.out.println("[DEBUG] Verificando histórico de apostas antes de apostar: "
+                    + jogador.getHistoricoApostas().size());
+            jogador.apostar();
         }
     }
 
