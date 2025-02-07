@@ -22,27 +22,29 @@ public class Rotas {
                     .entity("Erro: Dados da mesa estão vazios ou mal formatados.")
                     .build();
         }
-
-        // Melhorando a visualização no console
-        System.out.println("\n===============================================");
-        System.out.printf(" Dados recebidos da MESA %s%n", resultado.getMesaId());
-        System.out.println("===============================================");
-        System.out.printf(" Saldo final da mesa: %.2f%n", resultado.getSaldoFinalMesa());
-        System.out.println("-----------------------------------------------");
-        System.out.println(" Melhores jogadores:");
-        System.out.println(" ID |    Nome     | Saldo Inicial |  Saldo Final ");
-        System.out.println("----|-------------|---------------|--------------");
-
-        resultado.getMelhoresJogadores().forEach(jogador -> System.out.printf(" %2d | %-11s |  %12.2f |  %12.2f %n",
-                jogador.getId(), jogador.getNome(),
-                jogador.getSaldoInicial(), jogador.getSaldo()));
-
-        System.out.println("===============================================\n");
-
+    
+        // 🔹 Garante que apenas uma mesa imprime os dados por vez
+        synchronized (System.out) {
+            System.out.println("\n===============================================");
+            System.out.printf(" Dados recebidos da MESA %s%n", resultado.getMesaId());
+            System.out.println("===============================================");
+            System.out.printf(" Saldo final da mesa: %.2f%n", resultado.getSaldoFinalMesa());
+            System.out.println("-----------------------------------------------");
+            System.out.println(" Melhores jogadores:");
+            System.out.println(" ID |    Nome     | Saldo Inicial |  Saldo Final ");
+            System.out.println("----|-------------|---------------|--------------");
+    
+            resultado.getMelhoresJogadores().forEach(jogador -> System.out.printf(" %2d | %-11s |  %12.2f |  %12.2f %n",
+                    jogador.getId(), jogador.getNome(),
+                    jogador.getSaldoInicial(), jogador.getSaldo()));
+    
+            System.out.println("===============================================\n");
+        }
+    
         operacoes.processarJogadores(resultado.getMelhoresJogadores());
-
+    
         return Response.ok("Dados da mesa " + resultado.getMesaId() + " recebidos com sucesso!").build();
-    }
+    }    
 
     @GET
     @Path("/melhores")

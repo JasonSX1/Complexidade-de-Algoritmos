@@ -14,12 +14,6 @@ public class OperacoesImpl implements Operacoes {
             System.err.println("[ERRO] Lista de jogadores recebida é nula ou vazia.");
             return;
         }
-
-        System.out.println("[SERVIDOR] Processando jogadores...");
-        for (Jogador jogador : jogadores) {
-            System.out.println("[SERVIDOR] Registrando jogador: " + jogador);
-            jogadoresRegistrados.add(jogador);
-        }
     }
 
     @Override
