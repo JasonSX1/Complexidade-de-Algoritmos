@@ -109,88 +109,89 @@ public class ClienteImpl implements Cliente, Runnable {
         }
     }
 
-   @Override
-public void enviarDadosMesa() {
-    try {
-        if (melhoresJogadores.isEmpty()) {
-            System.err.println("[MESA " + mesaId + "] Nenhum jogador qualificado para envio.");
-            return;
-        }
-
-        // 🔹 Seleciona os 3 melhores jogadores manualmente
-        List<Jogador> top3Jogadores = new ArrayList<>();
-        Jogador primeiro = null, segundo = null, terceiro = null;
-
-        for (Jogador jogador : melhoresJogadores) {
-            double lucro = jogador.getSaldo() - jogador.getSaldoInicial();
-
-            if (primeiro == null || lucro > (primeiro.getSaldo() - primeiro.getSaldoInicial())) {
-                terceiro = segundo;
-                segundo = primeiro;
-                primeiro = jogador;
-            } else if (segundo == null || lucro > (segundo.getSaldo() - segundo.getSaldoInicial())) {
-                terceiro = segundo;
-                segundo = jogador;
-            } else if (terceiro == null || lucro > (terceiro.getSaldo() - terceiro.getSaldoInicial())) {
-                terceiro = jogador;
+    @Override
+    public void enviarDadosMesa() {
+        try {
+            if (melhoresJogadores.isEmpty()) {
+                System.err.println("[MESA " + mesaId + "] Nenhum jogador qualificado para envio.");
+                return;
             }
+    
+            // 🔹 Seleciona os 3 melhores jogadores manualmente
+            List<Jogador> top3Jogadores = new ArrayList<>();
+            Jogador primeiro = null, segundo = null, terceiro = null;
+    
+            for (Jogador jogador : melhoresJogadores) {
+                double lucro = jogador.getSaldo() - jogador.getSaldoInicial();
+    
+                if (primeiro == null || lucro > (primeiro.getSaldo() - primeiro.getSaldoInicial())) {
+                    terceiro = segundo;
+                    segundo = primeiro;
+                    primeiro = jogador;
+                } else if (segundo == null || lucro > (segundo.getSaldo() - segundo.getSaldoInicial())) {
+                    terceiro = segundo;
+                    segundo = jogador;
+                } else if (terceiro == null || lucro > (terceiro.getSaldo() - terceiro.getSaldoInicial())) {
+                    terceiro = jogador;
+                }
+            }
+    
+            if (primeiro != null) top3Jogadores.add(primeiro);
+            if (segundo != null) top3Jogadores.add(segundo);
+            if (terceiro != null) top3Jogadores.add(terceiro);
+    
+            // 🔹 Calcular o lucro total da mesa corretamente
+            double totalApostado = 0;
+            double totalPago = 0;
+            for (Jogador jogador : jogadores) {
+                totalApostado += jogador.getTotalApostado(); // Soma todas as apostas feitas
+                totalPago += jogador.getTotalGanho(); // Soma todos os pagamentos aos jogadores
+            }
+            double lucroTotalMesa = totalApostado - totalPago;
+    
+            // 🔹 Criar DTO contendo apenas o lucro e os 3 melhores jogadores
+            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, lucroTotalMesa, top3Jogadores);
+            String json = new Gson().toJson(resultado);
+    
+            // 🔑 Exibir JSON antes da criptografia
+            System.out.println("===============================================");
+            System.out.println(" Dados enviados ao SERVIDOR pela MESA " + mesaId);
+            System.out.println("===============================================");
+            System.out.printf(" Lucro total da mesa: %.2f\n", lucroTotalMesa);
+            System.out.println(" Melhores jogadores:");
+            for (Jogador jogador : top3Jogadores) {
+                double lucroJogador = jogador.getSaldo() - jogador.getSaldoInicial();
+                System.out.printf(" %2d | %-20s | %13.2f | %13.2f | %8.2f%n",
+                        jogador.getId(), jogador.getNomeCompleto(),
+                        jogador.getSaldoInicial(), jogador.getSaldo(), lucroJogador);
+            }
+            System.out.println("===============================================");
+    
+            // 🔑 Encriptar os dados e enviar ao servidor
+            String dadosCriptografados = Encriptador.encriptar(chavePublica, json.getBytes(StandardCharsets.UTF_8));
+            System.out.println("[DEBUG] Dados criptografados enviados ao servidor: " + dadosCriptografados);
+    
+            // 🔹 Enviar os dados criptografados ao servidor
+            URL url = new URL(URL_MESA);
+            HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
+    
+            conexao.setDoOutput(true);
+            conexao.setRequestMethod("POST");
+            conexao.setRequestProperty("Content-Type", "application/json");
+    
+            try (OutputStream os = conexao.getOutputStream()) {
+                byte[] input = dadosCriptografados.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+    
+            int responseCode = conexao.getResponseCode();
+            System.out.println("[MESA " + mesaId + "] Resposta do servidor: " + responseCode);
+            conexao.disconnect();
+        } catch (Exception e) {
+            System.err.println("[MESA " + mesaId + "] Erro ao enviar dados.");
+            e.printStackTrace();
         }
-
-        if (primeiro != null) top3Jogadores.add(primeiro);
-        if (segundo != null) top3Jogadores.add(segundo);
-        if (terceiro != null) top3Jogadores.add(terceiro);
-
-        // 🔹 Calcular o lucro total da mesa corretamente
-        double totalApostado = 0;
-        double totalPago = 0;
-        for (Jogador jogador : jogadores) {
-            totalApostado += jogador.getTotalApostado();
-            totalPago += jogador.getTotalGanho();
-        }
-        double lucroTotalMesa = totalApostado - totalPago; // Lucro da casa = Total Apostado - Total Pago
-
-        // 🔹 Criar DTO contendo apenas o lucro e os 3 melhores jogadores
-        MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, lucroTotalMesa, top3Jogadores);
-        String json = new Gson().toJson(resultado);
-
-        // 🔑 Exibir JSON antes da criptografia
-        System.out.println("===============================================");
-        System.out.println(" Dados enviados ao SERVIDOR pela MESA " + mesaId);
-        System.out.println("===============================================");
-        System.out.printf(" Lucro total da mesa: %.2f\n", lucroTotalMesa);
-        System.out.println(" Melhores jogadores:");
-        for (Jogador jogador : top3Jogadores) {
-            double lucroJogador = jogador.getSaldo() - jogador.getSaldoInicial();
-            System.out.printf(" %2d | %-20s | %13.2f | %13.2f | %8.2f%n",
-                    jogador.getId(), jogador.getNomeCompleto(),
-                    jogador.getSaldoInicial(), jogador.getSaldo(), lucroJogador);
-        }
-        System.out.println("===============================================");
-
-        // 🔑 Encriptar os dados usando o método híbrido AES + RSA
-        String dadosCriptografados = Encriptador.encriptar(chavePublica, json.getBytes(StandardCharsets.UTF_8));
-
-        System.out.println("[DEBUG] Dados criptografados enviados ao servidor: " + dadosCriptografados);
-
-        // 🔹 Enviar os dados criptografados ao servidor
-        URL url = new URL(URL_MESA);
-        HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
-
-        conexao.setDoOutput(true);
-        conexao.setRequestMethod("POST");
-        conexao.setRequestProperty("Content-Type", "application/json");
-
-        try (OutputStream os = conexao.getOutputStream()) {
-            os.write(dadosCriptografados.getBytes(StandardCharsets.UTF_8));
-        }
-
-        int responseCode = conexao.getResponseCode();
-        System.out.println("[MESA " + mesaId + "] Resposta do servidor: " + responseCode);
-        conexao.disconnect();
-    } catch (Exception e) {
-        System.err.println("[MESA " + mesaId + "] Erro ao enviar dados.");
-        e.printStackTrace();
     }
-}
+    
 
 }
