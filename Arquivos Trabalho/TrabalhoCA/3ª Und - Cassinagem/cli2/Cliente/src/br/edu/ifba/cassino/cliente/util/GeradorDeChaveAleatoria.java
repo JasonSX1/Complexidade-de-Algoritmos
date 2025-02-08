@@ -10,7 +10,7 @@ public class GeradorDeChaveAleatoria {
     private static final int TAMANHO_AMOSTRA = 1024; // Número de bytes lidos do áudio
 
     /**
-     * 🔹 Gera uma chave aleatória a partir de um arquivo de áudio
+     * Gera uma chave aleatória a partir de um arquivo de áudio
      * @param caminhoAudio Caminho do arquivo de áudio
      * @return Chave aleatória em bytes
      * @throws Exception Se ocorrer erro ao processar o áudio
@@ -27,7 +27,7 @@ public class GeradorDeChaveAleatoria {
             throw new IOException("Arquivo de áudio muito curto para gerar chave aleatória.");
         }
 
-        // 🔹 Usa os primeiros bytes para gerar uma chave aleatória
+        // Usa os primeiros bytes para gerar uma chave aleatória
         byte[] chaveAleatoria = new byte[TAMANHO_CHAVE];
         System.arraycopy(buffer, 0, chaveAleatoria, 0, TAMANHO_CHAVE);
 

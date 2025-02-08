@@ -17,7 +17,6 @@ public class OperacoesImpl implements Operacoes {
 
         System.out.println("[SERVIDOR] Processando jogadores...");
         for (Jogador jogador : jogadores) {
-            System.out.println("[SERVIDOR] Registrando jogador: " + jogador);
             jogadoresRegistrados.add(jogador);
         }
     }

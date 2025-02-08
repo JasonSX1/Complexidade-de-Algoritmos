@@ -6,9 +6,7 @@ import br.edu.ifba.cassino.cliente.modelo.MesaResultadoDTO;
 import br.edu.ifba.cassino.cliente.sensoriamento.SensorDeApostas;
 import br.edu.ifba.cassino.cliente.util.Encriptador;
 import com.google.gson.Gson;
-
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,7 +16,6 @@ import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Queue;
 import java.util.LinkedList;
@@ -32,7 +29,6 @@ public class ClienteImpl implements Cliente, Runnable {
     private final String mesaId;
     private List<Jogador> jogadores;
     private Queue<Jogador> melhoresJogadores;
-    private double saldoFinalMesa;
     private PublicKey chavePublica; // 🔹 Agora está corretamente definido
 
     public ClienteImpl(String mesaId, int totalJogadores, int jogadoresPorLeva) {
@@ -41,7 +37,6 @@ public class ClienteImpl implements Cliente, Runnable {
         this.jogadoresPorLeva = jogadoresPorLeva;
         this.jogadores = new ArrayList<>();
         this.melhoresJogadores = new LinkedList<>();
-        this.saldoFinalMesa = 0.0;
         try {
             this.chavePublica = carregarChavePublica();
         } catch (Exception e) {
@@ -112,16 +107,27 @@ public class ClienteImpl implements Cliente, Runnable {
     @Override
     public void enviarDadosMesa() {
         try {
-            if (melhoresJogadores.isEmpty()) {
-                System.err.println("[MESA " + mesaId + "] Nenhum jogador qualificado para envio.");
+            if (jogadores.isEmpty()) {
+                System.err.println("[" + mesaId + "] Nenhum jogador qualificado para envio.");
                 return;
             }
+    
+            // 🔹 Calcular o total apostado e o total pago corretamente
+            double totalApostado = 0;
+            double totalPago = 0;
+    
+            for (Jogador jogador : jogadores) {
+                totalApostado += jogador.getTotalApostado();
+                totalPago += jogador.getTotalGanho();
+            }
+    
+            double lucroTotalMesa = totalApostado - totalPago; // Lucro do cassino
     
             // 🔹 Seleciona os 3 melhores jogadores manualmente
             List<Jogador> top3Jogadores = new ArrayList<>();
             Jogador primeiro = null, segundo = null, terceiro = null;
     
-            for (Jogador jogador : melhoresJogadores) {
+            for (Jogador jogador : jogadores) {
                 double lucro = jogador.getSaldo() - jogador.getSaldoInicial();
     
                 if (primeiro == null || lucro > (primeiro.getSaldo() - primeiro.getSaldoInicial())) {
@@ -139,15 +145,6 @@ public class ClienteImpl implements Cliente, Runnable {
             if (primeiro != null) top3Jogadores.add(primeiro);
             if (segundo != null) top3Jogadores.add(segundo);
             if (terceiro != null) top3Jogadores.add(terceiro);
-    
-            // 🔹 Calcular o lucro total da mesa corretamente
-            double totalApostado = 0;
-            double totalPago = 0;
-            for (Jogador jogador : jogadores) {
-                totalApostado += jogador.getTotalApostado(); // Soma todas as apostas feitas
-                totalPago += jogador.getTotalGanho(); // Soma todos os pagamentos aos jogadores
-            }
-            double lucroTotalMesa = totalApostado - totalPago;
     
             // 🔹 Criar DTO contendo apenas o lucro e os 3 melhores jogadores
             MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, lucroTotalMesa, top3Jogadores);
@@ -167,7 +164,7 @@ public class ClienteImpl implements Cliente, Runnable {
             }
             System.out.println("===============================================");
     
-            // 🔑 Encriptar os dados e enviar ao servidor
+            // 🔑 Encriptar os dados
             String dadosCriptografados = Encriptador.encriptar(chavePublica, json.getBytes(StandardCharsets.UTF_8));
             System.out.println("[DEBUG] Dados criptografados enviados ao servidor: " + dadosCriptografados);
     
@@ -185,13 +182,11 @@ public class ClienteImpl implements Cliente, Runnable {
             }
     
             int responseCode = conexao.getResponseCode();
-            System.out.println("[MESA " + mesaId + "] Resposta do servidor: " + responseCode);
+            System.out.println("[" + mesaId + "] Resposta do servidor: " + responseCode);
             conexao.disconnect();
         } catch (Exception e) {
-            System.err.println("[MESA " + mesaId + "] Erro ao enviar dados.");
+            System.err.println("[" + mesaId + "] Erro ao enviar dados.");
             e.printStackTrace();
         }
     }
-    
-
 }
