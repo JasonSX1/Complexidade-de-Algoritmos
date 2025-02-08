@@ -15,8 +15,6 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
-
-
 @Path("/cassino")
 public class Rotas {
     private static final Operacoes operacoes = new OperacoesImpl();
@@ -39,23 +37,44 @@ public class Rotas {
     @Produces(MediaType.APPLICATION_JSON)
     public Response receberDadosMesa(String dadosCriptografados) {
         try {
+            // 🔑 Exibir chave privada usada na descriptografia
+            String chavePrivadaBase64 = Base64.getEncoder().encodeToString(chavePrivada.getEncoded());
+            System.out.println("[DEBUG] Chave privada usada para descriptografia (Base64): " + chavePrivadaBase64);
+
+            // 🔑 Exibir dados criptografados recebidos antes da descriptografia
+            System.out.println("[DEBUG] Dados criptografados recebidos: " + dadosCriptografados);
+
             // 🔑 Descriptografar os dados recebidos
             String jsonDescriptografado = Desencriptador.descriptografar(chavePrivada, dadosCriptografados);
-    
+
             // 🔹 Converter JSON para objeto MesaResultadoDTO
             MesaResultadoDTO resultado = new Gson().fromJson(jsonDescriptografado, MesaResultadoDTO.class);
-    
+
             // 📌 Verifica se os dados da mesa são válidos
             if (resultado == null || resultado.getMelhoresJogadores().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("Erro: Dados da mesa estão vazios ou mal formatados.")
                         .build();
             }
-    
-            System.out.println("[SERVIDOR] Dados descriptografados recebidos.");
+
+            // 🔹 Exibir os dados recebidos após descriptografia
+            System.out.println("===============================================");
+            System.out.printf(" Dados recebidos da MESA %s\n", resultado.getMesaId());
+            System.out.println("===============================================");
+            System.out.printf(" Lucro total da mesa: %.2f\n", resultado.getSaldoFinalMesa());
+            System.out.println(" Melhores jogadores:");
+            System.out.println(" ID |    Nome Completo      | Saldo Inicial |  Saldo Final |   Lucro  ");
+            for (Jogador jogador : resultado.getMelhoresJogadores()) {
+                double lucroJogador = jogador.getSaldo() - jogador.getSaldoInicial();
+                System.out.printf(" %2d | %-20s | %13.2f | %13.2f | %8.2f%n",
+                        jogador.getId(), jogador.getNomeCompleto(),
+                        jogador.getSaldoInicial(), jogador.getSaldo(), lucroJogador);
+            }
+            System.out.println("===============================================");
+
             operacoes.processarJogadores(resultado.getMelhoresJogadores());
-    
-            return Response.ok("Dados recebidos com sucesso!").build();
+
+            return Response.ok("Dados da mesa " + resultado.getMesaId() + " recebidos com sucesso!").build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -63,7 +82,6 @@ public class Rotas {
                     .build();
         }
     }
-    
 
     @GET
     @Path("/info")

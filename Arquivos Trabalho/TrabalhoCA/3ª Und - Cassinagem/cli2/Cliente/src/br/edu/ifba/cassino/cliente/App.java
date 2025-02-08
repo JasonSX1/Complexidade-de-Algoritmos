@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class App {
-    private static final int QUANTIDADE_MESAS = 10; // Número de mesas no cassino
-    private static final int TOTAL_JOGADORES_POR_MESA = 1000; // Total de jogadores por mesa
-    private static final int JOGADORES_POR_LEVA = 100; // Jogadores processados por rodada na mesa
+    private static final int QUANTIDADE_MESAS = 1; // Número de mesas no cassino
+    private static final int TOTAL_JOGADORES_POR_MESA = 10; // Total de jogadores por mesa
+    private static final int JOGADORES_POR_LEVA = 10; // Jogadores processados por rodada na mesa
 
     public static void main(String[] args) {
         

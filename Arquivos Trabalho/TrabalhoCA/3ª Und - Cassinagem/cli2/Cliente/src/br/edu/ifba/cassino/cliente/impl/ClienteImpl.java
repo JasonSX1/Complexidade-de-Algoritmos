@@ -87,7 +87,7 @@ public class ClienteImpl implements Cliente, Runnable {
             int fim = Math.min(i + jogadoresPorLeva, jogadores.size());
             List<Jogador> levaJogadores = new ArrayList<>(jogadores.subList(i, fim));
 
-            SensorDeApostas.gerarApostasParaJogadores(levaJogadores, 5);
+            SensorDeApostas.gerarApostasParaJogadores(levaJogadores, 10);
 
             levaJogadores.forEach(Jogador::apostar);
             atualizarMelhoresJogadores(levaJogadores);
@@ -109,34 +109,59 @@ public class ClienteImpl implements Cliente, Runnable {
         }
     }
 
+    @Override
     public void enviarDadosMesa() {
         try {
             if (melhoresJogadores.isEmpty()) {
                 System.err.println("[MESA " + mesaId + "] Nenhum jogador qualificado para envio.");
                 return;
             }
-    
-            // 🔹 Criar DTO para envio
-            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, saldoFinalMesa,
+
+            // 🔹 Calcular o lucro total da mesa
+            double saldoInicialMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldoInicial).sum();
+            double saldoFinalMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldo).sum();
+            double lucroTotalMesa = saldoFinalMesa - saldoInicialMesa;
+
+            // 🔹 Criar DTO contendo apenas o lucro e os 3 melhores jogadores
+            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, lucroTotalMesa,
                     new ArrayList<>(melhoresJogadores));
             String json = new Gson().toJson(resultado);
-    
-            // 🔑 Encriptar os dados usando AES + RSA
+
+            // 🔑 Exibir JSON antes da criptografia
+            System.out.println("===============================================");
+            System.out.println(" Dados enviados ao SERVIDOR pela MESA " + mesaId);
+            System.out.println("===============================================");
+            System.out.printf(" Lucro total da mesa: %.2f\n", lucroTotalMesa);
+            System.out.println(" Melhores jogadores:");
+            for (Jogador jogador : melhoresJogadores) {
+                double lucroJogador = jogador.getSaldo() - jogador.getSaldoInicial();
+                System.out.printf(" %2d | %-20s | %13.2f | %13.2f | %8.2f%n",
+                        jogador.getId(), jogador.getNomeCompleto(),
+                        jogador.getSaldoInicial(), jogador.getSaldo(), lucroJogador);
+            }
+            System.out.println("===============================================");
+
+            // 🔑 Gerar a chave de criptografia
+            String chaveBase64 = Base64.getEncoder().encodeToString(chavePublica.getEncoded());
+            System.out.println("[DEBUG] Chave pública usada para criptografia (Base64): " + chaveBase64);
+
+            // 🔑 Encriptar os dados
             String dadosCriptografados = Encriptador.encriptar(chavePublica, json.getBytes(StandardCharsets.UTF_8));
-    
+            System.out.println("[DEBUG] Dados criptografados enviados ao servidor: " + dadosCriptografados);
+
             // 🔹 Enviar os dados criptografados ao servidor
             URL url = new URL(URL_MESA);
             HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
-    
+
             conexao.setDoOutput(true);
             conexao.setRequestMethod("POST");
             conexao.setRequestProperty("Content-Type", "application/json");
-    
+
             try (OutputStream os = conexao.getOutputStream()) {
                 byte[] input = dadosCriptografados.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
-    
+
             int responseCode = conexao.getResponseCode();
             System.out.println("[MESA " + mesaId + "] Resposta do servidor: " + responseCode);
             conexao.disconnect();
@@ -145,5 +170,4 @@ public class ClienteImpl implements Cliente, Runnable {
             e.printStackTrace();
         }
     }
-    
 }
