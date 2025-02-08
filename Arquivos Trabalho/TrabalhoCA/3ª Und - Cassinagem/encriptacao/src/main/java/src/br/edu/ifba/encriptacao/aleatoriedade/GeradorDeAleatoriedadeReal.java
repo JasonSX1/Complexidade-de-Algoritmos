@@ -7,6 +7,16 @@ import javax.sound.sampled.*;
 
 import src.br.edu.ifba.encriptacao.excecoes.FalhaGeracaoDeChaves;
 
+/**
+ * Análise de Complexidade:  
+ * - A complexidade geral desta classe varia de acordo com o tamanho do áudio.  
+ * - Construtor GeradorDeAleatoriedadeReal(String caminhoAudio): O(1), abertura do arquivo de áudio.  
+ * - Método nextInt() e nextLong(): O(t), onde t é o número de bytes lidos (até 4 para nextInt e 8 para nextLong).  
+ * - Método extrairAleatoriedade(int tamanho): O(t), leitura de t bytes do fluxo de áudio.  
+ * - Método finalizar(): O(1), fechamento do fluxo de áudio.  
+ */
+
+
 public class GeradorDeAleatoriedadeReal extends SecureRandom {
     private static final int TAMANHO_AMOSTRA = 1024; // Número de amostras lidas por vez
     private AudioInputStream audioStream;

@@ -2,6 +2,11 @@ package br.edu.ifba.cassino.servidor.modelo;
 
 import java.util.List;
 
+/**
+ * - A complexidade geral desta classe é O(1), pois todos os métodos realizam apenas atribuições ou retornos diretos.  
+ * - A complexidade do construtor com parâmetros também é O(1), já que não há operações iterativas ou de alta carga.
+ */
+
 public class MesaResultadoDTO {
     private String mesaId;
     private List<Jogador> melhoresJogadores;

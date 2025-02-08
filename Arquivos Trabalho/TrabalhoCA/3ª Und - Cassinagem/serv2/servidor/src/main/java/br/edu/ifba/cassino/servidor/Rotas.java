@@ -8,12 +8,25 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.util.Base64;
-import java.util.List;
-
 import com.google.gson.Gson;
+
+/*
+ * Complexidade das funções:
+ * 
+ * - receberDadosMesa(String dadosCriptografados):
+ *   - Descriptografar os dados: O(N), onde N é o tamanho da string criptografada.
+ *   - Converter JSON para objeto: O(M), onde M é o tamanho do JSON.
+ *   - Iterar sobre a lista de jogadores recebidos: O(K), onde K é o número de jogadores.
+ *   - Adicionar jogadores à lista e exibir dados: O(K).
+ *   - No pior caso, a complexidade total é O(N + M + K), que pode ser aproximada para O(N).
+ * 
+ * - getInfo():
+ *   - Retorna uma string fixa em O(1).
+ * 
+ * Portanto, a função principal receberDadosMesa é O(N), enquanto getInfo é O(1).
+ */
 
 @Path("/cassino")
 public class Rotas {
@@ -37,7 +50,7 @@ public class Rotas {
     @Produces(MediaType.APPLICATION_JSON)
     public Response receberDadosMesa(String dadosCriptografados) {
         try {
-            // 🔑 Exibir chave privada usada na descriptografia
+            // Exibir chave privada usada na descriptografia
             String chavePrivadaBase64 = Base64.getEncoder().encodeToString(chavePrivada.getEncoded());
             System.out.println("[DEBUG] Chave privada usada para descriptografia (Base64): " + chavePrivadaBase64);
 

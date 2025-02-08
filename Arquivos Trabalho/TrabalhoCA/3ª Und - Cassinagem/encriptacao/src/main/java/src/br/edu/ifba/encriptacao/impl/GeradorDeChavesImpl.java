@@ -14,6 +14,7 @@ public class GeradorDeChavesImpl implements GeradorDeChaves<GeradorDeAleatorieda
     private KeyPair chavePar;
     private GeradorDeAleatoriedadeReal geradorAleatoriedade;
 
+    // A complexidade da inicialização é O(1), pois envolve apenas a configuração do KeyPairGenerator e do gerador de aleatoriedade.
     @Override
     public void inicializar(GeradorDeAleatoriedadeReal geradorDeAleatoriedade, String algoritmoDeEncriptacao) {
         try {
@@ -25,6 +26,8 @@ public class GeradorDeChavesImpl implements GeradorDeChaves<GeradorDeAleatorieda
         }
     }
 
+    // A complexidade da geração de chaves é O(n), onde 'n' é o tamanho das chaves (2048 bits). 
+    
     @Override
     public KeyPair gerarChaves() throws FalhaGeracaoDeChaves {
         try {
@@ -35,6 +38,8 @@ public class GeradorDeChavesImpl implements GeradorDeChaves<GeradorDeAleatorieda
         }
     }
 
+    // A complexidade de gerar e salvar as chaves é O(n + m), onde 'n' é o tempo para gerar as chaves e 'm' é o tempo para escrever as chaves no disco. 
+    // A escrita no arquivo depende do tamanho das chaves e da velocidade do sistema de arquivos.
     @Override
     public void gerarChaves(String arquivoChavePrivada, String arquivoChavePublica) throws FalhaGeracaoDeChaves {
         try {
@@ -54,6 +59,7 @@ public class GeradorDeChavesImpl implements GeradorDeChaves<GeradorDeAleatorieda
         }
     }
 
+    // A complexidade da finalização é O(1), pois envolve apenas a finalização do gerador de aleatoriedade.
     @Override
     public void finalizar() throws FalhaGeracaoDeChaves {
         try {

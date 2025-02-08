@@ -3,7 +3,6 @@ package src.br.edu.ifba.encriptacao.impl;
 import java.io.File;
 import java.nio.file.Files;
 import java.security.KeyFactory;
-import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -11,9 +10,18 @@ import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
 
 import src.br.edu.ifba.encriptacao.aleatoriedade.GeradorDeAleatoriedadeReal;
-import src.br.edu.ifba.encriptacao.chaves.GeradorDeChaves;
 import src.br.edu.ifba.encriptacao.excecoes.FalhaEncriptacao;
 import src.br.edu.ifba.encriptacao.excecoes.FalhaGeracaoDeChaves;
+
+/**
+ * Análise de Complexidade:  
+ * - Construtor EncriptadorImpl(String): O(n) para leitura dos arquivos de chave, onde n é o tamanho dos arquivos.  
+ * - Método carregarChaves(String, String): O(n) para leitura das chaves privadas e públicas.  
+ * - Método encriptar(byte[]): O(m), onde m é o tamanho dos dados a serem encriptados.  
+ * - Método descriptografar(byte[]): O(m), onde m é o tamanho dos dados a serem descriptografados.  
+ * A complexidade geral é linear em relação ao tamanho dos dados e das chaves utilizadas.
+ */
+
 
 public class EncriptadorImpl {
     private Cipher cipher;

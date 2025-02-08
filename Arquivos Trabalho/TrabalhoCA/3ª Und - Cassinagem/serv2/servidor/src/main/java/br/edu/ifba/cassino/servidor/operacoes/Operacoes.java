@@ -4,7 +4,6 @@ import br.edu.ifba.cassino.servidor.modelo.Jogador;
 import java.util.List;
 
 public interface Operacoes {
-
     // Processa os jogadores recebidos do cliente e os registra no servidor
     void processarJogadores(List<Jogador> jogadores);
 

@@ -11,7 +11,7 @@ import src.br.edu.ifba.encriptacao.impl.GeradorDeChavesImpl;
 
 public class App {
 
-    private static final String CAMINHO_DO_AUDIO = "encriptacao\\fonteAleatoriedade\\AudioCassino.wav"; // 🔹 Altere para o caminho correto do áudio
+    private static final String CAMINHO_DO_AUDIO = "fonteAleatoriedade\\AudioCassino.wav";
     private static final String ALGORITMO_DE_ENCRIPTACAO = "RSA";
 
     private static final String CAMINHO_CHAVE_PRIVADA = "chave_privada.key";
@@ -31,14 +31,14 @@ public class App {
                 System.out.println("******* Gerando par de chaves #" + (i + 1) + " *******");
                 KeyPair chaves = geradorDeChaves.gerarChaves();
 
-                // 🔹 Inicializa o encriptador com as chaves geradas
+                // Inicializa o encriptador com as chaves geradas
                 EncriptadorImpl encriptador = new EncriptadorImpl(CAMINHO_DO_AUDIO);
 
-                // 🔹 Mensagem de teste
+                // Mensagem de teste
                 String mensagem = "Complexidade de Algoritmos";
                 System.out.println("📩 Mensagem original: " + mensagem);
 
-                // 🔹 Encriptando a mensagem
+                // Encriptando a mensagem
                 byte[] mensagemCriptografada = encriptador.encriptar(mensagem.getBytes());
                 System.out.println("Encriptado: " + new String(mensagemCriptografada));
 
@@ -47,7 +47,7 @@ public class App {
                 System.out.println("Desencriptado: " + new String(mensagemDescriptografada));
             }
 
-            // 🔹 Gerar e salvar as chaves
+            // Gerar e salvar as chaves
             geradorDeChaves.gerarChaves(CAMINHO_CHAVE_PRIVADA, CAMINHO_CHAVE_PUBLICA);
             geradorDeChaves.finalizar();
 

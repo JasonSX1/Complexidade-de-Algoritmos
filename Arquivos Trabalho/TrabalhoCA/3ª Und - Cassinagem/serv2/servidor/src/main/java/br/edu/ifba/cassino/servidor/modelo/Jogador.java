@@ -10,6 +10,8 @@ public class Jogador {
     private double saldoInicial;
     private double saldo;
 
+    //Todas as operações realizadas dentro da classe são O(1), pois envolvem apenas atribuições, leituras de atributos e concatenações de strings de tamanho fixo.
+
     // Construtor vazio necessário para a desserialização do JSON
     public Jogador() {}
 
@@ -38,11 +40,11 @@ public class Jogador {
         this.nome = nome;
     }
 
-    public String getSobrenome() { // 🔹 Adicionando getter para sobrenome
+    public String getSobrenome() {
         return sobrenome;
     }
 
-    public void setSobrenome(String sobrenome) { // 🔹 Adicionando setter para sobrenome
+    public void setSobrenome(String sobrenome) {
         this.sobrenome = sobrenome;
     }
 

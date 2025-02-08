@@ -9,6 +9,16 @@ public class GeradorDeChaveAleatoria {
     private static final int TAMANHO_CHAVE = 16; // 16 bytes (128 bits)
     private static final int TAMANHO_AMOSTRA = 1024; // Número de bytes lidos do áudio
 
+    /*
+     * Complexidade geral da classe: O(1)
+     * Todas as operações realizadas são baseadas em tamanhos de buffers constantes
+     * (TAMANHO_CHAVE e TAMANHO_AMOSTRA),
+     * ou seja, o tempo de execução não varia de acordo com o tamanho do arquivo de
+     * áudio, mas sim com valores fixos.
+     * Como resultado, a complexidade geral do método e da classe como um todo é
+     * O(1).
+     */
+
     /**
      * Gera uma chave aleatória a partir de um arquivo de áudio
      * @param caminhoAudio Caminho do arquivo de áudio
