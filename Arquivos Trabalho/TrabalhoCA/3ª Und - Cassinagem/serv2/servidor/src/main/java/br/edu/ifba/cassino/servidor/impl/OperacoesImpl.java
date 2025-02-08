@@ -14,6 +14,12 @@ public class OperacoesImpl implements Operacoes {
             System.err.println("[ERRO] Lista de jogadores recebida é nula ou vazia.");
             return;
         }
+
+        System.out.println("[SERVIDOR] Processando jogadores...");
+        for (Jogador jogador : jogadores) {
+            System.out.println("[SERVIDOR] Registrando jogador: " + jogador);
+            jogadoresRegistrados.add(jogador);
+        }
     }
 
     @Override
@@ -23,18 +29,19 @@ public class OperacoesImpl implements Operacoes {
             return new ArrayList<>();
         }
 
-        // Encontrar os 3 jogadores com maior saldo sem usar sort()
+        // Encontrar os 3 jogadores com maior lucro
         List<Jogador> melhores = new ArrayList<>();
-        double menorSaldo = Double.NEGATIVE_INFINITY;
+        double menorLucro = Double.NEGATIVE_INFINITY;
 
         for (Jogador jogador : jogadoresRegistrados) {
             if (melhores.size() < 3) {
                 melhores.add(jogador);
-                menorSaldo = Math.min(menorSaldo, jogador.getSaldo());
+                menorLucro = Math.min(menorLucro, jogador.getSaldo() - jogador.getSaldoInicial());
             } else {
                 for (int i = 0; i < 3; i++) {
-                    if (jogador.getSaldo() > melhores.get(i).getSaldo()) {
-                        // Substitui o jogador com menor saldo do top 3
+                    double lucroAtual = jogador.getSaldo() - jogador.getSaldoInicial();
+                    if (lucroAtual > (melhores.get(i).getSaldo() - melhores.get(i).getSaldoInicial())) {
+                        // Substitui o jogador com menor lucro no top 3
                         melhores.set(i, jogador);
                         break;
                     }
@@ -47,16 +54,18 @@ public class OperacoesImpl implements Operacoes {
             System.out.println("[SERVIDOR] Menos de três jogadores qualificados.");
         }
 
-        // Exibir os jogadores armazenados
+        // Exibir os melhores jogadores
         System.out.println("===============================================");
         System.out.println(" Dados dos Melhores Jogadores ");
         System.out.println("===============================================");
-        System.out.println(" ID |    Nome     | Saldo Inicial |  Saldo Final");
-        System.out.println("----|-------------|---------------|--------------");
+        System.out.println(" ID |    Nome Completo      | Saldo Inicial |  Saldo Final |   Lucro  ");
+        System.out.println("----|----------------------|---------------|--------------|----------");
 
         for (Jogador jogador : melhores) {
-            System.out.printf(" %2d | %-12s | %13.2f | %13.2f\n",
-                    jogador.getId(), jogador.getNome(), jogador.getSaldoInicial(), jogador.getSaldo());
+            double lucroJogador = jogador.getSaldo() - jogador.getSaldoInicial();
+            System.out.printf(" %2d | %-20s | %13.2f | %13.2f | %8.2f\n",
+                    jogador.getId(), jogador.getNomeCompleto(),
+                    jogador.getSaldoInicial(), jogador.getSaldo(), lucroJogador);
         }
 
         System.out.println("===============================================");
