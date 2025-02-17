@@ -66,10 +66,6 @@ public class Jogador {
 
         historicoApostas.add(aposta);
         saldo += aposta.getResultado();
-
-        System.out.printf(
-                getNomeCompleto(), aposta.getTipoAposta(), aposta.getEntrada(), aposta.getResultado(),
-                historicoApostas.size());
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------

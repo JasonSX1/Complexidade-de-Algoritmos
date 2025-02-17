@@ -63,7 +63,7 @@ public class OperacoesImpl implements Operacoes {
         System.out.println("===============================================");
         System.out.println(" Dados dos Melhores Jogadores ");
         System.out.println("===============================================");
-        System.out.println(" ID |    Nome Completo      | Saldo Inicial |  Saldo Final |   Lucro  ");
+        System.out.println(" ID |    Nome Completo     | Saldo Inicial |  Saldo Final |   Lucro  ");
         System.out.println("----|----------------------|---------------|--------------|----------");
 
         for (Jogador jogador : melhores) { // O(3), que é O(1)
