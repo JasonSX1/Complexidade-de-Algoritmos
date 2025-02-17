@@ -7,6 +7,8 @@ public class MesaResultadoDTO {
     private double saldoFinalMesa;
     private List<Jogador> melhoresJogadores;
 
+    // Complexidade geral da classe é O(1) para a maioria dos métodos, exceto para o método getMelhoresJogadores, que é O(n), já que depende do tamanho da lista que recebe.
+
     public MesaResultadoDTO(String mesaId, double saldoFinalMesa, List<Jogador> melhoresJogadores) {
         this.mesaId = mesaId;
         this.saldoFinalMesa = saldoFinalMesa;

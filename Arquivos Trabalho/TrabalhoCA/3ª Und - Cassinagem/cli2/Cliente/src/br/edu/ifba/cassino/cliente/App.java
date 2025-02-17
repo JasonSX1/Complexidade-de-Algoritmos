@@ -27,7 +27,6 @@ public class App {
             threadsMesas.add(threadMesa);
             threadMesa.start(); // O(1) - Inicia uma nova thread
         }
-
         
         // Aguarda todas as mesas finalizarem suas operações.
         // Complexidade: O(n), onde n é o número de threads (mesas).

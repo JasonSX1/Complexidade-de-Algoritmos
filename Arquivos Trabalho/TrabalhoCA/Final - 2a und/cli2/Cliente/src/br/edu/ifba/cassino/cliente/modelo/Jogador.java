@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+// A complexidade geral da classe é O(1) para a maioria dos métodos, exceto para o método gerarJogadores, e apostar, que são O(n).
+
 public class Jogador {
     private int id;
     private String nome;
@@ -44,6 +46,14 @@ public class Jogador {
         this.saldo = saldo;
     }
 
+    public double getTotalApostado() {
+        return this.saldoInicial - this.saldo;
+    }
+
+    public double getTotalGanho() {
+        return this.saldo - this.saldoInicial;
+    }
+
     public List<Aposta> getHistoricoApostas() {
         return historicoApostas;
     }
@@ -62,6 +72,7 @@ public class Jogador {
                 historicoApostas.size());
     }
 
+    //-------------------------------------------------------------------------------------------------------------------------------------------------
     // Gera uma lista de jogadores com nomes e sobrenomes aleatórios usando Java
     // Faker
     public static List<Jogador> gerarJogadores(int quantidade) {

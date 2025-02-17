@@ -55,7 +55,7 @@ public class SensorDeApostas {
                         numeroSorteado, corSorteada, tipoSorteado, resultado);
                 aposta.setNumeroDaRodada(rodada);
 
-                // 🔹 GARANTINDO QUE AS APOSTAS SÃO REALMENTE ARMAZENADAS
+                // GARANTINDO QUE AS APOSTAS SÃO REALMENTE ARMAZENADAS
                 jogador.adicionarAposta(aposta);
             }
         }

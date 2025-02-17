@@ -54,23 +54,23 @@ public class Rotas {
             String chavePrivadaBase64 = Base64.getEncoder().encodeToString(chavePrivada.getEncoded());
             System.out.println("[DEBUG] Chave privada usada para descriptografia (Base64): " + chavePrivadaBase64);
 
-            // 🔑 Exibir dados criptografados recebidos antes da descriptografia
+            // Exibir dados criptografados recebidos antes da descriptografia
             System.out.println("[DEBUG] Dados criptografados recebidos: " + dadosCriptografados);
 
-            // 🔑 Descriptografar os dados recebidos
+            // Descriptografar os dados recebidos
             String jsonDescriptografado = Desencriptador.descriptografar(chavePrivada, dadosCriptografados);
 
-            // 🔹 Converter JSON para objeto MesaResultadoDTO
+            // Converter JSON para objeto MesaResultadoDTO
             MesaResultadoDTO resultado = new Gson().fromJson(jsonDescriptografado, MesaResultadoDTO.class);
 
-            // 📌 Verifica se os dados da mesa são válidos
+            // Verifica se os dados da mesa são válidos
             if (resultado == null || resultado.getMelhoresJogadores().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("Erro: Dados da mesa estão vazios ou mal formatados.")
                         .build();
             }
 
-            // 🔹 Exibir os dados recebidos após descriptografia
+            // Exibir os dados recebidos após descriptografia
             System.out.println("===============================================");
             System.out.printf(" Dados recebidos da MESA %s\n", resultado.getMesaId());
             System.out.println("===============================================");

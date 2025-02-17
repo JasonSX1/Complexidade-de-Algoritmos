@@ -8,6 +8,20 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 
+/*
+ * Complexidade das funções:
+ * 
+ *   - Converter JSON para objeto: O(N), onde N é o tamanho do JSON.
+ *   - Iterar sobre a lista de jogadores recebidos: O(M), onde M é o número de jogadores.
+ *   - Adicionar jogadores à lista e exibir dados: O(M).
+ *   - No pior caso, a complexidade total é O(N + M), que pode ser aproximada para O(N).
+ * 
+ * - getInfo():
+ *   - Retorna uma string fixa em O(1).
+ * 
+ * Portanto, a função principal receberDadosMesa é O(N), enquanto getInfo é O(1).
+ */
+
 @Path("/cassino")
 public class Rotas {
     private static final Operacoes operacoes = new OperacoesImpl();
@@ -17,47 +31,36 @@ public class Rotas {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response receberDadosMesa(MesaResultadoDTO resultado) {
+        
+        // Verifica se os dados da mesa são válidos
         if (resultado == null || resultado.getMelhoresJogadores().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Erro: Dados da mesa estão vazios ou mal formatados.")
                     .build();
         }
     
-        // 🔹 O cliente já enviou o lucro total da mesa corretamente, então só exibimos
-        double lucroTotalMesa = resultado.getSaldoFinalMesa();
-    
-        // 🔹 Sincronização para evitar sobreposição de prints
+        // Sincronização para evitar sobreposição de prints
         synchronized (System.out) {
             System.out.println("\n===============================================");
             System.out.printf(" Dados recebidos da MESA %s%n", resultado.getMesaId());
             System.out.println("===============================================");
-            System.out.printf(" Lucro total da mesa: %.2f%n", lucroTotalMesa);
+            System.out.printf(" Lucro total da mesa: %.2f\n", resultado.getSaldoFinalMesa());
             System.out.println("-----------------------------------------------");
             System.out.println(" Melhores jogadores:");
             System.out.println(" ID |    Nome Completo      | Saldo Inicial |  Saldo Final |   Lucro  ");
-            System.out.println("----|----------------------|---------------|--------------|----------");
-    
-            resultado.getMelhoresJogadores().forEach(jogador -> {
+            for (Jogador jogador : resultado.getMelhoresJogadores()) {
                 double lucroJogador = jogador.getSaldo() - jogador.getSaldoInicial();
                 System.out.printf(" %2d | %-20s | %13.2f | %13.2f | %8.2f%n",
-                        jogador.getId(), formatarNome(jogador.getNomeCompleto()),
+                        jogador.getId(), jogador.getNomeCompleto(),
                         jogador.getSaldoInicial(), jogador.getSaldo(), lucroJogador);
-            });
-    
-            System.out.println("===============================================\n");
+            }
+            System.out.println("===============================================");
         }
     
         operacoes.processarJogadores(resultado.getMelhoresJogadores());
     
         return Response.ok("Dados da mesa " + resultado.getMesaId() + " recebidos com sucesso!").build();
-    }
-    
-    /**
-     * 🔹 Formata o nome para não ultrapassar um limite de 20 caracteres
-     */
-    private String formatarNome(String nome) {
-        return nome.length() > 20 ? nome.substring(0, 17) + "..." : nome;
-    }      
+    }  
 
     @GET
     @Path("/melhores")

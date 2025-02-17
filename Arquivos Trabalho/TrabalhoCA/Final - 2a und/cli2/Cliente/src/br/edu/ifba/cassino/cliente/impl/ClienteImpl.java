@@ -24,7 +24,6 @@ public class ClienteImpl implements Cliente, Runnable {
     private final String mesaId;
     private List<Jogador> jogadores;
     private Queue<Jogador> melhoresJogadores;
-    private double saldoFinalMesa;
 
     public ClienteImpl(String mesaId, int totalJogadores, int jogadoresPorLeva) {
         this.mesaId = mesaId;
@@ -32,17 +31,18 @@ public class ClienteImpl implements Cliente, Runnable {
         this.jogadoresPorLeva = jogadoresPorLeva;
         this.jogadores = new ArrayList<>();
         this.melhoresJogadores = new LinkedList<>();
-        this.saldoFinalMesa = 0.0;
     }
 
     @Override
     public void configurar(int totalJogadores, int jogadoresPorLeva) {
+        // Geração de jogadores
+        // Complexidade: O(n), onde n é o número total de jogadores
         this.jogadores = Jogador.gerarJogadores(totalJogadores);
     }
 
     @Override
     public void iniciar() {
-        new Thread(this).start();
+        new Thread(this).start(); // O(1) - Inicia uma nova thread
     }
 
     @Override
@@ -50,42 +50,43 @@ public class ClienteImpl implements Cliente, Runnable {
         System.out.println("[" + mesaId + "] Iniciando apostas...");
 
         if (jogadores.size() != totalJogadores) {
-            System.err.println("[ERRO] Quantidade de jogadores incorreta! Esperado: " + totalJogadores + ", Obtido: "
-                    + jogadores.size());
+            System.err.println("[ERRO] Quantidade de jogadores incorreta!");
             return;
         }
 
+        /**
+         * Processa apostas em levas.
+         * Complexidade: O(n * m), onde n é o total de jogadores e m é o número de
+         * apostas por jogador.
+         */
         for (int i = 0; i < totalJogadores; i += jogadoresPorLeva) {
-            if (i >= jogadores.size()) {
-                System.err.println("[ERRO] Tentativa de acessar subList além do tamanho da lista. Encerrando loop.");
+            if (i >= jogadores.size())
                 break;
-            }
 
-            int fim = Math.min(i + jogadoresPorLeva, jogadores.size());
+            int fim = i + jogadoresPorLeva;
+            if (fim > jogadores.size()) {
+                fim = jogadores.size(); }
             List<Jogador> levaJogadores = new ArrayList<>(jogadores.subList(i, fim));
 
-            SensorDeApostas.gerarApostasParaJogadores(levaJogadores, 5);
+            SensorDeApostas.gerarApostasParaJogadores(levaJogadores, 10); // O(n)
 
-            levaJogadores.forEach(Jogador::apostar);
-            atualizarMelhoresJogadores(levaJogadores);
-            enviarDadosMesa();
+            levaJogadores.forEach(Jogador::apostar); // O(n)
+            atualizarMelhoresJogadores(levaJogadores); // O(n)
+            enviarDadosMesa(); // O(1)
         }
     }
 
-    private void atualizarMelhoresJogadores(List<Jogador> leva) {
-        // 🔹 Garante que sempre tentamos pegar os três melhores
-        if (leva.size() < 3) {
-            System.err.println("[ERRO] Menos de 3 jogadores na leva. Enviando todos disponíveis.");
-            melhoresJogadores = new LinkedList<>(leva);
-            return;
-        }
-    
-        melhoresJogadores = new LinkedList<>();
+    /**
+     * Atualiza a lista dos melhores jogadores da mesa.
+     * Complexidade: O(n), onde n é o número de jogadores na leva.
+     */
+    private void atualizarMelhoresJogadores(List<Jogador> levaJogadores) {
+        melhoresJogadores.clear();
         Jogador primeiro = null, segundo = null, terceiro = null;
-    
-        for (Jogador jogador : leva) {
+
+        for (Jogador jogador : levaJogadores) {
             double lucro = jogador.getSaldo() - jogador.getSaldoInicial();
-    
+
             if (primeiro == null || lucro > (primeiro.getSaldo() - primeiro.getSaldoInicial())) {
                 terceiro = segundo;
                 segundo = primeiro;
@@ -97,26 +98,15 @@ public class ClienteImpl implements Cliente, Runnable {
                 terceiro = jogador;
             }
         }
-    
-        // 🔹 Garante que os três melhores são enviados
-        if (primeiro != null) melhoresJogadores.add(primeiro);
-        if (segundo != null) melhoresJogadores.add(segundo);
-        if (terceiro != null) melhoresJogadores.add(terceiro);
-    
-        // 🔹 Exibe quem foi selecionado
-        System.out.println("[DEBUG] Melhores jogadores selecionados para envio:");
-        for (Jogador j : melhoresJogadores) {
-            System.out.printf("[DEBUG] %s | Saldo Inicial: %.2f | Saldo Final: %.2f\n",
-                    j.getNomeCompleto(), j.getSaldoInicial(), j.getSaldo());
-        }
-    
-        saldoFinalMesa = 0.0;
-        for (Jogador jogador : leva) {
-            saldoFinalMesa += jogador.getSaldo();
-        }
+
+        if (primeiro != null)
+            melhoresJogadores.add(primeiro);
+        if (segundo != null)
+            melhoresJogadores.add(segundo);
+        if (terceiro != null)
+            melhoresJogadores.add(terceiro);
     }
     
-
     @Override
     public void enviarDadosMesa() {
         try {
@@ -125,16 +115,20 @@ public class ClienteImpl implements Cliente, Runnable {
                 return;
             }
     
-            // 🔹 Calcular o lucro total da mesa
-            double saldoInicialMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldoInicial).sum();
-            double saldoFinalMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldo).sum();
-            double lucroTotalMesa = saldoFinalMesa - saldoInicialMesa;
+            // Calcula o lucro total da mesa
+            double totalApostado = 0, totalPago = 0;
+            for (Jogador jogador : jogadores) {
+                totalApostado += jogador.getTotalApostado();
+                totalPago += jogador.getTotalGanho();
+            }
+            double lucroTotalMesa = totalApostado - totalPago;
     
-            // 🔹 Criar DTO para envio
-            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, lucroTotalMesa, new ArrayList<>(melhoresJogadores));
+            // Criar DTO contendo apenas o lucro e os 3 melhores jogadores
+            MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, lucroTotalMesa, 
+                    new ArrayList<>(melhoresJogadores));
             String json = new Gson().toJson(resultado);
     
-            // 🔹 Exibir os dados antes de enviar
+            // Exibir os dados antes de enviar
             System.out.println("===============================================");
             System.out.println(" Dados enviados ao SERVIDOR pela MESA " + mesaId);
             System.out.println("===============================================");
@@ -143,17 +137,15 @@ public class ClienteImpl implements Cliente, Runnable {
             System.out.println(" Melhores jogadores:");
             System.out.println(" ID |    Nome Completo      | Saldo Inicial |  Saldo Final |   Lucro  ");
             System.out.println("----|----------------------|---------------|--------------|----------");
-    
             for (Jogador jogador : melhoresJogadores) {
                 double lucroJogador = jogador.getSaldo() - jogador.getSaldoInicial();
                 System.out.printf(" %2d | %-20s | %13.2f | %13.2f | %8.2f%n",
-                        jogador.getId(), formatarNome(jogador.getNomeCompleto()),
+                        jogador.getId(), jogador.getNomeCompleto(),
                         jogador.getSaldoInicial(), jogador.getSaldo(), lucroJogador);
             }
-    
             System.out.println("===============================================");
     
-            // 🔹 Enviar os dados ao servidor
+            // Enviar os dados ao servidor
             URL url = new URL(URL_MESA);
             HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
     
@@ -174,12 +166,4 @@ public class ClienteImpl implements Cliente, Runnable {
             e.printStackTrace();
         }
     }
-    
-    /**
-     * 🔹 Formata o nome para não ultrapassar um limite de 20 caracteres
-     */
-    private String formatarNome(String nome) {
-        return nome.length() > 20 ? nome.substring(0, 17) + "..." : nome;
-    }
-      
 }
