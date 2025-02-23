@@ -24,7 +24,6 @@ public class ClienteImpl implements Cliente, Runnable {
     private final String mesaId;
     private List<Jogador> jogadores;
     private Queue<Jogador> melhoresJogadores;
-    private double saldoFinalMesa;
 
     public ClienteImpl(String mesaId, int totalJogadores, int jogadoresPorLeva) {
         this.mesaId = mesaId;
@@ -32,7 +31,6 @@ public class ClienteImpl implements Cliente, Runnable {
         this.jogadoresPorLeva = jogadoresPorLeva;
         this.jogadores = new ArrayList<>();
         this.melhoresJogadores = new LinkedList<>();
-        this.saldoFinalMesa = 0.0;
     }
 
     @Override
@@ -48,32 +46,35 @@ public class ClienteImpl implements Cliente, Runnable {
     @Override
     public void run() {
         System.out.println("[" + mesaId + "] Iniciando apostas...");
-
+    
         if (jogadores.size() != totalJogadores) {
             System.err.println("[ERRO] Quantidade de jogadores incorreta! Esperado: " + totalJogadores + ", Obtido: "
                     + jogadores.size());
             return;
         }
-
+    
         for (int i = 0; i < totalJogadores; i += jogadoresPorLeva) {
-            if (i >= jogadores.size()) {
-                System.err.println("[ERRO] Tentativa de acessar subList além do tamanho da lista. Encerrando loop.");
+            List<Jogador> levaJogadores = new ArrayList<>();
+    
+            for (int j = 0; j < jogadoresPorLeva && (i + j) < jogadores.size(); j++) {
+                levaJogadores.add(jogadores.get(i + j));
+            }
+    
+            if (levaJogadores.isEmpty()) {
+                System.err.println("[ERRO] Nenhum jogador na leva. Encerrando loop.");
                 break;
             }
-
-            int fim = Math.min(i + jogadoresPorLeva, jogadores.size());
-            List<Jogador> levaJogadores = new ArrayList<>(jogadores.subList(i, fim));
-
+    
             SensorDeApostas.gerarApostasParaJogadores(levaJogadores, 5);
-
+    
             levaJogadores.forEach(Jogador::apostar);
             atualizarMelhoresJogadores(levaJogadores);
             enviarDadosMesa();
         }
-    }
+    }    
 
     private void atualizarMelhoresJogadores(List<Jogador> leva) {
-        // 🔹 Garante que sempre tentamos pegar os três melhores
+        // Garante que sempre tentamos pegar os três melhores
         if (leva.size() < 3) {
             System.err.println("[ERRO] Menos de 3 jogadores na leva. Enviando todos disponíveis.");
             melhoresJogadores = new LinkedList<>(leva);
@@ -98,21 +99,16 @@ public class ClienteImpl implements Cliente, Runnable {
             }
         }
     
-        // 🔹 Garante que os três melhores são enviados
+        // Garante que os três melhores são enviados
         if (primeiro != null) melhoresJogadores.add(primeiro);
         if (segundo != null) melhoresJogadores.add(segundo);
         if (terceiro != null) melhoresJogadores.add(terceiro);
     
-        // 🔹 Exibe quem foi selecionado
+        // Exibe quem foi selecionado
         System.out.println("[DEBUG] Melhores jogadores selecionados para envio:");
         for (Jogador j : melhoresJogadores) {
             System.out.printf("[DEBUG] %s | Saldo Inicial: %.2f | Saldo Final: %.2f\n",
                     j.getNomeCompleto(), j.getSaldoInicial(), j.getSaldo());
-        }
-    
-        saldoFinalMesa = 0.0;
-        for (Jogador jogador : leva) {
-            saldoFinalMesa += jogador.getSaldo();
         }
     }
     
@@ -125,16 +121,16 @@ public class ClienteImpl implements Cliente, Runnable {
                 return;
             }
     
-            // 🔹 Calcular o lucro total da mesa
+            // Calcular o lucro total da mesa
             double saldoInicialMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldoInicial).sum();
             double saldoFinalMesa = melhoresJogadores.stream().mapToDouble(Jogador::getSaldo).sum();
             double lucroTotalMesa = saldoFinalMesa - saldoInicialMesa;
     
-            // 🔹 Criar DTO para envio
+            // Criar DTO para envio
             MesaResultadoDTO resultado = new MesaResultadoDTO(mesaId, lucroTotalMesa, new ArrayList<>(melhoresJogadores));
             String json = new Gson().toJson(resultado);
     
-            // 🔹 Exibir os dados antes de enviar
+            // Exibir os dados antes de enviar
             System.out.println("===============================================");
             System.out.println(" Dados enviados ao SERVIDOR pela MESA " + mesaId);
             System.out.println("===============================================");
@@ -153,7 +149,7 @@ public class ClienteImpl implements Cliente, Runnable {
     
             System.out.println("===============================================");
     
-            // 🔹 Enviar os dados ao servidor
+            // Enviar os dados ao servidor
             URL url = new URL(URL_MESA);
             HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
     
@@ -176,7 +172,7 @@ public class ClienteImpl implements Cliente, Runnable {
     }
     
     /**
-     * 🔹 Formata o nome para não ultrapassar um limite de 20 caracteres
+     * Formata o nome para não ultrapassar um limite de 20 caracteres
      */
     private String formatarNome(String nome) {
         return nome.length() > 20 ? nome.substring(0, 17) + "..." : nome;
